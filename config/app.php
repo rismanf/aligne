@@ -123,4 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+
+    'allowed_domain' => env('ALLOWED_DOMAINS', 'localhost'),
+
 ];

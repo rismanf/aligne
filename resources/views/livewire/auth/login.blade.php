@@ -24,7 +24,7 @@
         required
       />
 
-      <x-checkbox label="Remember me" wire:model="remember" />
+      {{-- <x-checkbox label="Remember me" wire:model="remember" /> --}}
 
       <x-button label="Login" type="submit" class="btn-primary w-full" spinner="login" />
     </form>

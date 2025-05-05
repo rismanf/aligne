@@ -2,34 +2,68 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class Login extends Component
 {
-    public string $email = "";
-    public string $password = "";
-    public bool $remember = false;
+    public string $email = '';
+    public string $password = '';
+
+    public static function middleware()
+    {
+        return ['guest'];
+    }
 
     public function login()
     {
         $this->validate([
-            "email" => ["required", "email"],
-            "password" => ["required", "min:6"],
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        // Simulate login validation
-        if ($this->email === "user@example.com" && $this->password === "password123") {
-            session()->flash("success", "Login successful!");
-            return redirect()->route("welcome");
-        } else {
-            $this->addError("email", "These credentials do not match our records.");
+        $email = trim(strtolower($this->email));
+        $password = trim($this->password);
+
+        if (env('LOGIN_TYPE', 'local') == 'local') {
+            if (strpos($email, '@neutradc.com') > 0) {
+                if (Auth::attempt(['email' => $email, 'password' => $password])) {
+                    session()->regenerate();
+                    return redirect()->intended(route('home'));
+                }
+            }
+            // if ($email == $password) {
+            //     session()->regenerate();
+            //     return redirect()->intended(route('home'));
+            // }
         }
+
+        if ($this->ldapLogin($email, $password)) {
+            $username = str_replace('@neutradc.com', '', $email);
+            $user = User::where('ad_name', '=', $username)->first();
+            Auth::login($user);
+            session()->regenerate();
+            return redirect()->intended(route('home'));
+        }
+
+        throw ValidationException::withMessages([
+            'email' => __('auth.failed'),
+        ]);
+    }
+
+    public function ldapLogin($email, $password)
+    {
+        // Implementasikan fungsi LDAP kamu di sini
+        return false; // placeholder
     }
 
     public function render()
     {
-        return view("livewire.auth.login")->layout("components.layouts.auth", [
-            "title" => "Login"
-        ]);
+        return view("livewire.auth.login")
+            ->layout("components.layouts.auth", [
+                "title" => "Login"
+            ]);
     }
 }

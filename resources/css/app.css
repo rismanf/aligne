@@ -22,17 +22,6 @@ input:invalid, textarea:invalid, select:invalid {
 }
 
 
-
-/**
-    The lines above are intact.
-    The lines below were added by maryUI installer.
-*/
-
-/** daisyUI */
-@plugin "daisyui" {
-    themes: light --default, dark --prefersdark;
-}
-
 /* maryUI */
 @source "../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
 
@@ -44,10 +33,68 @@ input:invalid, textarea:invalid, select:invalid {
 * Because Laravel defaults does not match well the design of daisyUI.
 */
 
-.mary-table-pagination span[aria-current="page"] > span {
-    @apply bg-primary text-base-100
+.mary-table-pagination {
+    button, span {
+        @apply text-xs border-none !text-base-content
+    }
+ 
+    button {
+        @apply cursor-pointer !bg-base-100
+    }
+ 
+    span[aria-current="page"] > span {
+        @apply bg-base-content/5
+    }
+ 
+    button, span[aria-current="page"] > span, span[aria-disabled="true"] span {
+        @apply py-1 px-2 bg-base-200
+    }
 }
 
-.mary-table-pagination button {
-    @apply cursor-pointer
+
+/**
+    The lines above are intact.
+    The lines below were added by maryUI installer.
+*/
+
+/** daisyUI */
+@plugin "daisyui" {
+    themes: fantasy --default, dark --preferslight;
 }
+
+@plugin "daisyui/theme" {
+    name: "fantasy";
+    default: true;
+    prefersdark: false;
+    color-scheme: "light";
+    --color-base-100: oklch(100% 0 0);
+    --color-base-200: oklch(93% 0 0);
+    --color-base-300: oklch(86% 0 0);
+    --color-base-content: oklch(27.807% 0.029 256.847);
+    --color-primary: oklch(47% 0.114 61.907);
+    --color-primary-content: oklch(98% 0.003 247.858);
+    --color-secondary: oklch(53.92% 0.162 241.36);
+    --color-secondary-content: oklch(98% 0.003 247.858);
+    --color-accent: oklch(75.98% 0.204 56.72);
+    --color-accent-content: oklch(15.196% 0.04 56.72);
+    --color-neutral: oklch(27.807% 0.029 256.847);
+    --color-neutral-content: oklch(98% 0.003 247.858);
+    --color-info: oklch(72.06% 0.191 231.6);
+    --color-info-content: oklch(0% 0 0);
+    --color-success: oklch(64.8% 0.15 160);
+    --color-success-content: oklch(0% 0 0);
+    --color-warning: oklch(84.71% 0.199 83.87);
+    --color-warning-content: oklch(0% 0 0);
+    --color-error: oklch(71.76% 0.221 22.18);
+    --color-error-content: oklch(0% 0 0);
+    --radius-selector: 1rem;
+    --radius-field: 0.5rem;
+    --radius-box: 1rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+  }
+  
+
