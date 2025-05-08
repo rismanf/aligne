@@ -20,7 +20,7 @@
              {{-- Special `actions` slot --}}
             @scope('cell_action', $role)
                 <div class="flex gap-1">
-                    <x-button icon="o-eye" onclick="window.location.href='{{ route('role.show', $role->id) }}'" spinner class="btn-xs" />
+                    <x-button icon="o-eye" onclick="window.location.href='{{ route('admin.role.show', $role->id) }}'" spinner class="btn-xs" />
                     <x-button icon="o-trash" wire:click="showDeleteModal({{ $role->id }})" spinner class="btn-xs" />
                 </div>
             @endscope

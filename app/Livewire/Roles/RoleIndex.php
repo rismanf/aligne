@@ -106,7 +106,7 @@ class RoleIndex extends Component
         $title = 'Role Management';
         $breadcrumbs = [
             [
-                'link' => route("home"), // route('home') = nama route yang ada di web.php
+                'link' => route("admin.home"), // route('home') = nama route yang ada di web.php
                 'label' => 'Home', // label yang ditampilkan di breadcrumb
                 'icon' => 's-home',
             ],
@@ -115,7 +115,7 @@ class RoleIndex extends Component
                 'label' => 'Admin', 
             ],
             [
-                'link' => route("role.index"), // route('home') = nama route yang ada di web.php
+                'link' => route("admin.role.index"), // route('home') = nama route yang ada di web.php
                 'label' => 'Role', 
             ],
         ];
@@ -127,7 +127,7 @@ class RoleIndex extends Component
             return $role;
         });
 
-        // dd($users);
+        // dd($roles);
  
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],

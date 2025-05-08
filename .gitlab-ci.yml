@@ -1,0 +1,43 @@
+variables:
+    GIT_STRATEGY: clone
+ 
+build_dev:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+  script:
+     - echo 'building dev'
+     - sudo cat $devenv >> .env
+     - sudo docker-compose -f docker-compose.dev.yml down && sudo docker-compose -f docker-compose.dev.yml up -d --build
+     - echo 'installing library'
+     - sudo chown -R gitlab-runner:www-data storage
+     - sudo chown -R gitlab-runner:www-data bootstrap/cache
+     - sudo chmod -R 777 storage
+     - sudo chmod -R 777 bootstrap/cache
+     - echo 'finishing building dev'
+  tags:
+     - website-dev # isi tag sesuai yg sudah didaftarkan di runner
+
+build_prod:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  script:
+     - echo 'building prod'
+     - sudo cat $prodenv >> .env
+     - sudo cat $prodcer >> cert-crt.cer
+     - sudo cat $prodkey >> cert-key.key
+     - echo 'Cleaning exsisting container'
+     - sudo docker-compose -f docker-compose.prod.yml down 
+     - echo 'Rebuild container'
+     - sudo docker-compose -f docker-compose.prod.yml up -d --build
+     - echo 'installing library'
+     - sudo chown -R gitlab-runner:www-data storage
+     - sudo chown -R gitlab-runner:www-data bootstrap/cache
+     - sudo chmod -R 775 storage
+     - sudo chmod -R 775 bootstrap/cache
+     - echo 'finishing building prod'
+  tags:
+     - website-prod # isi tag sesuai yg sudah didaftarkan di runner
+
+

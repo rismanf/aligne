@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    container_name: website #<nama-project> diganti dengan project yg dikerjakan
+    working_dir: /app
+    # environment:
+      # - FRANKENPHP_CONFIG="worker /app/public/index.php"
+    ports:
+      - "9000:80"
+    volumes:
+      - .:/app
+      - ./custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./CaddyFile.dev:/etc/caddy/Caddyfile

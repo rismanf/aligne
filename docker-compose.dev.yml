@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    container_name: webiste_dev #<nama-project> diganti dengan project yg dikerjakan
+    working_dir: /app
+    environment:
+      - FRANKENPHP_CONFIG="worker /app/public/index.php"
+    ports:
+      - "9000:80"
+    volumes:
+      - ./storage/logs:/var/www/data/website/logs #<nama-project> diganti dengan project yg dikerjakan
+      - ./custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./CaddyFile.dev:/etc/caddy/Caddyfile
+      - laravel_composer_cache:/var/www/html/vendor
+volumes:
+  laravel_composer_cache:

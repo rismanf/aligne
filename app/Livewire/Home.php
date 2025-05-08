@@ -14,7 +14,7 @@ class Home extends Component
     {
         $breadcrumbs = [
             [
-                'link' => route("home"), // route('home') = nama route yang ada di web.php
+                'link' => route("admin.home"), // route('home') = nama route yang ada di web.php
                 'label' => 'Home', // label yang ditampilkan di breadcrumb
                 'icon' => 's-home',
             ],

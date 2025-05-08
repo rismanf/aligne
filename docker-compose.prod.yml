@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    container_name: website_prod #<nama-project> diganti dengan project yg dikerjakan
+    working_dir: /app
+    environment:
+      - FRANKENPHP_CONFIG="worker /app/public/index.php"
+      - SERVER_NAME="onedashboard.neutradc.com"
+    ports:
+      - "80:80"
+      - "443:443"  # FrankenPHP berjalan di port 80
+    volumes:
+      - ./custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./storage/logs:/var/www/data/website/logs #<nama-project> diganti dengan project yg dikerjakan    
+      - ./CaddyFile.prod:/etc/caddy/Caddyfile #menggunakan caddyfile prod
+      - laravel_composer_cache:/var/www/html/vendor
+      - ./cert-crt.cer:/etc/caddy/certs/cert-crt.cer
+      - ./cert-key.key:/etc/caddy/certs/cert-key.key
+volumes:
+  laravel_composer_cache:

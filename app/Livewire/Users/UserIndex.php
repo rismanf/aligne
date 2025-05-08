@@ -105,7 +105,7 @@ class UserIndex extends Component
         $title = 'User Management';
         $breadcrumbs = [
             [
-                'link' => route("home"), // route('home') = nama route yang ada di web.php
+                'link' => route("admin.home"), // route('home') = nama route yang ada di web.php
                 'label' => 'Home', // label yang ditampilkan di breadcrumb
                 'icon' => 's-home',
             ],
@@ -114,7 +114,7 @@ class UserIndex extends Component
                 'label' => 'Admin', 
             ],
             [
-                'link' => route("user.index"), // route('home') = nama route yang ada di web.php
+                'link' => route("admin.user.index"), // route('home') = nama route yang ada di web.php
                 'label' => 'User', 
             ],
         ];

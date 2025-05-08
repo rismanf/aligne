@@ -31,7 +31,7 @@ class Login extends Component
             if (strpos($email, '@neutradc.com') > 0) {
                 if (Auth::attempt(['email' => $email, 'password' => $password])) {
                     session()->regenerate();
-                    return redirect()->intended(route('home'));
+                    return redirect()->intended(route('admin.home'));
                 }
             }
             // if ($email == $password) {
@@ -45,7 +45,7 @@ class Login extends Component
             $user = User::where('ad_name', '=', $username)->first();
             Auth::login($user);
             session()->regenerate();
-            return redirect()->intended(route('home'));
+            return redirect()->intended(route('admin.home'));
         }
 
         throw ValidationException::withMessages([

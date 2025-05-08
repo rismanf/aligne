@@ -27,7 +27,7 @@ class RoleShow extends Component
         $title = 'Role Permission';
         $breadcrumbs = [
             [
-                'link' => route("home"), // route('home') = nama route yang ada di web.php
+                'link' => route("admin.home"), // route('home') = nama route yang ada di web.php
                 'label' => 'Home', // label yang ditampilkan di breadcrumb
                 'icon' => 's-home',
             ],
@@ -36,7 +36,7 @@ class RoleShow extends Component
                 'label' => 'Admin', 
             ],
             [
-                'link' => route("role.index"), // route('home') = nama route yang ada di web.php
+                'link' => route("admin.role.index"), // route('home') = nama route yang ada di web.php
                 'label' => 'Role', 
             ],
         ];
