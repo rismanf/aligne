@@ -6,7 +6,7 @@ services:
     # environment:
       # - FRANKENPHP_CONFIG="worker /app/public/index.php"
     ports:
-      - "9008:80"
+      - "9018:80"
     volumes:
       - .:/app
       - ./custom.ini:/usr/local/etc/php/conf.d/custom.ini
