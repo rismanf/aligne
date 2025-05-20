@@ -16,7 +16,7 @@ build_dev:
      - sudo chmod -R 777 bootstrap/cache
      - echo 'finishing building dev'
   tags:
-     - website-dev # isi tag sesuai yg sudah didaftarkan di runner
+     - website2.0-dev # isi tag sesuai yg sudah didaftarkan di runner
 
 build_prod:
   stage: build
