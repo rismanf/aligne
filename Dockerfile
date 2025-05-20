@@ -24,7 +24,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install
 
 # Install Bun
-RUN curl -fsSL https://bun.sh/install | bash
+RUN curl -fsSL https://bun.sh/install | bash && \
+    mv ~/.bun/bin/bun /usr/local/bin/bun
 
 # Add Bun to PATH (untuk shell non-interaktif)
 ENV PATH="/root/.bun/bin:$PATH"
