@@ -3,8 +3,8 @@ services:
     build: .
     container_name: webiste_dev #<nama-project> diganti dengan project yg dikerjakan
     working_dir: /app
-    environment:
-      - FRANKENPHP_CONFIG="worker /app/public/index.php"
+    # environment:
+    #   - FRANKENPHP_CONFIG="worker /app/public/index.php"
     ports:
       - "9008:80"
     volumes:
