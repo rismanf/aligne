@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Home;
 use App\Livewire\Auth\Login;
 use App\Livewire\News\Newscreate;
-use App\Livewire\News\NewsCreate as NewsNewsCreate;
 use App\Livewire\News\NewsIndex;
 use App\Livewire\Website\AboutUs;
 use App\Livewire\Website\ContactUs;
@@ -18,7 +17,6 @@ use App\Livewire\Website\News;
 use App\Livewire\Website\NewsDetail;
 use App\Livewire\Website\Services;
 use App\Livewire\Website\TwoHandsHub;
-use App\Livewire\Website\WebsiteIndex;
 
 // Route bawaan login (Livewire)
 Route::get('/login', Login::class)->name('login');
@@ -58,7 +56,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'domainCheck'])->gro
     Route::get('/home', Home::class)->name('home');
 
     Route::get('/news', NewsIndex::class)->name('news.index');
-    Route::get('/news/create', NewsCreate::class)->name('news.create');
+    // Route::get('/news/create', NewsCreate::class)->name('news.create');
     Route::get('/user', \App\Livewire\Users\UserIndex::class)->name('user.index');
 
     Route::get('/role', \App\Livewire\Roles\RoleIndex::class)->name('role.index');
