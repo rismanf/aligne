@@ -30,7 +30,8 @@ Route::get('/logout', function () {
 
     return redirect('/');
 })->name('logout');
-Route::middleware(['domainCheck'])->group(function () {
+
+// Route::middleware(['domainCheck'])->group(function () {
     // Redirect '/' tergantung status login
     Route::get('/', Main::class);
     Route::get('/two-hands-hub', TwoHandsHub::class);
@@ -43,7 +44,7 @@ Route::middleware(['domainCheck'])->group(function () {
     Route::get('/news', News::class);
     Route::get('/news/{id}', NewsDetail::class);
     Route::get('/contact-us', ContactUs::class);
-});
+// });
 
 
 // Route::get('/', function () {

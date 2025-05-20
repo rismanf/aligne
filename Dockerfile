@@ -21,7 +21,7 @@ COPY . .
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install Laravel dependencies
-RUN composer install --optimize-autoloader
+RUN composer install
 
 # Install Bun
 RUN curl -fsSL https://bun.sh/install | bash
