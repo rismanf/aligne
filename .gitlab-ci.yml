@@ -38,6 +38,6 @@ build_prod:
      - sudo chmod -R 775 bootstrap/cache
      - echo 'finishing building prod'
   tags:
-     - website-prod # isi tag sesuai yg sudah didaftarkan di runner
+     - website2.0-prod # isi tag sesuai yg sudah didaftarkan di runner
 
 
