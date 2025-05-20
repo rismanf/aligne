@@ -4,6 +4,8 @@ use App\Livewire\Layouts\AppLayout;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Home;
 use App\Livewire\Auth\Login;
+use App\Livewire\News\Newscreate;
+use App\Livewire\News\NewsCreate as NewsNewsCreate;
 use App\Livewire\News\NewsIndex;
 use App\Livewire\Website\AboutUs;
 use App\Livewire\Website\ContactUs;
@@ -55,6 +57,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'domainCheck'])->gro
     Route::get('/home', Home::class)->name('home');
 
     Route::get('/news', NewsIndex::class)->name('news.index');
+    Route::get('/news/create', NewsCreate::class)->name('news.create');
     Route::get('/user', \App\Livewire\Users\UserIndex::class)->name('user.index');
 
     Route::get('/role', \App\Livewire\Roles\RoleIndex::class)->name('role.index');

@@ -8,6 +8,7 @@
     <title>{{ isset($title) ? $title . ' - ' . config('app.name') : config('app.name') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
 <body class="min-h-screen font-sans antialiased bg-base-200">
@@ -71,13 +72,11 @@
             <x-menu-separator />
 
             {{-- Menu --}}
-            <aside class="flex flex-col h-screen">
-                @livewire('layouts.menus', ['title' => $title])
+            @livewire('layouts.menus', ['title' => $title])
 
-                <x-menu class="text-xs space-y-0 p-1">
-                    <x-menu-item title="Logout" link="{{ route('logout') }}" icon="o-arrow-left-start-on-rectangle" />
-                </x-menu>
-            </aside>
+            <x-menu class="text-xs space-y-0 p-1">
+                <x-menu-item title="Logout" link="{{ route('logout') }}" icon="o-arrow-left-start-on-rectangle" />
+            </x-menu>
         </x-slot:sidebar>
 
         {{-- The `$slot` goes here --}}
@@ -95,6 +94,7 @@
 
     {{-- TOAST area --}}
     <x-toast />
+
 </body>
 
 </html>

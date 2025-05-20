@@ -9,7 +9,7 @@
         wire:model.defer="email"
         placeholder="Email"
         icon="o-user"
-        hint="Your registered email."
+        hint=""
         class="w-full pr-0"
         required
       />

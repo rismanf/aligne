@@ -378,7 +378,7 @@
                 <div class="gallery__embed wrapper__relative">
                     <img src="/assets/img/gallery-video-cover.webp" alt="Gallery" />
                     <div class="wrapper__absolute wrapper--center">
-                        <a href="/img/gallery-video-summit-2024.webm" class="glightbox" data-gallery="video">
+                        <a href="/assets/img/gallery-video-summit-2024.webm" class="glightbox" data-gallery="video">
                             <svg class="icon" aria-hidden="true">
                                 <use xlink:href="#svg-youtube-lg"></use>
                             </svg>
@@ -386,28 +386,28 @@
                     </div>
                 </div>
                 <div class="gallery__masonry grid">
-                    <a href="/img/gallery-1.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
+                    <a href="/assets/img/gallery-1.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
                         <img src="/assets/img/gallery-1.webp" alt="Gallery" />
                     </a>
-                    <a href="/img/gallery-2.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
+                    <a href="/assets/img/gallery-2.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
                         <img src="/assets/img/gallery-2.webp" alt="Gallery" />
                     </a>
-                    <a href="/img/gallery-3.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
+                    <a href="/assets/img/gallery-3.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
                         <img src="/assets/img/gallery-3.webp" alt="Gallery" />
                     </a>
-                    <a href="/img/gallery-4.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
+                    <a href="/assets/img/gallery-4.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
                         <img src="/assets/img/gallery-4.webp" alt="Gallery" />
                     </a>
-                    <a href="/img/gallery-5.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
+                    <a href="/assets/img/gallery-5.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
                         <img src="/assets/img/gallery-5.webp" alt="Gallery" />
                     </a>
-                    <a href="/img/gallery-6.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
+                    <a href="/assets/img/gallery-6.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
                         <img src="/assets/img/gallery-6.webp" alt="Gallery" />
                     </a>
-                    <a href="/img/gallery-7.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
+                    <a href="/assets/img/gallery-7.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
                         <img src="/assets/img/gallery-7.webp" alt="Gallery" />
                     </a>
-                    <a href="/img/gallery-8.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
+                    <a href="/assets/img/gallery-8.webp" class="gallery__masonry--item glightbox" data-gallery="gallery">
                         <img src="/assets/img/gallery-8.webp" alt="Gallery" />
                     </a>
                 </div>

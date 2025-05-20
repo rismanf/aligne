@@ -126,4 +126,5 @@ return [
 
     'allowed_domain' => env('ALLOWED_DOMAINS', 'localhost'),
 
+    'tinymce' =>env('TINY_EDITOR_API_KEY', 'YOUR_TINY_EDITOR_API_KEY'),
 ];

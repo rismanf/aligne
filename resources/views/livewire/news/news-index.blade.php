@@ -2,7 +2,7 @@
     <x-card >
         <div class="flex justify-end mb-4">
             {{-- <x-input label="Search" placeholder="Search" wire:model="search" class="w-1/2" /> --}}
-            <x-button label="Add" icon="o-plus" @click="$wire.createForm = true" class="btn-primary btn-xs p-2" />
+            <x-button label="Add" icon="o-plus" onclick="window.location.href='{{ route('admin.news.create') }}'" class="btn-primary btn-xs p-2" />
         </div>
         
         <x-hr target="gotoPage" />

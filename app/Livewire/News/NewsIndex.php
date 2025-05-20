@@ -27,10 +27,6 @@ class NewsIndex extends Component
                 'icon' => 's-home',
             ],
             [
-                // 'link' => route("user.index"), // route('home') = nama route yang ada di web.php
-                'label' => 'Admin',
-            ],
-            [
                 'link' => '', // route('home') = nama route yang ada di web.php
                 'label' => 'News',
             ],
