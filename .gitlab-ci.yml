@@ -7,7 +7,14 @@ build_dev:
     - if: '$CI_COMMIT_BRANCH == "dev"'
   script:
      - echo 'building dev'
-     - sudo cat $devenv >> .env
+    #  - sudo cat $devenv >> .env
+     - |
+      if [ -z "$devenv" ]; then
+        echo "❌ ERROR: Variabel 'devenv' kosong. Hentikan proses."
+        exit 1
+      fi
+     - echo "$devenv" >> .env
+     - echo "✅ .env berhasil dibuat:"
      - sudo docker-compose -f docker-compose.dev.yml down && sudo docker-compose -f docker-compose.dev.yml up -d --build
      - echo 'installing library'
      - sudo chown -R gitlab-runner:www-data storage
