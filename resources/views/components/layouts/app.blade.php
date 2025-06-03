@@ -5,6 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" href="{{ asset('assets/img/logo-fav.webp') }}" media="(prefers-color-scheme: light)"
+        type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('assets/img/logo-fav.webp') }}" media="(prefers-color-scheme: dark)"
+        type="image/x-icon" />
     <title>{{ isset($title) ? $title . ' - ' . config('app.name') : config('app.name') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -72,7 +76,7 @@
             <x-menu-separator />
 
             {{-- Menu --}}
-            @livewire('layouts.menus', ['title' => $title])
+            @include('livewire.partials.menus', ['title' => $title])
 
             <x-menu class="text-xs space-y-0 p-1">
                 <x-menu-item title="Logout" link="{{ route('logout') }}" icon="o-arrow-left-start-on-rectangle" />

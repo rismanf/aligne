@@ -27,6 +27,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('log_invoices', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id')->nullable();
+            $table->string('event_name', 20);
+            $table->string('invoice_code')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('master_data', function (Blueprint $table) {
             $table->id();
             $table->string('type',75);
@@ -38,19 +46,6 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('organization', function (Blueprint $table) {
-            $table->id();
-            $table->string('type',75);
-            $table->string('code',75);
-            $table->integer('parent')->nullable();
-            $table->string('name')->nullable();
-            $table->string('description')->nullable();
-            $table->boolean('is_active')->default(1);
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-
     }
 
     /**
@@ -59,7 +54,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('log_logins');
+        Schema::dropIfExists('log_invoices');
         Schema::dropIfExists('master_data');
-        Schema::dropIfExists('organization');
     }
 };

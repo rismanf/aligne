@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->string('slug')->unique();
+            $table->string('slug')->unique();// unique slug for the news article
+            $table->string('title_slug');
             $table->string('title');
             $table->string('description')->nullable();           
             $table->string('keyword')->nullable();

@@ -41,6 +41,14 @@ class PermissionTableSeeder extends Seeder
             'contactus-create',
             'contactus-edit',
             'contactus-delete',
+            'participant-list',
+            'participant-create',
+            'participant-edit',
+            'participant-delete',
+            'invoice-list',
+            'invoice-create',
+            'invoice-edit',
+            'invoice-delete',
         ];
 
         foreach ($permissions as $permission) {

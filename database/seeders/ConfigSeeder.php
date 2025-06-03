@@ -17,13 +17,18 @@ class ConfigSeeder extends Seeder
     {
         //
         $user = User::create([
-            'name' => 'Admin',
+            'name' => 'Risman Firmansyah',
+            'first_name' => 'Risman',
+            'last_name' => 'Firmansyah',
             'ad_name' => 'admin',
             'phone' => '0812345678',
             'nik' => '2205022',
             'title' => 'Administrator2',
             'department' => 'Enterprise IT System & Automation',
             'email' => 'admin@neutradc.com',
+            'type_user' => 'Internal',
+            'country' => 'Indonesia',
+            'company' => 'NeutraDC',
             'password' => bcrypt('password')
         ]);
 
@@ -32,5 +37,7 @@ class ConfigSeeder extends Seeder
         $permissions = Permission::pluck('id', 'id')->all();
 
         $role->syncPermissions($permissions);
+
+        $user->assignRole('Admin');
     }
 }

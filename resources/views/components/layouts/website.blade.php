@@ -46,20 +46,20 @@
 
     <!-- gtm -->
 
-    <script type="module" crossorigin src="{{ asset('assets/js/scripts-DsA2Lpeu.js') }}"></script>
-    <link rel="stylesheet" crossorigin href="{{ asset('assets/css/styles-CUkTHLj5.css') }}" />
+    <script type="module" crossorigin src="{{ asset('assets/js/scripts-C8WMqR8i.js') }}"></script>
+    <link rel="stylesheet" crossorigin href="{{ asset('assets/css/styles-BcoVOL7o.css') }}" />
 </head>
 
 <body>
     <main id="page-home" class="page-home">
 
-        @include('livewire.layouts.svg')
-        @include('livewire.website.header')
+        @include('livewire.partials.svg')
+        @include('livewire.partials.header')
         {{ $slot }}
 
         <!-- gtm noscript -->
 
-        @include('livewire.website.footer')
+        @include('livewire.partials.footer')
     </main>
 </body>
 
