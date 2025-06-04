@@ -2,16 +2,19 @@
 
 namespace App\Livewire\Public;
 
+use App\Models\Menu;
 use Livewire\Component;
 
 class AboutUs extends Component
 {
     public function render()
     {
+        $menu = Menu::where('name', 'About Us')->first();
+
         return view('livewire.public.about-us')->layout('components.layouts.website', [
-            'title' => 'About Us | NeutraDC',
-            'description' => 'A Digital Ecosystem Hub for Unlimited Access to Indonesia’s Digital Economy.',
-            'keywords' => 'NeutraDC, About Us, Data Center, Colocation, Cloud Computing, Managed Services',
+             'title' => $menu->title,
+            'description' => $menu->description,
+            'keywords' => $menu->keywords,
             'image' => asset('images/logo.png'),
             'url' => url()->current(),
         ]);

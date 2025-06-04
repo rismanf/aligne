@@ -272,8 +272,8 @@
                                     broader region.
                                 </p>
                             </div>
-                            <img class="" src="/assets/img/logo-nxera-batam.webp" alt="Presence" />
-                            <a href="/data-center/jakarta-hq/" class="stretched-link"></a>
+                            <img class="" src="{{asset('assets/img/logo-nxera-batam.webp')}}" alt="Presence" />
+                            <a href="{{route('data-center.batam')}}" class="stretched-link"></a>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -288,8 +288,9 @@
                                     businesses expanding in the region.
                                 </p>
                             </div>
-                            <img class="" src="/assets/img/logo-neutradc-singapore.webp" alt="Presence" />
-                            <a href="/data-center/singapore/" class="stretched-link"></a>
+                            <img class="" src="{{ asset('assets/img/logo-neutradc-singapore.webp') }}"
+                                alt="Presence" />
+                            <a href="{{ route('data-center.singapore') }}" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -301,7 +302,7 @@
         <div class="container">
             <div class="section__content">
                 <div class="glightbox__wrapper">
-                    <img src="/assets/img/about-compo.webp" alt="image" />
+                    <img src="{{asset('assets/img/compro.webp')}}" alt="image" />
 
                     <div class="section__heading">
                         <h2>NeutraDC Company Profile</h2>
@@ -323,7 +324,7 @@
                 <div class="section__heading text-center text__lg">
                     <h2>
                         News
-                        <a href="/news/" class="btn btn__danger--alt btn--lg">Read our latest news</a>
+                        <a href="{{ route('news') }}" class="btn btn__danger--alt btn--lg">Read our latest news</a>
                     </h2>
                 </div>
 

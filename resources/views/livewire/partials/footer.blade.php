@@ -13,17 +13,17 @@
             <div class="footer__menu">
                 <ul class="footer__nav" role="list">
                     <li>
-                        <a href="/data-center/jakarta-hq/" class="footer__link">
+                        <a href="{{ route('data-center.jakarta-hq') }}" class="footer__link">
                             Data Center
                         </a>
                     </li>
                     <li>
-                        <a href="/services/" class="footer__link">
+                        <a href="{{ route('services') }}" class="footer__link">
                             Services
                         </a>
                     </li>
                     <li>
-                        <a href="/about-us/" class="footer__link">
+                        <a href="{{ route('about-us') }}" class="footer__link">
                             About Us
                         </a>
                     </li>
@@ -33,7 +33,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/contact-us/" class="footer__link">
+                        <a href="{{ route('contact-us') }}" class="footer__link">
                             Contact Us
                         </a>
                     </li>

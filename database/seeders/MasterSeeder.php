@@ -43,5 +43,7 @@ class MasterSeeder extends Seeder
                 'name' => $stat,
             ]);
         }
+
+        
     }
 }

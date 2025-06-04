@@ -54,7 +54,7 @@
     <main id="page-home" class="page-home">
 
         @include('livewire.partials.svg')
-        @include('livewire.partials.header')
+        @livewire('public.menu')
         {{ $slot }}
 
         <!-- gtm noscript -->

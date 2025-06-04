@@ -21,7 +21,7 @@
                             </div>
 
                             <div class="link__wrapper">
-                                <a href="/about-us/" class="btn btn__danger btn--round">
+                                <a href="{{ route('about-us') }}" class="btn btn__danger btn--round">
                                     Leverage our capabilities
                                 </a>
                             </div>
@@ -59,13 +59,13 @@
                         <p>Discover Our Data Centers</p>
 
                         <div class="link__wrapper">
-                            <a href="/data-center/jakarta-hq/" class="btn btn__danger btn--round">
+                            <a href="{{ route('data-center.jakarta-hq') }}" class="btn btn__danger btn--round">
                                 Jakarta
                             </a>
-                            <a href="/data-center/batam/" class="btn btn__danger btn--round">
+                            <a href="{{ route('data-center.batam') }}" class="btn btn__danger btn--round">
                                 Batam
                             </a>
-                            <a href="/data-center/singapore/" class="btn btn__danger btn--round">
+                            <a href="{{ route('data-center.singapore') }}" class="btn btn__danger btn--round">
                                 Singapore
                             </a>
                         </div>
@@ -205,7 +205,7 @@
                                     Pacific.
                                 </p>
                             </div>
-                            <a href="/services/" class="btn btn__danger btn--round">
+                            <a href="{{ route('services') }}" class="btn btn__danger btn--round">
                                 View Service
                             </a>
                         </div>
@@ -213,7 +213,7 @@
 
                     <div class="grid__growth--item">
                         <div class="growth__line">
-                            <img src="/assets/img/growth-map-latest-2.webp" alt="map" />
+                            <img src="{{ asset('assets/img/growth-map-latest-1.webp') }}" alt="map" />
                         </div>
                     </div>
                 </div>
@@ -227,7 +227,7 @@
                 <div class="section__heading text-center text__lg">
                     <h2>
                         News
-                        <a href="/news/" class="btn btn__danger--alt btn--lg">Read our latest news</a>
+                        <a href="{{ route('news') }}" class="btn btn__danger--alt btn--lg">Read our latest news</a>
                     </h2>
                 </div>
 
@@ -235,7 +235,7 @@
                     <div class="col">
                         <div class="card news__card">
                             <div class="card__img">
-                                <img src="/assets/img/news-1.webp" class="card-img-top"
+                                <img src="{{ asset('assets/img/news-1.webp') }}" class="card-img-top"
                                     alt="Supporting Local Entrepreneurs to Go Global, Telkom Through NeutraDC Provides AI Technology Training for SMEs in Mandalika" />
                                 <div class="wrapper__absolute">
                                     <span class="cta cta__light">
@@ -256,14 +256,14 @@
                                     Provides AI Technology Training for
                                     SMEs in Mandalika
                                 </h3>
-                                <a href="/news/news-1/" class="stretched-link"></a>
+                                <a href="{{ route('news') }}" class="stretched-link"></a>
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="card news__card">
                             <div class="card__img">
-                                <img src="/assets/img/news-2.webp" class="card-img-top"
+                                <img src="{{ asset('assets/img/news-2.webp') }}" class="card-img-top"
                                     alt="NeutraDC Introduces the Cutting-Edge Smart Hands 2.0 as a Digital Assistant for Data Centers" />
                                 <div class="wrapper__absolute">
                                     <span class="cta cta__light">
@@ -283,15 +283,15 @@
                                     Smart Hands 2.0 as a Digital
                                     Assistant for Data Centers
                                 </h3>
-                                <a href="/news/news-1/" class="stretched-link"></a>
+                                <a href="{{ route('news') }}" class="stretched-link"></a>
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="card news__card">
                             <div class="card__img">
-                                <img src="/assets/img/news-3.webp" class="card-img-top"
-                                    alt="NeutraDC Signs MoU with HPE, Cirrascale, and DataCanvas Limited for AI-Ecosystem Collaboration" />
+                                <img src="{{ asset('assets/img/news-3.webp') }}" class="card-img-top"
+                                    alt="NeutraDC Signs MoU with HPE, Cirrascale, and DataCanvas Limited for AI-Ecosystem Collaboration">
                                 <div class="wrapper__absolute">
                                     <span class="cta cta__light">
                                         View More
@@ -310,7 +310,7 @@
                                     Cirrascale, and DataCanvas Limited
                                     for AI-Ecosystem Collaboration
                                 </h3>
-                                <a href="/news/news-1/" class="stretched-link"></a>
+                                <a href="{{ route('news') }}" class="stretched-link"></a>
                             </div>
                         </div>
                     </div>

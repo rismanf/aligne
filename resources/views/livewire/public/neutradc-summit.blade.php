@@ -51,10 +51,23 @@
                     </h2>
                 </div>
                 <div class="btn__wrapper text-center mt-5">
-                    <a href="#" class="btn btn__danger btn--lg">
+                    {{-- <a href="#" class="btn btn__danger btn--lg">
                         Become an EARLY REGISTRANT for NeutraDC Summit
                         2025
-                    </a>
+                    </a> --}}
+                    @guest
+                        <a href="{{route('register')}}" class="btn btn__danger btn--lg">
+                            REGISTER NOW for NeutraDC Summit 2025
+                        </a>
+                    @endguest
+
+                    @auth
+                        <a href="{{route('admin.home')}}" class="btn btn__danger btn--lg">
+                            Event NeutraDC Summit 2025
+                        </a>
+                    @endauth
+
+
                 </div>
             </div>
         </div>

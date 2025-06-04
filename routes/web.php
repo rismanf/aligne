@@ -40,19 +40,19 @@ Route::get('/logout', function () {
 
 // Route::middleware(['domainCheck'])->group(function () {
 // Redirect '/' tergantung status login
-Route::get('/', Home::class);
-Route::get('/neutradc-summit', NeutradcSummit::class);
+Route::get('/', Home::class)->name('/');
+Route::get('/neutradc-summit', NeutradcSummit::class)->name('neutradc-summit');
 // Route::get('/data-center', DataCenterHome::class);
-Route::get('/data-center/jakarta-hq', Jakarta::class);
-Route::get('/data-center/batam', Batam::class);
-Route::get('/data-center/singapore', Singapore::class);
-Route::get('/services', Service::class);
-Route::get('/about-us', AboutUs::class);
-Route::get('/news', News::class);
-Route::get('/news/{id}', NewsDetail::class);
-Route::get('/contact-us', ContactUs::class);
-Route::get('/two-hands-hub', TwoHandHub::class);
-Route::get('/register', Register::class);
+Route::get('/data-center/jakarta-hq', Jakarta::class)->name('data-center.jakarta-hq');
+Route::get('/data-center/batam', Batam::class)->name('data-center.batam');
+Route::get('/data-center/singapore', Singapore::class)->name('data-center.singapore');
+Route::get('/services', Service::class)->name('services');
+Route::get('/about-us', AboutUs::class)->name('about-us');
+Route::get('/news', News::class)->name('news');
+Route::get('/news/{id}', NewsDetail::class)->name('news.detail');
+Route::get('/contact-us', ContactUs::class)->name('contact-us');
+Route::get('/two-hands-hub', TwoHandHub::class)->name('two-hands-hub');
+Route::get('/register', Register::class)->name('register');
 
 // });
 
