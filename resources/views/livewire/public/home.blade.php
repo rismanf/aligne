@@ -213,7 +213,7 @@
 
                     <div class="grid__growth--item">
                         <div class="growth__line">
-                            <img src="{{ asset('assets/img/growth-map-latest-1.webp') }}" alt="map" />
+                            <img src="{{ asset('assets/img/growth-map-latest-2.webp') }}" alt="map" />
                         </div>
                     </div>
                 </div>

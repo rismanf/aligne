@@ -46,7 +46,7 @@
             <div class="section__content">
                 <div class="section__heading section__heading--lg text-center text--danger">
                     <h2>
-                        Early Bird Registration <br />
+                        Registration <br />
                         for NeutraDC Summit 2025
                     </h2>
                 </div>
@@ -56,13 +56,16 @@
                         2025
                     </a> --}}
                     @guest
-                        <a href="{{route('register')}}" class="btn btn__danger btn--lg">
-                            REGISTER NOW for NeutraDC Summit 2025
+                        <a href="{{ route('login') }}" class="btn btn__danger btn--lg">
+                            Login
+                        </a>
+                        <a href="{{ route('register') }}" class="btn btn__danger btn--lg">
+                            Register
                         </a>
                     @endguest
 
                     @auth
-                        <a href="{{route('admin.home')}}" class="btn btn__danger btn--lg">
+                        <a href="{{ route('admin.home') }}" class="btn btn__danger btn--lg">
                             Event NeutraDC Summit 2025
                         </a>
                     @endauth

@@ -2,10 +2,20 @@
 
 namespace App\Livewire\Admin\News;
 
+use App\Models\News;
+use App\Models\User;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Mary\Traits\Toast;
+use Spatie\Permission\Models\Role;
 
 class ListNews extends Component
 {
+
+    use WithPagination;
+    use Toast;
+
+    public function mount() {}
     public function render()
     {
         $title = 'News Management';
@@ -25,10 +35,35 @@ class ListNews extends Component
             ],
         ];
 
-        // return view('livewire.admin.news.list-news');
-        return view('livewire.maintenance')->layout('components.layouts.app', [
-            'breadcrumbs' => $breadcrumbs,
-            'title' => $title,
-        ]);
+        $news = News::with('roles')
+            ->paginate(3);
+
+        $news->getCollection()->transform(function ($val, $index) use ($news) {
+            $val->row_number = ($news->currentPage() - 1) * $news->perPage() + $index + 1;
+            return $val;
+        });
+
+
+        $t_headers = [
+            ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
+            ['key' => 'title', 'label' => 'Title'],
+            ['key' => 'author', 'label' => 'Author'],
+            ['key' => 'updated_at', 'label' => 'Updated At'],
+            ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
+        ];
+
+        return view('livewire.admin.news.list-news', [
+            't_headers' => $t_headers,
+            'news' => $news,
+        ])
+            ->layout('components.layouts.app', [
+                'breadcrumbs' => $breadcrumbs,
+                'title' => $title,
+            ]);
+
+        // return view('livewire.maintenance')->layout('components.layouts.app', [
+        //     'breadcrumbs' => $breadcrumbs,
+        //     'title' => $title,
+        // ]);
     }
 }

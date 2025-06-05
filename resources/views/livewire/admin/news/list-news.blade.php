@@ -46,7 +46,6 @@
             {{-- Notice we are using now the `actions` slot from `x-form`, not from modal --}}
             <x-slot:actions>
                 <x-button label="Cancel" @click="$wire.deleteModal = false" />
-                <x-button label="Confirm" class="btn-primary" @click="$wire.deleteRole({{ $selectedUserId }})" spinner />
             </x-slot:actions>
         </x-form>
     </x-modal>
