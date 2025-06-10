@@ -5,6 +5,7 @@ use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Invoice\ListInvoice;
 use App\Livewire\Admin\News\AddNews;
 use App\Livewire\Admin\News\ListNews;
+use App\Livewire\Admin\Participant\AddParticipant;
 use App\Livewire\Admin\Participant\ListParticipant;
 use App\Livewire\Admin\Role\ListRole;
 use App\Livewire\Admin\Role\RoleShow;
@@ -73,10 +74,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'domainCheck'])->gro
 
     Route::get('/role', ListRole::class)->name('role.index');
     Route::get('/role/{id}', RoleShow::class)->name('role.show');
-    
+
+    Route::get('/participant', ListParticipant::class)->name('participant.index');
+    Route::get('/participant/create', AddParticipant::class)->name('participant.create');
+
     Route::get('/vcard', ListVcard::class)->name('vcard.index');
     Route::get('/contact', ListContact::class)->name('contact.index');
-    Route::get('/participant', ListParticipant::class)->name('participant.index');
     Route::get('/invoice', ListInvoice::class)->name('invoice.index');
-
 });

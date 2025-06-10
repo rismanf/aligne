@@ -35,8 +35,7 @@ class ListNews extends Component
             ],
         ];
 
-        $news = News::with('roles')
-            ->paginate(3);
+        $news = News::paginate(5);
 
         $news->getCollection()->transform(function ($val, $index) use ($news) {
             $val->row_number = ($news->currentPage() - 1) * $news->perPage() + $index + 1;
@@ -61,9 +60,5 @@ class ListNews extends Component
                 'title' => $title,
             ]);
 
-        // return view('livewire.maintenance')->layout('components.layouts.app', [
-        //     'breadcrumbs' => $breadcrumbs,
-        //     'title' => $title,
-        // ]);
     }
 }

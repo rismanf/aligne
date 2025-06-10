@@ -17,9 +17,11 @@ return new class extends Migration
             $table->string('title_slug');
             $table->string('title');
             $table->string('description')->nullable();           
-            $table->string('keyword')->nullable();
+            $table->string('keywords')->nullable();
             $table->string('author')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image_original')->nullable();
+            $table->string('image_medium')->nullable();
+            $table->string('image_small')->nullable();
             $table->string('category')->nullable();
             $table->string('tags')->nullable();
             $table->text('body');            

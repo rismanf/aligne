@@ -17,6 +17,7 @@
             </x-slot:actions>
         </x-form>
     </x-card>
+
 </div>
 
 <script src="https://cdn.tiny.cloud/1/{{ config('app.tinymce') }}/tinymce/6/tinymce.min.js" referrerpolicy="origin">

@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('qoutations', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->integer('event_id');
             $table->integer('type_user');
-            $table->string('quotation')->nullable();
-            $table->string('quotation_type')->nullable();
-            $table->string('quotation_option')->nullable();
+            $table->string('question')->nullable();
+            $table->string('qoestion_type')->nullable();
             $table->boolean('is_active')->default(1);
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('qoutations');
+        Schema::dropIfExists('questions');
     }
 };
