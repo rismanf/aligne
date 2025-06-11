@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('event_id');
             $table->integer('type_user');
             $table->string('question')->nullable();
-            $table->string('qoestion_type')->nullable();
+            $table->string('question_type')->nullable();
             $table->boolean('is_active')->default(1);
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();

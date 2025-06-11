@@ -34,9 +34,13 @@ class ConfigSeeder extends Seeder
 
         $role = Role::create(['name' => 'Admin']);
 
+
         $permissions = Permission::pluck('id', 'id')->all();
 
         $role->syncPermissions($permissions);
+        
+        $user1 = Role::create(['name' => 'User']);
+        $user1->syncPermissions($permissions);
 
         $user->assignRole('Admin');
     }

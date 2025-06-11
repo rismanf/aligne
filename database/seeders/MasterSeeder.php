@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Event;
 use App\Models\master_data;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -44,6 +45,16 @@ class MasterSeeder extends Seeder
             ]);
         }
 
+        Event::create([
+            'name' => 'NeutraDC Summit 2025',
+            'location' => 'Jakarta, Indonesia',
+            'description' => 'NeutraDC Summit 2025 is the premier event for data center professionals.',
+            'start_date' => '2025-06-17',
+            'end_date' => '2025-06-18',
+            'is_active' => 1,
+            'created_by_id' => 1,
+            'updated_by_id' => 1,
+        ]);
         
     }
 }

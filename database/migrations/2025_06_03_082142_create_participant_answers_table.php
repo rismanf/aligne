@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->integer('event_id');
             $table->integer('participant_id');
-            $table->string('quotation');
+            $table->integer('question_id');
+            $table->string('question')->nullable();
+            $table->integer('answer_id');
             $table->string('answer')->nullable();
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();

@@ -7,6 +7,9 @@ use Livewire\Component;
 
 class ContactUs extends Component
 {
+    public function save(){
+        
+    }
     public function render()
     {
         $menu = Menu::where('name', 'Contact Us')->first();

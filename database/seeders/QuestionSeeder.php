@@ -13,57 +13,85 @@ class QuestionSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-      {
+    {
         $questions = [
             [
                 'question' => 'What type of advisory firm do you work for?',
                 'type_user' => 1,
                 'event_id' => 1,
+                'question_type' => 'multiple',
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
             [
                 'question' => 'What type of investment company do you work for?',
                 'type_user' => 1,
                 'event_id' => 1,
+                'question_type' => 'multiple',
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
             [
                 'question' => 'Which event are you primarily interested in attending? We will provide you event updates based on your selection.',
                 'type_user' => 1,
                 'event_id' => 1,
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
             [
                 'question' => 'We hold technology discovery sessions where you’ll hear rapid-fire pitches on a tech area of interest to you.',
                 'type_user' => 1,
                 'event_id' => 1,
+                'question_type' => 'multiple',
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
             [
                 'question' => 'Which closed-door Lunch Briefings most interest you? Please select two.',
                 'type_user' => 1,
                 'event_id' => 1,
+                'question_type' => 'multiple',
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
             [
                 'question' => 'Please confirm if you have any dietary requirements',
                 'type_user' => 1,
                 'event_id' => 1,
+                'question_type' => 'multiple',
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
             [
                 'question' => 'If we were to run a Networking Golf Day on 16 June, ahead of the Icebreaker Networking Party, would you be interested in playing?',
                 'type_user' => 7,
                 'event_id' => 1,
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
             [
                 'question' => 'Which technologies are you actively exploring?',
                 'type_user' => 1,
                 'event_id' => 1,
+                'question_type' => 'multiple',
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
             [
                 'question' => 'Which types of advisory/services are you currently looking for?',
                 'type_user' => 1,
                 'event_id' => 1,
+                'question_type' => 'multiple',
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
             [
                 'question' => 'Finally, what types of projects are you currently working on?',
                 'type_user' => 1,
                 'event_id' => 1,
+                'question_type' => 'multiple',
+                'created_by_id' => 1,
+                'updated_by_id' => 1,
             ],
         ];
 
@@ -174,7 +202,14 @@ class QuestionSeeder extends Seeder
 
         foreach ($question_options as $question => $options) {
             foreach ($options as $option) {
-                Questions_option::firstOrCreate(['option' => $option, 'question_id' => Questions::where('question', $question)->first()->id]);
+                Questions_option::firstOrCreate(
+                    [
+                        'option' => $option,
+                        'question_id' => Questions::where('question', $question)->first()->id,
+                        'created_by_id' => 1,
+                        'updated_by_id' => 1,
+                    ]
+                );
             }
         }
     }

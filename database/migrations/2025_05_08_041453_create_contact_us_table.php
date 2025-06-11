@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('contact_us', function (Blueprint $table) {
             $table->id();
+            $table->string('source')->nullable();
+            $table->string('full_name');
             $table->string('fist_name');
             $table->string('last_name');
             $table->string('email');

@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('location')->nullable();
+            $table->string('description')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->boolean('is_active')->default(1);
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();
