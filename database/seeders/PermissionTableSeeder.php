@@ -29,10 +29,10 @@ class PermissionTableSeeder extends Seeder
             'news-create',
             'news-edit',
             'news-delete',
-            'menus-list',
-            'menus-create',
-            'menus-edit',
-            'menus-delete',
+            'menu-list',
+            'menu-create',
+            'menu-edit',
+            'menu-delete',
             'vcard-list',
             'vcard-create',
             'vcard-edit',
@@ -49,6 +49,10 @@ class PermissionTableSeeder extends Seeder
             'invoice-create',
             'invoice-edit',
             'invoice-delete',
+            'invoice-confirm',
+            'invoice-cancel',
+            'invoice-approve',
+            'invoice-reject',
         ];
 
         foreach ($permissions as $permission) {

@@ -14,7 +14,7 @@
             <hr class="border-gray-300 my-4" />
             <x-input label="Coupon Code" wire:model="coupon_code" />
             <span class="text-xs text-gray-500">If you have a coupon code, please enter it here.</span>
-            
+
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
             @foreach ($questions as $question)
@@ -27,8 +27,11 @@
 
                     @if ($question->question_type === 'multiple')
                         @foreach ($question->options as $option)
-                            <x-checkbox label="{{ $option->option }}"
-                                wire:model="answers.{{ $question->id }}.{{ $option->id }}" />
+                            <label class="flex items-center space-x-2 mb-1">
+                                <input type="checkbox" wire:model="answers.{{ $question->id }}.{{ $option->id }}"
+                                    value="1" class="checkbox" />
+                                <span>{{ $option->option }}</span>
+                            </label>
                         @endforeach
                     @else
                         @foreach ($question->options as $option)

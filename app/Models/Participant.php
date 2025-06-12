@@ -21,6 +21,7 @@ class Participant extends Model
         'coupon_code',
         'price',
         'is_active',
+        'status',
         'created_by_id',
         'updated_by_id'
     ];

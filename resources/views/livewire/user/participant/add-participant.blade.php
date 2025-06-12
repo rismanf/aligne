@@ -1,45 +1,4 @@
 <div>
-    <section id="hero" class="hero banner contact">
-        <div class="grid grid__stack">
-            <div class="bg__right bg__img">
-                <img class="only__desktop" src="/assets/img/banner-bg-contact.webp" alt="Banner" />
-                <img class="only__mobile" src="/assets/img/banner-bg-contact.webp" alt="Banner" />
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="section__content">
-                            <div class="section__heading text--danger text__xl">
-                                <h1>Get in Touch</h1>
-                                <p>
-                                    Want to learn more about NeutraDC
-                                    data center, network &
-                                    infrastructure capabilities? Get in
-                                    touch with us now
-                                </p>
-                                <div class="link__wrapper vstack">
-                                    <a href="mailto:sales.admin@neutradc.com" class="cta cta__alt">
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-email"></use>
-                                        </svg>
-                                        sales.admin@neutradc.com
-                                    </a>
-                                    <a href="#" class="cta cta__alt" target="_blank">
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-pin"></use>
-                                        </svg>
-                                        Telkom Landmark Tower, 5th
-                                        Floor, Jl. Gatot Subroto South
-                                        Jakarta, Indonesia
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <section id="contact" class="contact">
         <div class="container">
@@ -103,4 +62,5 @@
             </div>
         </div>
     </section>
+
 </div>

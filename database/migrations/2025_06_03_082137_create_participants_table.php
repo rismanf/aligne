@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('invoice_code')->nullable();
             $table->string('coupon_code')->nullable();
             $table->string('price')->nullable();
+            $table->string('status')->nullable();
             $table->boolean('is_active')->default(1);            
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();

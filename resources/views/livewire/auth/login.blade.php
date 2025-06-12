@@ -1,32 +1,21 @@
 <div class="h-screen flex items-center justify-center">
-  <x-card class="min-w-md">
-    <x-slot name="title">Login</x-slot>
 
-    <form wire:submit="login" class="space-y-4">
-      <x-input
-        label="Email"
-        type="email"
-        wire:model.defer="email"
-        placeholder="Email"
-        icon="o-user"
-        hint=""
-        class="w-full pr-0"
-        required
-      />
+    <x-card class="min-w-md">
+        <x-slot name="title">Login</x-slot>
+        <x-slot:menu>
+            <x-button icon="o-arrow-left" class="btn-xs" label="Back to Home"
+                onclick="window.location.href='{{ route('/') }}'" title="Back to Home" />
+        </x-slot:menu>
+        <form wire:submit="login" class="space-y-4">
+            <x-input label="Email" type="email" wire:model.defer="email" placeholder="Email" icon="o-user"
+                hint="" class="w-full pr-0" required />
 
-      <x-input
-        label="Password"
-        type="password"
-        wire:model.defer="password"
-        placeholder="Password"
-        icon="o-lock-closed"
-        class="w-full pr-0"
-        required
-      />
+            <x-input label="Password" type="password" wire:model.defer="password" placeholder="Password"
+                icon="o-lock-closed" class="w-full pr-0" required />
 
-      {{-- <x-checkbox label="Remember me" wire:model="remember" /> --}}
+            {{-- <x-checkbox label="Remember me" wire:model="remember" /> --}}
 
-      <x-button label="Login" type="submit" class="btn-primary w-full" spinner="login" />
-    </form>
-  </x-card>
+            <x-button label="Login" type="submit" class="btn-primary w-full" spinner="login" />
+        </form>
+    </x-card>
 </div>

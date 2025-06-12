@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('event_id');
             $table->string('invoice_code')->unique();
             $table->string('total_price')->nullable();
-            $table->integer('participants')->nullable();
+            $table->integer('total_participants')->nullable();
             $table->string('status')->nullable();
             $table->boolean('is_active')->default(1);
             $table->integer('created_by_id')->nullable();

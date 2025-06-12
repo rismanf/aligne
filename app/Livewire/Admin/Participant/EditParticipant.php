@@ -11,9 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Mary\Traits\Toast;
 
-class AddParticipant extends Component
+class EditParticipant extends Component
 {
     use Toast;
+    public $participantId;
 
     public $name,
         $first_name,
@@ -87,7 +88,6 @@ class AddParticipant extends Component
             return;
         }
 
-        // Simpan data peserta
 
         DB::beginTransaction();
         try {
@@ -103,7 +103,22 @@ class AddParticipant extends Component
                 $price =  0;
             }
 
-            $user = Participant::create([
+            $user = Participant::where('id', $this->participantId)->first();
+            if (!$user) {
+                $this->toast(
+                    type: 'error',
+                    title: 'Participant Not Found',
+                    description: 'The participant you are trying to edit does not exist.',
+                    position: 'toast-top toast-end',
+                    icon: 'o-information-circle',
+                    css: 'alert-danger',
+                    timeout: 3000,
+                    redirectTo: null
+                );
+                return;
+            }
+            // Update data peserta
+            $user->update([
                 'event_id' => $event_id,
                 'full_name' => $this->first_name . ' ' . $this->last_name,
                 'first_name' => $this->first_name,
@@ -114,15 +129,13 @@ class AddParticipant extends Component
                 'country' => $this->country,
                 'job_title' => $this->job_title,
                 'price' => $price,
-                'status' => 'created',
-                'created_by_id' => $id_user,
                 'updated_by_id' => $id_user,
             ]);
             // Simpan jawaban peserta
 
             foreach ($questions as $question) {
                 $qid = $question->id;
-
+                ParticipantAnswers::where('participant_id', $user->id)->delete();
                 if ($question->question_type === 'multiple') {
                     foreach ($this->answers[$qid] ?? [] as $optionId => $isChecked) {
                         if ($isChecked) {
@@ -172,6 +185,39 @@ class AddParticipant extends Component
             );
         }
     }
+    public function mount($id)
+    {
+        $this->participantId = $id;
+        // Load participant data based on ID
+        $participant = Participant::with('answers')->findOrFail($this->participantId);
+        $this->name = $participant->name;
+        $this->first_name = $participant->first_name;
+        $this->last_name = $participant->last_name;
+        $this->phone = $participant->phone;
+        $this->nik = $participant->nik;
+        $this->job_title = $participant->job_title;
+        $this->department = $participant->department;
+        $this->email = $participant->email;
+        $this->type_user = $participant->type_user;
+        $this->country = $participant->country;
+        $this->coupon_code = $participant->coupon_code;
+        $this->company = $participant->company;
+
+        // Load answers if available
+
+        foreach ($participant->answers as $answer) {
+
+            $qid = $answer->question_id;
+            $aid = $answer->answer_id;
+
+            if ($answer->questions->question_type === 'multiple') {
+                $answers[$qid][$aid] = true; // simpan sebagai array untuk checkbox
+            } else {
+                $answers[$qid] = $aid; // simpan satu jawaban
+            }
+        }
+        $this->answers = $answers ?? [];
+    }
     public function render()
     {
         $title = 'Participant Management';
@@ -187,13 +233,12 @@ class AddParticipant extends Component
             ],
             [
                 'link' => '', // route('home') = nama route yang ada di web.php
-                'label' => 'Create Participant',
+                'label' => 'Edit Participant',
             ],
         ];
-
         $questions = Questions::with('options')->get();
 
-        return view('livewire.admin.participant.add-participant', [
+        return view('livewire.admin.participant.edit-participant', [
             'questions' => $questions,
         ])->layout('components.layouts.app', [
             'breadcrumbs' => $breadcrumbs,

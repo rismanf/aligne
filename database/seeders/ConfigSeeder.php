@@ -16,7 +16,7 @@ class ConfigSeeder extends Seeder
     public function run(): void
     {
         //
-        $user = User::create([
+        $admin = User::create([
             'name' => 'Risman Firmansyah',
             'first_name' => 'Risman',
             'last_name' => 'Firmansyah',
@@ -32,16 +32,31 @@ class ConfigSeeder extends Seeder
             'password' => bcrypt('password')
         ]);
 
-        $role = Role::create(['name' => 'Admin']);
-
-
+        $role_admin = Role::create(['name' => 'Admin']);
         $permissions = Permission::pluck('id', 'id')->all();
+        $admin->assignRole('Admin');
+        $role_admin->syncPermissions($permissions);
 
-        $role->syncPermissions($permissions);
-        
-        $user1 = Role::create(['name' => 'User']);
-        $user1->syncPermissions($permissions);
+        $role_user = Role::create(['name' => 'User']);
+        $role_user->givePermissionTo(
+            [
+                'participant-list',
+                'participant-create',
+                'participant-edit',
+                'participant-delete',
+                'invoice-list',
+                'invoice-confirm',
+                'invoice-cancel',
+            ]
+        );
 
-        $user->assignRole('Admin');
+        $role_finance = Role::create(['name' => 'Finance']);
+        $role_finance->givePermissionTo(
+            [
+                'invoice-list',
+                'invoice-approve',
+                'invoice-reject',
+            ]
+        );
     }
 }

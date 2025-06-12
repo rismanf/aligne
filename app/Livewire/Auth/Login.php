@@ -28,12 +28,17 @@ class Login extends Component
         $password = trim($this->password);
 
         if (env('LOGIN_TYPE', 'local') == 'local') {
-            if (strpos($email, '@neutradc.com') > 0) {
-                if (Auth::attempt(['email' => $email, 'password' => $password])) {
+            // if (strpos($email, '@neutradc.com') > 0) {
+            if (Auth::attempt(['email' => $email, 'password' => $password])) {
+                // if (Auth::user()->hasRole('admin')) {
                     session()->regenerate();
                     return redirect()->intended(route('admin.home'));
-                }
+                // } else {
+                //     session()->regenerate();
+                //     return redirect()->intended(route('user.home'));
+                // }
             }
+            // }
             // if ($email == $password) {
             //     session()->regenerate();
             //     return redirect()->intended(route('home'));

@@ -22,7 +22,7 @@ class ParticipantAnswers extends Model
         return $this->belongsTo(Participant::class, 'participant_id');
     }
 
-    public function question()
+    public function questions()
     {
         return $this->belongsTo(Questions::class, 'question_id');
     }

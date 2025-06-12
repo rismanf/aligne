@@ -7,6 +7,7 @@ use App\Livewire\Admin\News\AddNews;
 use App\Livewire\Admin\News\ListNews;
 use App\Livewire\Admin\Participant\AddParticipant;
 use App\Livewire\Admin\Participant\ListParticipant;
+use App\Livewire\Admin\Participant\PaymentParticipant;
 use App\Livewire\Admin\Role\ListRole;
 use App\Livewire\Admin\Role\RoleShow;
 use App\Livewire\Admin\User\ListUser;
@@ -27,6 +28,7 @@ use App\Livewire\Public\News;
 use App\Livewire\Public\NewsDetail;
 use App\Livewire\Public\Service;
 use App\Livewire\Public\TwoHandHub;
+use App\Models\User;
 
 // Route bawaan login (Livewire)
 Route::get('/login', Login::class)->name('login');
@@ -65,6 +67,14 @@ Route::get('/register', Register::class)->name('register');
 // });
 
 // Route yang butuh login & domain valid
+
+Route::prefix('user')->name('user.')->middleware(['auth', 'domainCheck'])->group(function () {
+    Route::get('/dashboard', App\Livewire\User\Home::class)->name('home');
+
+    Route::get('/participant', App\Livewire\User\Participant\AddParticipant::class)->name('participant.index');
+    Route::get('/participant/create', AddParticipant::class)->name('participant.create');
+});
+
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'domainCheck'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('home');
 
@@ -77,6 +87,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'domainCheck'])->gro
 
     Route::get('/participant', ListParticipant::class)->name('participant.index');
     Route::get('/participant/create', AddParticipant::class)->name('participant.create');
+    Route::get('/participant/{id}/edit', App\Livewire\Admin\Participant\EditParticipant::class)->name('participant.edit');
+    Route::get('/participant/payment', PaymentParticipant::class)->name('participant.payment');
 
     Route::get('/vcard', ListVcard::class)->name('vcard.index');
     Route::get('/contact', ListContact::class)->name('contact.index');
