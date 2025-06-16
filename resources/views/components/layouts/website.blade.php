@@ -61,6 +61,8 @@
 
         @include('livewire.partials.footer')
     </main>
+
+    <x-toast />
 </body>
 
 </html>

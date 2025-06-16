@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\News;
 
 use App\Models\News;
+use App\Models\Tags;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -23,10 +24,51 @@ class AddNews extends Component
         $image,
         $body;
 
+    public $published = false;
+    public $published_at;
+    public $TagModal = false;
+    public $name_tag;
+    public $tag_list = [];
+    public $tag_list_ids = [];
+
+    public function showTagModal()
+    {
+        $this->TagModal = true;
+    }
+
+    public function savetags()
+    {
+        $this->validate([
+            'name_tag' => 'required|string|max:255',
+        ]);
+
+        Tags::create([
+            'name' => $this->name_tag,
+            'slug' => Str::slug($this->name_tag),
+            'created_by_id' => auth()->id(),
+            'updated_by_id' => auth()->id(),
+            // You can add more fields if needed
+        ]);
+
+        // Reset the name_tag field after saving
+        $this->name_tag = '';
+        // Refresh the tag list
+        $this->tag_list = Tags::all()->map(function ($tag) {
+            return ['id' => $tag->id, 'name' => $tag->name];
+        })->toArray();
+
+        // Here you can save the tag or perform any action you need
+        $this->success('Tag Created');
+        $this->TagModal = false; // Close the modal after saving
+    }
+
+    public function togglePublished()
+    {
+        $this->published = !$this->published;
+        $this->published_at = $this->published ? now()->format('Y-m-d') : null;
+    }
     public function save()
     {
-
-
         $this->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:500',
@@ -67,7 +109,7 @@ class AddNews extends Component
         }
 
         // Generate slug based on current year and month, and a random number
-        $slug = substr(date('Y'), -1) . str_pad(date('m'), 2, '0', STR_PAD_LEFT) . str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+        $slug = substr(date('Y'), -1) . str_pad(date('m'), 2, '0', STR_PAD_LEFT) . str_pad(rand(0, 99), 2, '0', STR_PAD_LEFT);
         $title_slug = Str::slug($this->title);
 
         $news = new News();
@@ -105,6 +147,13 @@ class AddNews extends Component
     }
     public function render()
     {
+        $this->tag_list = Tags::all()->map(function ($tag) {
+            return ['id' => $tag->id, 'name' => $tag->name];
+        })->toArray();
+        // $this->tag_list = [
+        //     ['id' => 1, 'name' => 'Joe'],
+        // ];
+        // dd($this->tag_list);
         $title = 'News Management';
         $breadcrumbs = [
             [

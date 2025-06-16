@@ -52,7 +52,7 @@ Route::get('/data-center/singapore', Singapore::class)->name('data-center.singap
 Route::get('/services', Service::class)->name('services');
 Route::get('/about-us', AboutUs::class)->name('about-us');
 Route::get('/news', News::class)->name('news');
-Route::get('/news/{id}', NewsDetail::class)->name('news.detail');
+Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/two-hands-hub', TwoHandHub::class)->name('two-hands-hub');
 Route::get('/register', Register::class)->name('register');

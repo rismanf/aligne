@@ -231,90 +231,42 @@
                     </h2>
                 </div>
 
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 row--space">
-                    <div class="col">
-                        <div class="card news__card">
-                            <div class="card__img">
-                                <img src="{{ asset('assets/img/news-1.webp') }}" class="card-img-top"
-                                    alt="Supporting Local Entrepreneurs to Go Global, Telkom Through NeutraDC Provides AI Technology Training for SMEs in Mandalika" />
-                                <div class="wrapper__absolute">
-                                    <span class="cta cta__light">
-                                        View More
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-arrow-right"></use>
-                                        </svg>
-                                    </span>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        @foreach ($news as $item)
+                            <div class="col">
+                                <div class="card news__card">
+                                    <div class="card__img">
+                                        <picture>
+                                            <source media="(max-width: 600px)"
+                                                srcset="{{ Storage::disk('s3')->url($item->image_small) }}">
+                                            <source media="(max-width: 1200px)"
+                                                srcset="{{ Storage::disk('s3')->url($item->image_medium) }}">
+                                            <img src="{{ Storage::disk('s3')->url($item->image_original) }}"
+                                                class="card-img-top" alt="{{ $item->title }}">
+                                        </picture>
+                                        <div class="wrapper__absolute">
+                                            <span class="cta cta__light">
+                                                View More
+                                                <svg class="icon" aria-hidden="true">
+                                                    <use xlink:href="#svg-arrow-right"></use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <span class="card__date">
+                                            {{ \Carbon\Carbon::parse($item->created_at)->format('d F Y') }}
+                                        </span>
+                                        <h3 class="card-title">
+                                            {{ $item->title }}
+                                        </h3>
+                                        <a href="/news/{{ $item->slug . '/' . $item->title_slug }}"
+                                            class="stretched-link"></a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <span class="card__date">
-                                    03 October 2024
-                                </span>
-                                <h3 class="card-title">
-                                    Supporting Local Entrepreneurs to Go
-                                    Global, Telkom Through NeutraDC
-                                    Provides AI Technology Training for
-                                    SMEs in Mandalika
-                                </h3>
-                                <a href="{{ route('news') }}" class="stretched-link"></a>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-                    <div class="col">
-                        <div class="card news__card">
-                            <div class="card__img">
-                                <img src="{{ asset('assets/img/news-2.webp') }}" class="card-img-top"
-                                    alt="NeutraDC Introduces the Cutting-Edge Smart Hands 2.0 as a Digital Assistant for Data Centers" />
-                                <div class="wrapper__absolute">
-                                    <span class="cta cta__light">
-                                        View More
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-arrow-right"></use>
-                                        </svg>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <span class="card__date">
-                                    01 October 2024
-                                </span>
-                                <h3 class="card-title">
-                                    NeutraDC Introduces the Cutting-Edge
-                                    Smart Hands 2.0 as a Digital
-                                    Assistant for Data Centers
-                                </h3>
-                                <a href="{{ route('news') }}" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card news__card">
-                            <div class="card__img">
-                                <img src="{{ asset('assets/img/news-3.webp') }}" class="card-img-top"
-                                    alt="NeutraDC Signs MoU with HPE, Cirrascale, and DataCanvas Limited for AI-Ecosystem Collaboration">
-                                <div class="wrapper__absolute">
-                                    <span class="cta cta__light">
-                                        View More
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-arrow-right"></use>
-                                        </svg>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <span class="card__date">
-                                    29 September 2024
-                                </span>
-                                <h3 class="card-title">
-                                    NeutraDC Signs MoU with HPE,
-                                    Cirrascale, and DataCanvas Limited
-                                    for AI-Ecosystem Collaboration
-                                </h3>
-                                <a href="{{ route('news') }}" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
