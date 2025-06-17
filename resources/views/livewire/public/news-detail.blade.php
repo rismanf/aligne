@@ -112,7 +112,7 @@
                                 <button class="btn btn__share btn--lg" data-sharer="x"
                                     data-title="Supporting Local Entrepreneurs to Go Global, Telkom Through NeutraDC Provides AI Technology Training for SMEs in Mandalika"
                                     data-hashtags="NeutraDCnews"
-                                    data-url="https://neutradc.internalpreview.com/news/news-1/">
+                                    data-url="{{ url()->current() }}">
                                     <svg class="icon" aria-hidden="true">
                                         <use xlink:href="#svg-twitter"></use>
                                     </svg>
@@ -121,7 +121,7 @@
                             <li>
                                 <button class="btn btn__share btn--lg" data-sharer="facebook"
                                     data-hashtag="NeutraDC, NeutraDCnews"
-                                    data-url="https://neutradc.internalpreview.com/news/news-1/">
+                                    data-url="{{ url()->current() }}">
                                     <svg class="icon" aria-hidden="true">
                                         <use xlink:href="#svg-facebook"></use>
                                     </svg>
@@ -130,7 +130,7 @@
                             <li>
                                 <button class="btn btn__share btn--lg" data-sharer="whatsapp"
                                     data-title="Supporting Local Entrepreneurs to Go Global, Telkom Through NeutraDC Provides AI Technology Training for SMEs in Mandalika"
-                                    data-url="https://neutradc.internalpreview.com/news/news-1/">
+                                    data-url="{{ url()->current() }}">
                                     <svg class="icon" aria-hidden="true">
                                         <use xlink:href="#svg-whatsapp"></use>
                                     </svg>
@@ -138,7 +138,7 @@
                             </li>
                             <li>
                                 <button class="btn btn__share btn--lg" data-sharer="linkedin"
-                                    data-url="https://neutradc.internalpreview.com/news/news-1/">
+                                    data-url="{{ url()->current() }}">
                                     <svg class="icon" aria-hidden="true">
                                         <use xlink:href="#svg-linkedin-alt"></use>
                                     </svg>
@@ -147,7 +147,7 @@
                             <li>
                                 <button class="btn btn__share btn--lg" data-sharer="email"
                                     data-title="Supporting Local Entrepreneurs to Go Global, Telkom Through NeutraDC Provides AI Technology Training for SMEs in Mandalika"
-                                    data-url="https://neutradc.internalpreview.com/news/news-1/"
+                                    data-url="{{ url()->current() }}"
                                     data-subject="Neutra DC News">
                                     <svg class="icon" aria-hidden="true">
                                         <use xlink:href="#svg-email"></use>
@@ -156,7 +156,7 @@
                             </li>
                             <li>
                                 <button class="btn btn__share btn--lg url__copy"
-                                    data-url="https://neutradc.internalpreview.com/news/news-1/"
+                                    data-url="{{ url()->current() }}"
                                     data-bs-toggle="tooltip" data-bs-original-title="Copy Url"
                                     data-bs-placement="right">
                                     <svg class="icon" aria-hidden="true">
