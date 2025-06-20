@@ -76,14 +76,14 @@ Route::get('/vcard', Vcard::class)->name('vcard');
 
 // Route yang butuh login & domain valid
 
-Route::prefix('user')->name('user.')->middleware(['auth', 'domainCheck'])->group(function () {
+Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', App\Livewire\User\Home::class)->name('home');
 
     Route::get('/participant', App\Livewire\User\Participant\AddParticipant::class)->name('participant.index');
     Route::get('/participant/create', AddParticipant::class)->name('participant.create');
 });
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'domainCheck'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('home');
 
     Route::get('/news', ListNews::class)->name('news.index');
