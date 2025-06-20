@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <img src="/assets/img/logo-main.webp" alt="Brand" />
+                <img src="{{asset('/assets/img/logo-main.webp')}}" alt="Brand" />
             </a>
             <button class="btn btn__toggler navbar-toggler" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Button Menu">

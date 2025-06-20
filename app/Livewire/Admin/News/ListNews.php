@@ -26,16 +26,12 @@ class ListNews extends Component
                 'icon' => 's-home',
             ],
             [
-                // 'link' => route("user.index"), // route('home') = nama route yang ada di web.php
-                'label' => 'Admin',
-            ],
-            [
                 // 'link' => route("admin.role.index"), // route('home') = nama route yang ada di web.php
                 'label' => 'News',
             ],
         ];
 
-        $news = News::paginate(5);
+        $news = News::orderBy('created_at', 'desc')->paginate(5);
 
         $news->getCollection()->transform(function ($val, $index) use ($news) {
             $val->row_number = ($news->currentPage() - 1) * $news->perPage() + $index + 1;
@@ -47,6 +43,8 @@ class ListNews extends Component
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
             ['key' => 'title', 'label' => 'Title'],
             ['key' => 'author', 'label' => 'Author'],
+            ['key' => 'is_active', 'label' => 'Status'],
+            ['key' => 'published_at', 'label' => 'Published At'],
             ['key' => 'updated_at', 'label' => 'Updated At'],
             ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
         ];
@@ -59,6 +57,5 @@ class ListNews extends Component
                 'breadcrumbs' => $breadcrumbs,
                 'title' => $title,
             ]);
-
     }
 }

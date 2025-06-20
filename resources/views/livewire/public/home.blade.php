@@ -2,8 +2,8 @@
     <section id="hero" class="hero banner">
         <div class="grid grid__stack">
             <div class="bg__img section__vh">
-                <img class="only__desktop" src="/assets/img/banner-home-hero-latest-2a.webp" alt="Banner" />
-                <img class="only__mobile" src="/assets/img/banner-home-hero-latest-2a.webp" alt="Banner" />
+                <img class="only__desktop" src="{{asset('/assets/img/banner-home-hero-latest-2a.webp')}}" alt="Banner" />
+                <img class="only__mobile" src="{{asset('/assets/img/banner-home-hero-latest-2a.webp')}}" alt="Banner" />
             </div>
             <div class="section__content align__center">
                 <div class="container">

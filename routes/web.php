@@ -3,14 +3,20 @@
 use App\Livewire\Admin\Contact\ListContact;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Invoice\ListInvoice;
+use App\Livewire\Admin\Menu\ListMenu;
 use App\Livewire\Admin\News\AddNews;
+use App\Livewire\Admin\News\EditNews;
 use App\Livewire\Admin\News\ListNews;
+use App\Livewire\Admin\News\NewsShow;
 use App\Livewire\Admin\Participant\AddParticipant;
 use App\Livewire\Admin\Participant\ListParticipant;
 use App\Livewire\Admin\Participant\PaymentParticipant;
+use App\Livewire\Admin\Question\ListQuestion;
 use App\Livewire\Admin\Role\ListRole;
 use App\Livewire\Admin\Role\RoleShow;
 use App\Livewire\Admin\User\ListUser;
+use App\Livewire\Admin\Vcard\AddVcard;
+use App\Livewire\Admin\Vcard\EditVcard;
 use App\Livewire\Admin\Vcard\ListVcard;
 use App\Livewire\Layouts\AppLayout;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +34,7 @@ use App\Livewire\Public\News;
 use App\Livewire\Public\NewsDetail;
 use App\Livewire\Public\Service;
 use App\Livewire\Public\TwoHandHub;
+use App\Livewire\Public\Vcard;
 use App\Models\User;
 
 // Route bawaan login (Livewire)
@@ -56,6 +63,7 @@ Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/two-hands-hub', TwoHandHub::class)->name('two-hands-hub');
 Route::get('/register', Register::class)->name('register');
+Route::get('/vcard', Vcard::class)->name('vcard');
 
 // });
 
@@ -80,17 +88,26 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'domainCheck'])->gro
 
     Route::get('/news', ListNews::class)->name('news.index');
     Route::get('/news/create', AddNews::class)->name('news.create');
-    Route::get('/user', ListUser::class)->name('user.index');
+    Route::get('/news/{id}', NewsShow::class)->name('news.show');
+    Route::get('/news/{id}/edit', EditNews::class)->name('news.edit');
 
-    Route::get('/role', ListRole::class)->name('role.index');
-    Route::get('/role/{id}', RoleShow::class)->name('role.show');
+    Route::get('/vcard', ListVcard::class)->name('vcard.index');
+    Route::get('/vcard/create', AddVcard::class)->name('vcard.create');
+    Route::get('/vcard/{id}/edit', EditVcard::class)->name('vcard.edit');
+
+    Route::get('/menu', ListMenu::class)->name('menu.index');
+
 
     Route::get('/participant', ListParticipant::class)->name('participant.index');
     Route::get('/participant/create', AddParticipant::class)->name('participant.create');
     Route::get('/participant/{id}/edit', App\Livewire\Admin\Participant\EditParticipant::class)->name('participant.edit');
     Route::get('/participant/payment', PaymentParticipant::class)->name('participant.payment');
 
-    Route::get('/vcard', ListVcard::class)->name('vcard.index');
     Route::get('/contact', ListContact::class)->name('contact.index');
     Route::get('/invoice', ListInvoice::class)->name('invoice.index');
+    Route::get('/question', ListQuestion::class)->name('question.index');
+    Route::get('/user', ListUser::class)->name('user.index');
+
+    Route::get('/role', ListRole::class)->name('role.index');
+    Route::get('/role/{id}', RoleShow::class)->name('role.show');
 });

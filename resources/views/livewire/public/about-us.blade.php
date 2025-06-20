@@ -1,67 +1,9 @@
 <div>
-    <header id="header" class="header fixed-top">
-        <nav class="navbar navbar-expand-lg">
-            <div class="container">
-                <a class="navbar-brand" href="/">
-                    <img src="/assets/img/logo-main.webp" alt="Brand" />
-                </a>
-                <button class="btn btn__toggler navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Button Menu">
-                    <span></span><span></span><span></span>
-                </button>
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                    aria-labelledby="offcanvasNavbarLabel" data-bs-backdrop="static">
-                    <div class="offcanvas-body">
-                        <ul class="navbar-nav justify-content-end flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/neutradc-summit/">NeutraDC Summit</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="/data-center/" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                    Data Center
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="nav-link dropdown-item" href="/data-center/jakarta-hq/">NeutraDC
-                                            Jakarta</a>
-                                    </li>
-                                    <li>
-                                        <a class="nav-link dropdown-item" href="/data-center/batam/">NeutraDC Batam</a>
-                                    </li>
-                                    <li>
-                                        <a class="nav-link dropdown-item" href="/data-center/singapore/">NeutraDC
-                                            Singapore</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/services/">Services</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/about-us/">About Us</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/news/">News</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/contact-us/">Contact Us</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/two-hands-hub/">Two Hands Hub</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
-
     <section id="hero" class="hero banner">
         <div class="grid grid__stack">
             <div class="bg__img section__vh">
-                <img class="only__desktop" src="/assets/img/banner-about-1.webp" alt="Banner" />
-                <img class="only__mobile" src="/assets/img/banner-about-1.webp" alt="Banner" />
+                <img class="only__desktop" src="{{ asset('/assets/img/banner-about-1.webp') }}" alt="Banner" />
+                <img class="only__mobile" src="{{ asset('/assets/img/banner-about-1.webp') }}" alt="Banner" />
             </div>
             <div class="container">
                 <div class="section__content">
@@ -81,7 +23,7 @@
 
     <section id="about" class="about banner wrapper__relative">
         <div class="bg__img wrapper__absolute">
-            <img src="/assets/img/banner-bg-about.webp" alt="Banner" />
+            <img src="{{ asset('/assets/img/banner-bg-about.webp') }}" alt="Banner" />
         </div>
         <div class="section__content about__content">
             <div class="container container__half">
@@ -122,7 +64,8 @@
                     <div class="row g-4 row__space">
                         <div class="col-md-4">
                             <div class="card__img">
-                                <img src="/assets/img/about-profile.webp" class="img-fluid" alt="Andreuw Th.A.F" />
+                                <img src="{{ asset('/assets/img/about-profile.webp') }}" class="img-fluid"
+                                    alt="Andreuw Th.A.F" />
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -272,8 +215,8 @@
                                     broader region.
                                 </p>
                             </div>
-                            <img class="" src="{{asset('assets/img/logo-nxera-batam.webp')}}" alt="Presence" />
-                            <a href="{{route('data-center.batam')}}" class="stretched-link"></a>
+                            <img class="" src="{{ asset('assets/img/logo-nxera-batam.webp') }}" alt="Presence" />
+                            <a href="{{ route('data-center.batam') }}" class="stretched-link"></a>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -302,11 +245,11 @@
         <div class="container">
             <div class="section__content">
                 <div class="glightbox__wrapper">
-                    <img src="{{asset('assets/img/compro.webp')}}" alt="image" />
+                    <img src="{{ asset('assets/img/about-compo.webp') }}" alt="image" />
 
                     <div class="section__heading">
                         <h2>NeutraDC Company Profile</h2>
-                        <a href="https://www.youtube.com/watch?v=D0UnqGm_miA" class="btn btn__play glightbox">
+                        <a href="https://www.youtube.com/watch?v=vAvXpspww3E" class="btn btn__play glightbox">
                             <svg class="icon" aria-hidden="true">
                                 <use xlink:href="#svg-play-video"></use>
                             </svg>

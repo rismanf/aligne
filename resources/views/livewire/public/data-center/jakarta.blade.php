@@ -3,7 +3,7 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container">
                 <a class="navbar-brand" href="/">
-                    <img src="/assets/img/logo-main.webp" alt="Brand" />
+                    <img src="{{ asset('/assets/img/logo-main.webp') }}" alt="Brand" />
                 </a>
                 <button class="btn btn__toggler navbar-toggler" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Button Menu">
@@ -59,7 +59,7 @@
 
     <section id="hero" class="hero banner wrapper__relative">
         <div class="bg__img wrapper__absolute">
-            <img src="/assets/img/banner-bg-coverage.webp" alt="Banner" />
+            <img src="{{ asset('/assets/img/banner-bg-coverage.webp') }}" alt="Banner" />
         </div>
         <div class="container">
             <div class="section__content">
@@ -103,8 +103,8 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="/assets/img/jakarta-1.webp" class="img-fluid rounded-start"
-                                            alt="Cikarang" />
+                                        <img src="{{ asset('/assets/img/jakarta-1.webp') }}"
+                                            class="img-fluid rounded-start" alt="Cikarang" />
                                         <h4 class="card-title">
                                             Cikarang
                                         </h4>
@@ -171,8 +171,8 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="/assets/img/jakarta-2.webp" class="img-fluid rounded-start"
-                                            alt="Serpong" />
+                                        <img src="{{ asset('/assets/img/jakarta-2.webp') }}"
+                                            class="img-fluid rounded-start" alt="Serpong" />
                                         <h4 class="card-title">
                                             Serpong
                                         </h4>
@@ -234,8 +234,8 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="/assets/img/jakarta-3.webp" class="img-fluid rounded-start"
-                                            alt="Sentul" />
+                                        <img src="{{ asset('/assets/img/jakarta-3.webp') }}"
+                                            class="img-fluid rounded-start" alt="Sentul" />
                                         <h4 class="card-title">
                                             Sentul
                                         </h4>
@@ -297,8 +297,8 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="/assets/img/jakarta-4.webp" class="img-fluid rounded-start"
-                                            alt="Surabaya" />
+                                        <img src="{{ asset('/assets/img/jakarta-4.webp') }}"
+                                            class="img-fluid rounded-start" alt="Surabaya" />
                                         <h4 class="card-title">
                                             Surabaya
                                         </h4>
@@ -361,8 +361,8 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="/assets/img/edge-dc.webp" class="img-fluid rounded-start"
-                                            alt="EdgeDC" />
+                                        <img src="{{ asset('/assets/img/edge-dc.webp') }}"
+                                            class="img-fluid rounded-start" alt="EdgeDC" />
                                         <h4 class="card-title">
                                             EdgeDC
                                         </h4>
@@ -426,7 +426,7 @@
                         services across Indonesia.
                     </p>
                 </div>
-                <img class="cover" src="/assets/img/jakarta-map-latest-2.webp" alt="Presence" />
+                <img class="cover" src="{{ asset('/assets/img/jakarta-map-latest-2.webp') }}" alt="Presence" />
             </div>
         </div>
     </section>

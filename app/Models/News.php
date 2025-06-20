@@ -19,6 +19,7 @@ class News extends Model
         'category',
         'tags',
         'body',
+        'published_at',
         'month',
         'year',
         'is_active',

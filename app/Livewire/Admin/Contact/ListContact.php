@@ -4,9 +4,12 @@ namespace App\Livewire\Admin\Contact;
 
 use App\Models\ContactUs;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ListContact extends Component
 {
+    use WithPagination;
+    
     public $detail_contact = [];
     public bool $DetailModal = false;
     public function showDetailModal($id_user)

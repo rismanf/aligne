@@ -1,7 +1,7 @@
 <div>
     <section id="hero" class="hero banner wrapper__relative">
         <div class="bg__img wrapper__absolute">
-            <img src="/assets/img/banner-bg-coverage.webp" alt="Banner" />
+            <img src="{{asset('/assets/img/banner-bg-coverage.webp')}}" alt="Banner" />
         </div>
         <div class="container">
             <div class="section__content">
@@ -83,7 +83,7 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="/assets/img/sng-1.webp" class="img-fluid rounded-start"
+                                        <img src="{{asset('/assets/img/sng-1.webp')}}" class="img-fluid rounded-start"
                                             alt="SNG-1" />
                                         <h4 class="card-title">
                                             SNG-1
@@ -127,7 +127,7 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="/assets/img/sng-2.webp" class="img-fluid rounded-start"
+                                        <img src="{{asset('/assets/img/sng-2.webp')}}" class="img-fluid rounded-start"
                                             alt="SNG-2" />
                                         <h4 class="card-title">
                                             SNG-2
@@ -168,7 +168,7 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="/assets/img/sng-3.webp" class="img-fluid rounded-start"
+                                        <img src="{{asset('/assets/img/sng-3.webp')}}" class="img-fluid rounded-start"
                                             alt="SNG-3" />
                                         <h4 class="card-title">
                                             SNG-3
@@ -228,7 +228,7 @@
                     <div class="row g-4 row__space">
                         <div class="col-md-4">
                             <div class="card__img">
-                                <img src="/assets/img/about-singapore-profile.webp" class="img-fluid"
+                                <img src="{{asset('/assets/img/about-singapore-profile.webp')}}" class="img-fluid"
                                     alt="Sendang Praptomo" />
                             </div>
                         </div>
@@ -292,7 +292,7 @@
                         providers.
                     </p>
                 </div>
-                <img class="mx-auto" src="/assets/img/singapore-map-latest-2.webp" alt="Presence" />
+                <img class="mx-auto" src="{{asset('/assets/img/singapore-map-latest-2.webp')}}" alt="Presence" />
             </div>
         </div>
     </section>

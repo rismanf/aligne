@@ -1,7 +1,7 @@
 <div>
     <section id="hero" class="hero banner wrapper__relative">
         <div class="bg__img wrapper__absolute">
-            <img src="/assets/img/banner-bg-coverage.webp" alt="Banner" />
+            <img src="{{asset('/assets/img/banner-bg-coverage.webp')}}" alt="Banner" />
         </div>
         <div class="container">
             <div class="section__content">
@@ -21,7 +21,7 @@
     <section id="services" class="services">
         <div class="container">
             <div class="glightbox__wrapper">
-                <img src="/assets/img/about-compo.webp" alt="image" />
+                <img src="{{asset('/assets/img/about-compo.webp')}}" alt="image" />
 
                 <div class="section__heading">
                     <h2>NeutraDC Services</h2>

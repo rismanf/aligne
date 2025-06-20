@@ -53,12 +53,14 @@ class PermissionTableSeeder extends Seeder
             'invoice-cancel',
             'invoice-approve',
             'invoice-reject',
+            'question-list',
+            'question-create',
+            'question-edit',
+            'question-delete',
         ];
 
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
         }
-
-        
     }
 }

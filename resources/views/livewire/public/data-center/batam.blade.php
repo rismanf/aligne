@@ -1,7 +1,7 @@
 <div>
     <section id="hero" class="hero banner wrapper__relative">
         <div class="bg__img wrapper__absolute">
-            <img src="/assets/img/banner-bg-coverage.webp" alt="Banner" />
+            <img src="{{ asset('/assets/img/banner-bg-coverage.webp') }}" alt="Banner" />
         </div>
         <div class="container">
             <div class="section__content">
@@ -97,7 +97,7 @@
                     <div class="row g-4 row__space">
                         <div class="col-md-4">
                             <div class="card__img">
-                                <img src="/assets/img/about-batam-profile.webp" class="img-fluid"
+                                <img src="{{ asset('/assets/img/about-batam-profile.webp') }}" class="img-fluid"
                                     alt="Indrama YM Purba" />
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                     </p>
                 </div>
 
-                <img class="mx-auto" src="/assets/img/batam-map-latest-2.webp" alt="Batam Elevating" />
+                <img class="mx-auto" src="{{ asset('/assets/img/batam-map-latest-2.webp') }}" alt="Batam Elevating" />
 
                 <div class="link__wrapper text-center mt-5">
                     <a href="#contact" class="btn btn__primary btn--lg">
@@ -364,8 +364,9 @@
 
                     <form class="row g-4" wire:submit="save">
                         <div class="col-md-6">
-                            <input id="contactNameFirst" type="text" class="form-control" placeholder="First Name"
-                                aria-label="First Name" wire:model.defer="first_name" required />
+                            <input id="contactNameFirst" type="text" class="form-control"
+                                placeholder="First Name" aria-label="First Name" wire:model.defer="first_name"
+                                required />
                             @error('first_name')
                                 <span class="text">*{{ $message }}</span>
                             @enderror
@@ -378,8 +379,9 @@
                             @enderror
                         </div>
                         <div class="col-md-6">
-                            <input id="contactCompany" type="text" class="form-control" placeholder="Company Name"
-                                aria-label="Company Name" wire:model.defer="company" required />
+                            <input id="contactCompany" type="text" class="form-control"
+                                placeholder="Company Name" aria-label="Company Name" wire:model.defer="company"
+                                required />
                             @error('company')
                                 <span class="text">*{{ $message }}</span>
                             @enderror
@@ -414,8 +416,8 @@
                             @enderror
                         </div>
                         <div class="col-12">
-                            <textarea id="contactMessage" class="form-control" placeholder="Message" aria-label="Message" required rows="4"
-                                wire:model.defer="message"></textarea>
+                            <textarea id="contactMessage" class="form-control" placeholder="Message" aria-label="Message" required
+                                rows="4" wire:model.defer="message"></textarea>
                             @error('message')
                                 <span class="text">*{{ $message }}</span>
                             @enderror

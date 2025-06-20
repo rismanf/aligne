@@ -14,7 +14,7 @@
                 <x-menu-item title="Contact Us" icon="o-identification" link="{{ route('admin.contact.index') }}" />
             @endcan
             @can('menu-list')
-                <x-menu-item title="Menu" icon="o-identification" link="#" />
+                <x-menu-item title="Menu" icon="o-identification" link="{{ route('admin.menu.index') }}" />
             @endcan
 
         @endcanany
@@ -22,6 +22,9 @@
         @canany(['participant-list', 'invoice-list'])
             @can('participant-list')
                 <x-menu-item title="Participants" icon="o-user-group" link="{{ route('admin.participant.index') }}" />
+            @endcan
+            @can('question-list')
+                <x-menu-item title="Questions" icon="o-question" link="{{ route('admin.question.index') }}" />
             @endcan
             @can('invoice-list')
                 <x-menu-item title="Invoice" icon="o-banknotes" link="{{ route('admin.invoice.index') }}" />

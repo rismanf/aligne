@@ -7,8 +7,8 @@
     <section id="hero" class="hero banner contact">
         <div class="grid grid__stack">
             <div class="bg__right bg__img">
-                <img class="only__desktop" src="/assets/img/banner-bg-contact.webp" alt="Banner" />
-                <img class="only__mobile" src="/assets/img/banner-bg-contact.webp" alt="Banner" />
+                <img class="only__desktop" src="{{ asset('/assets/img/banner-bg-contact.webp') }}" alt="Banner" />
+                <img class="only__mobile" src="{{ asset('/assets/img/banner-bg-contact.webp') }}" alt="Banner" />
             </div>
             <div class="container">
                 <div class="row">

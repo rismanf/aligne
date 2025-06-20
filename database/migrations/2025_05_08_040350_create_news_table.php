@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('category')->nullable();
             $table->string('tags')->nullable();
             $table->text('body');            
+            $table->date('published_at')->nullable();
             $table->integer('month')->nullable();
             $table->integer('year')->nullable();
             $table->boolean('is_active')->default(1);
