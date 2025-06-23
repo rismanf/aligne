@@ -2,8 +2,13 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\Event;
+use App\Models\Participant;
+use App\Models\ParticipantAnswers;
+use App\Models\Questions;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -11,77 +16,137 @@ class Register extends Component
 {
     use Toast;
 
-    public $firstname, $lastname, $company, $job, $country, $phone, $email, $password, $password_confirmation;
+    public $first_name, $last_name, $company, $job, $country, $phone, $email, $password, $password_confirmation;
+    public $answers = [];
     public function save()
     {
         $this->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'company' => 'nullable|string|max:255',
-            'job' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'company' => 'required|string|max:255',
+            'job' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
             'phone' => 'required|numeric',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-        ]);
-        session()->flash('success', 'User berhasil ditambahkan.');
-
-        // if ($this->password != $this->retype_password) {
-        //     $this->toast(
-        //         type: 'error',
-        //         title: 'Password Not Match',
-        //         description: null,                  // optional (text)
-        //         position: 'toast-top toast-end',    // optional (daisyUI classes)
-        //         icon: 'o-information-circle',       // Optional (any icon)
-        //         css: 'alert-info',                  // Optional (daisyUI classes)
-        //         timeout: 3000,                      // optional (ms)
-        //         redirectTo: null                    // optional (uri)
-        //     );
-        //     return;
-        // }
-
-        $user = User::create([
-            'name' => $this->firstname . ' ' . $this->lastname,
-            'first_name' => $this->firstname,
-            'last_name' => $this->lastname,
-            'company' => $this->company,
-            'title' => $this->job,
-            'country' => $this->country,
-            'phone' => $this->phone,
-            'email' => $this->email,
-            'password' => bcrypt($this->password), // default password atau form password sendiri
         ]);
 
-        $user->assignRole('User'); // Assign role 'user' to the new user
-        // // Jika ingin mengirim email verifikasi atau notifikasi lainnya, bisa ditambahkan di sini
-        // // Contoh: Mail::to($user->email)->send(new UserRegistered($user));
-        // // Jika ingin menampilkan pesan sukses, bisa menggunakan session flash atau toast
+        $questions  = Questions::with('options')->get();
+        // Cek apakah semua pertanyaan dijawab
+        foreach ($questions as $question) {
+            $qid = $question->id;
 
-        // // session()->flash('success', 'User berhasil ditambahkan.');
-        // $this->resetForm();
-        // $this->toast(
-        //     type: 'success',
-        //     title: 'Data Saved',
-        //     description: null,                  // optional (text)
-        //     position: 'toast-top toast-end',    // optional (daisyUI classes)
-        //     icon: 'o-information-circle',       // Optional (any icon)
-        //     css: 'alert-info',                  // Optional (daisyUI classes)
-        //     timeout: 3000,                      // optional (ms)
-        //     redirectTo: route('user.index')                    // optional (uri)
-        // );
-        // // Setelah pendaftaran berhasil, bisa diarahkan ke halaman login atau halaman lain
-        // return redirect()->route('login');
+            if ($question->question_type === 'multiple') {
+                // Validasi minimal 1 checkbox dicentang
+                if (empty($this->answers[$qid]) || !collect($this->answers[$qid])->filter()->count()) {
+                    $this->addError("answers.$qid", 'Pilih minimal satu jawaban.');
+                }
+            } else {
+                // Validasi radio wajib diisi
+                if (empty($this->answers[$qid])) {
+                    $this->addError("answers.$qid", 'Pertanyaan ini wajib dijawab.');
+                }
+            }
+        }
 
-        Auth::login($user);
-        session()->regenerate();
-        return redirect()->intended(route('admin.home'));
+        // Jika ada error, jangan lanjut simpan
+        if ($this->getErrorBag()->isNotEmpty()) {
+            $this->toast(
+                type: 'error',
+                title: 'Validation Error',
+                description: 'Please fix the errors before submitting.',
+                position: 'toast-top toast-end',
+                icon: 'o-information-circle',
+                css: 'alert-warning',
+                timeout: 3000,
+                redirectTo: null
+            );
+            return;
+        }
 
-        // Implementasikan logika pendaftaran di sini
-        // Misalnya, menyimpan data pengguna baru ke database
+        DB::beginTransaction();
+        try {
+            $event_id = Event::where('is_active', true)->first()->id; // Ganti dengan event_id yang sesuai
+            $id_user = 1;
+            $price =  5000000;
+
+
+            $user = Participant::create([
+                'event_id' => $event_id,
+                'full_name' => $this->first_name . ' ' . $this->last_name,
+                'first_name' => $this->first_name,
+                'last_name' => $this->last_name,
+                'phone' => $this->phone,
+                'email' => $this->email,
+                'company' => $this->company,
+                'country' => $this->country,
+                'job_title' => $this->job,
+                'price' => $price,
+                'status' => 'created',
+                'created_by_id' => $id_user,
+                'updated_by_id' => $id_user,
+            ]);
+            // Simpan jawaban peserta
+
+            foreach ($questions as $question) {
+                $qid = $question->id;
+
+                if ($question->question_type === 'multiple') {
+                    foreach ($this->answers[$qid] ?? [] as $optionId => $isChecked) {
+                        if ($isChecked) {
+                            ParticipantAnswers::create([
+                                'event_id' => $event_id,
+                                'participant_id' => $user->id,
+                                'question_id' => $qid,
+                                'question' => $question->question,
+                                'answer_id' => $optionId,
+                                'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
+                                'created_by_id' => $id_user,
+                                'updated_by_id' => $id_user,
+                            ]);
+                        }
+                    }
+                } else {
+                    $optionId = $this->answers[$qid];
+                    ParticipantAnswers::create([
+                        'event_id' => $event_id,
+                        'participant_id' => $user->id,
+                        'question_id' => $qid,
+                        'question' => $question->question,
+                        'answer_id' => $optionId,
+                        'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
+                        'created_by_id' => $id_user,
+                        'updated_by_id' => $id_user,
+                    ]);
+                }
+            }
+
+            $this->success(
+                'Participant created successfully!',
+                redirectTo: route('public.register')
+            );
+            DB::commit();
+        } catch (\Exception $e) {
+            dd( $e->getMessage());  
+            DB::rollBack();
+            $this->toast(
+                type: 'error',
+                title: 'Error',
+                description: 'Failed to create participant: ' . $e->getMessage(),
+                position: 'toast-top toast-end',
+                icon: 'o-information-circle',
+                css: 'alert-danger',
+                timeout: 3000,
+                redirectTo: null
+            );
+        }
     }
     public function render()
     {
-        return view('livewire.auth.register')->layout('components.layouts.website', [
+        $questions = Questions::with('options')->get();
+
+        return view('livewire.auth.register', [
+            'questions' => $questions,
+        ])->layout('components.layouts.website', [
             'title' => 'Register | NeutraDC',
             'description' => 'NeutraDC is a leading data center provider offering colocation, cloud computing, and managed services in Indonesia and Southeast Asia.',
             'keywords' => 'register, neutradc,neutradc summit, data center, colocation, cloud computing, managed services',
