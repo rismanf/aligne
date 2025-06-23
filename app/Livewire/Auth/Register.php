@@ -16,7 +16,7 @@ class Register extends Component
 {
     use Toast;
 
-    public $first_name, $last_name, $company, $job, $country, $phone, $email, $password, $password_confirmation;
+    public $first_name, $last_name, $company, $job, $country, $phone, $email, $password, $password_confirmation,$user_type;
     public $answers = [];
     public function save()
     {

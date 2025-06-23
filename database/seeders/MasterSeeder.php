@@ -19,7 +19,7 @@ class MasterSeeder extends Seeder
             'Internal',
             'End-customer',
             'General Admission',
-            'Patner/Sponsor',
+            'Partner/Sponsor',
         ];
 
         foreach ($request_status as $v => $stat) {

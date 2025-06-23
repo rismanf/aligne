@@ -15,7 +15,7 @@
             </div>
         </div>
     </section>
-    <section id="hero2" class="hero banner wrapper__relative">
+    {{-- <section id="hero2" class="hero banner wrapper__relative">
         <div class="bg__img wrapper__absolute">
             <img src="/assets/img/banner-2-bg.webp" alt="Banner" />
         </div>
@@ -37,8 +37,34 @@
                 </div>
             </div>
         </div>
+    </section> --}}
+    <section id="hero2" class="hero banner wrapper__relative">
+        <div class="bg__img wrapper__absolute">
+            <img src="/assets/img/banner-2-bg.webp" alt="Banner" />
+        </div>
+        <div class="container">
+            <div class="section__content">
+                {{-- <div class="btn__wrapper text-center mb-5">
+                    <a href="#" class="btn btn__light btn--lg">
+                        Become a SPONSOR for NeutraDC Summit 2025
+                    </a>
+                </div> --}}
+                <div class="section__heading section__heading--lg text-center text--white">
+                    <h2> Registration <br />
+                        for NeutraDC Summit 2025</h2>
+
+                </div>
+                <div class="btn__wrapper text-center mb-5">
+
+                    <a href="{{ route('register') }}" class="btn btn__light btn--lg">
+                        Join Now
+                    </a>
+
+                </div>
+            </div>
+        </div>
     </section>
-    <section id="hero3" class="hero banner wrapper__relative">
+    {{-- <section id="hero3" class="hero banner wrapper__relative">
         <div class="bg__img wrapper__absolute">
             <img src="/assets/img/banner-3-bg.webp" alt="Banner" />
         </div>
@@ -51,27 +77,37 @@
                     </h2>
                 </div>
                 <div class="btn__wrapper text-center mt-5">
-                    {{-- <a href="#" class="btn btn__danger btn--lg">
-                        Become an EARLY REGISTRANT for NeutraDC Summit
-                        2025
-                    </a> --}}
-                    @guest
-                        <a href="{{ route('login') }}" class="btn btn__danger btn--lg">
-                            Login
-                        </a>
+                 
                         <a href="{{ route('register') }}" class="btn btn__danger btn--lg">
-                            Register
+                            Join Now
                         </a>
-                    @endguest
-
-                    @auth
-                        <a href="{{ route('admin.home') }}" class="btn btn__danger btn--lg">
-                            Event NeutraDC Summit 2025
-                        </a>
-                    @endauth
-
 
                 </div>
+            </div>
+        </div>
+    </section> --}}
+
+    <section id="hero3" class="hero banner wrapper__relative">
+        <div class="bg__img wrapper__absolute">
+            <img src="/assets/img/banner-3-bg.webp" alt="Banner" />
+        </div>
+        <div class="container">
+            <div class="section__content">
+                <div class="btn__wrapper text-center mb-5">
+                    <a href="#" class="btn btn__danger btn--lg">
+                        Become a SPONSOR for NeutraDC Summit 2025
+                    </a>
+                </div>
+                <div class="section__heading section__heading--lg text-center text--danger">
+                    <h2>Stay connected with NeutraDC</h2>
+                    <h3>
+                        Be the first to know about our upcoming events,
+                        <br />
+                        industry trends, and exclusive insights just for
+                        you.
+                    </h3>
+                </div>
+
             </div>
         </div>
     </section>
@@ -247,7 +283,7 @@
         </div>
     </section>
 
-    <section id="speakers" class="speakers bg__danger">
+    {{-- <section id="speakers" class="speakers bg__danger" >
         <div class="container">
             <div class="section__content">
                 <div class="speakers__group">
@@ -496,7 +532,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section id="gallery" class="gallery">
         <div class="container">
@@ -549,7 +585,7 @@
         </div>
     </section>
 
-    <section id="banner-1" class="banner wrapper__relative bg__alt">
+    {{-- <section id="banner-1" class="banner wrapper__relative bg__alt">
         <div class="bg__img wrapper__absolute">
             <img src="/assets/img/banner-1-bg.webp" alt="Banner" />
         </div>
@@ -564,8 +600,8 @@
                 </div>
             </div>
         </div>
-    </section>
-    <section id="banner-1" class="banner wrapper__relative bg__alt">
+    </section> --}}
+    {{-- <section id="banner-1" class="banner wrapper__relative bg__alt">
         <div class="bg__img wrapper__absolute">
             <img src="/assets/img/banner-2-bg.webp" alt="Banner" />
         </div>
@@ -606,5 +642,5 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 </div>

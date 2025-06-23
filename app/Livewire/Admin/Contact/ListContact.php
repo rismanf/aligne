@@ -47,6 +47,7 @@ class ListContact extends Component
 
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
+            ['key' => 'source', 'label' => 'Source'],
             ['key' => 'full_name', 'label' => 'Name'],
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'company', 'label' => 'Company'],
