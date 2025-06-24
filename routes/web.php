@@ -23,7 +23,6 @@ use App\Livewire\Layouts\AppLayout;
 use Illuminate\Support\Facades\Route;
 
 use App\Livewire\Auth\Login;
-use App\Livewire\Auth\Register;
 use App\Livewire\Public\AboutUs;
 use App\Livewire\Public\ContactUs;
 use App\Livewire\Public\DataCenter\Batam;
@@ -33,10 +32,12 @@ use App\Livewire\Public\Home;
 use App\Livewire\Public\NeutradcSummit;
 use App\Livewire\Public\News;
 use App\Livewire\Public\NewsDetail;
+use App\Livewire\Public\Register;
 use App\Livewire\Public\Service;
 use App\Livewire\Public\SponsorRegister;
 use App\Livewire\Public\TwoHandHub;
 use App\Livewire\Public\Vcard;
+use App\Livewire\Public\Whistleblower;
 use App\Models\User;
 
 // Route bawaan login (Livewire)
@@ -66,6 +67,7 @@ Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/two-hands-hub', TwoHandHub::class)->name('two-hands-hub');
 Route::get('/register', Register::class)->name('register');
 Route::get('/sponsor-register', SponsorRegister::class)->name('sponsor-register');
+Route::get('/whistleblower', Whistleblower::class)->name('whistleblower');
 Route::get('/vcard', Vcard::class)->name('vcard');
 
 // });

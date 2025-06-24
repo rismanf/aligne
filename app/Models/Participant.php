@@ -17,6 +17,7 @@ class Participant extends Model
         'company',
         'country',
         'type_user',
+        'industry',
         'invoice_code',
         'coupon_code',
         'price',

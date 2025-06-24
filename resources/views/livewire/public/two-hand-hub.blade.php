@@ -140,7 +140,7 @@
                                 </p>
                             </div>
                             <div class="card__img">
-                                <img src="{{ asset('/assets/img/hub-card-4.webp') }}" alt="png" />
+                                <img src="{{ asset('/assets/img/hub-card-3.webp') }}" alt="png" />
                                 <div class="card__overlay">
                                     <svg class="icon" aria-hidden="true">
                                         <use xlink:href="#svg-two-synergize"></use>
@@ -171,7 +171,7 @@
                     <div class="col">
                         <div class="journey__card card">
                             <div class="card__img">
-                                <img src="{{ asset('/assets/img/journey-yogyakarta-4.webp') }}" alt="Yogyakarta" />
+                                <img src="{{ asset('/assets/img/journey-jogjakarta-2.webp') }}" alt="Yogyakarta" />
                             </div>
                             <div class="card-img-overlay">
                                 <div class="journey__card--body">

@@ -58,5 +58,45 @@ class ConfigSeeder extends Seeder
                 'invoice-reject',
             ]
         );
+
+        $role_corsec = Role::create(['name' => 'Corsec']);
+        $role_corsec->givePermissionTo(
+            [
+                'news-list',
+                'news-create',
+                'news-edit',
+                'news-delete',
+                'menu-list',
+                'menu-create',
+                'menu-edit',
+                'menu-delete',
+                'vcard-list',
+                'vcard-create',
+                'vcard-edit',
+                'vcard-delete',
+                'contactus-list',
+                'contactus-create',
+                'contactus-edit',
+                'contactus-delete',
+                'question-list',
+                'question-create',
+                'question-edit',
+                'question-delete',
+            ]
+        );
+
+        $role_sales = Role::create(['name' => 'Sales']);
+        $role_sales->givePermissionTo(
+            [
+                'participant-list',
+                'participant-create',
+                'participant-edit',
+                'participant-delete',
+                'sponsor-list',
+                'sponsor-create',
+                'sponsor-edit',
+                'sponsor-delete',
+            ]
+        );
     }
 }

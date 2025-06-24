@@ -15,7 +15,7 @@ class MasterSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        //Type User
         $request_status = [
             'End-customer',
             'General Admission',
@@ -30,6 +30,7 @@ class MasterSeeder extends Seeder
             ]);
         }
 
+        //Status Invoice
         $request_status = [
             'Unpaid',
             'Waiting for Payment',
@@ -45,17 +46,48 @@ class MasterSeeder extends Seeder
             ]);
         }
 
+        $request_sectors = [
+            "Banking, Finance & Fintech",
+            "Construction & Design",
+            "Consumer Manufacturing & Retail",
+            "E-Commerce",
+            "Education & Research",
+            "Energy & Utilities",
+            "Government & Public Agencies",
+            "Healthcare & Pharmaceuticals",
+            "Hospitality & Tourism",
+            "Industrial Manufacturing",
+            "Logistics & Transport",
+            "Media & Entertainment",
+            "Primary Industries (Oil & Gas, mining, agriculture)",
+            "Telecommunications",
+            "Cloud Service Provider",
+            "Data Center/Colocation Provider/REIT",
+            "IT Consultants & System Integrator",
+            "IT/DC Equipment Provider",
+            "IT/DC Solution & Service Provider",
+            "Others"
+        ];
+
+        foreach ($request_sectors as $v => $stat) {
+            master_data::create([
+                'type' => 'industry_sector',
+                'code' => $v + 1,
+                'name' => $stat,
+            ]);
+        }
+
         Event::create([
             'name' => 'NeutraDC Summit 2025',
             'location' => 'Jakarta, Indonesia',
             'description' => 'NeutraDC Summit 2025 is the premier event for data center professionals.',
             'start_date' => '2025-06-17',
-            'end_date' => '2025-06-18',
+            'end_date' => '2025-07-30',
             'is_active' => 1,
             'created_by_id' => 1,
             'updated_by_id' => 1,
         ]);
-        
+
         $countries = [
             ["name" => "Afghanistan", "code" => "AF", "continent" => "Asia", "continent_code" => "AS"],
             ["name" => "Aland Islands", "code" => "AX", "continent" => "Europe", "continent_code" => "EU"],
@@ -311,6 +343,71 @@ class MasterSeeder extends Seeder
             ["name" => "Zimbabwe", "code" => "ZW", "continent" => "Africa", "continent_code" => "AF"]
         ];
 
-        Country::insert($countries);
+        // Country::insert($countries);
+
+        foreach ($countries as $v => $stat) {
+            master_data::create([
+                'type' => 'country',
+                'code' => $v + 1,
+                'name' => $stat['name'],
+                'parent_code' => $stat['continent']
+            ]);
+        }
+
+        $positions = [
+            ["name" => "President Director / CEO", "parent" => "Executive Level"],
+            ["name" => "Vice President (VP)", "parent" => "Executive Level"],
+            ["name" => "Chief Operating Officer (COO)", "parent" => "Executive Level"],
+            ["name" => "Chief Technology Officer (CTO)", "parent" => "Executive Level"],
+            ["name" => "Chief Financial Officer (CFO)", "parent" => "Executive Level"],
+            ["name" => "Chief Marketing Officer (CMO)", "parent" => "Executive Level"],
+            ["name" => "Chief Commercial Officer (CCO)", "parent" => "Executive Level"],
+            ["name" => "Chief Information Officer (CIO)", "parent" => "Executive Level"],
+
+            ["name" => "Managing Director", "parent" => "Director Level"],
+            ["name" => "Director of Sales", "parent" => "Director Level"],
+            ["name" => "Director of Marketing", "parent" => "Director Level"],
+            ["name" => "Director of Operations", "parent" => "Director Level"],
+            ["name" => "IT Director", "parent" => "Director Level"],
+            ["name" => "Finance Director", "parent" => "Director Level"],
+            ["name" => "Business Development Director", "parent" => "Director Level"],
+
+            ["name" => "General Manager (GM)", "parent" => "Managerial Level"],
+            ["name" => "Senior Manager", "parent" => "Managerial Level"],
+            ["name" => "Marketing Manager", "parent" => "Managerial Level"],
+            ["name" => "Sales Manager", "parent" => "Managerial Level"],
+            ["name" => "Product Manager", "parent" => "Managerial Level"],
+            ["name" => "IT Manager", "parent" => "Managerial Level"],
+            ["name" => "Operations Manager", "parent" => "Managerial Level"],
+            ["name" => "Project Manager", "parent" => "Managerial Level"],
+
+            ["name" => "Business Analyst", "parent" => "Specialist / Staff Level"],
+            ["name" => "Software Engineer", "parent" => "Specialist / Staff Level"],
+            ["name" => "Network Engineer", "parent" => "Specialist / Staff Level"],
+            ["name" => "System Administrator", "parent" => "Specialist / Staff Level"],
+            ["name" => "Product Specialist", "parent" => "Specialist / Staff Level"],
+            ["name" => "Marketing Executive", "parent" => "Specialist / Staff Level"],
+            ["name" => "Sales Executive", "parent" => "Specialist / Staff Level"],
+            ["name" => "Finance Staff", "parent" => "Specialist / Staff Level"],
+            ["name" => "Admin Staff", "parent" => "Specialist / Staff Level"],
+
+            ["name" => "Consultant", "parent" => "Others"],
+            ["name" => "Investor", "parent" => "Others"],
+            ["name" => "Media / Journalist", "parent" => "Others"],
+            ["name" => "Government Official", "parent" => "Others"],
+            ["name" => "Academic / Lecturer", "parent" => "Others"],
+            ["name" => "Student", "parent" => "Others"],
+            ["name" => "Freelancer", "parent" => "Others"],
+            ["name" => "Others", "parent" => "Others"]
+        ];
+
+        foreach ($positions as $v => $stat) {
+            master_data::create([
+                'type' => 'job',
+                'code' => $v + 1,
+                'name' => $stat['name'],
+                'parent_code' => $stat['parent']
+            ]);
+        }
     }
 }

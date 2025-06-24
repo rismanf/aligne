@@ -6,11 +6,13 @@ use App\Models\Invoice;
 use App\Models\Participant;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
 class ListParticipant extends Component
 {
     use Toast;
+    use WithPagination;
 
     public $selectedUserId,
         $total_price,
@@ -19,6 +21,8 @@ class ListParticipant extends Component
     public bool $confirmModal = false;
     public bool $showModal = false;
     public bool $deleteModal = false;
+
+    public array $sortBy = ['column' => 'full_name', 'direction' => 'asc'];
 
     public function showDeleteModal($userId)
     {
@@ -103,22 +107,25 @@ class ListParticipant extends Component
             ],
         ];
         $id_user = Auth::id();
-        if (Auth::user()->hasRole('User')) {
-            $participants = Participant::where('created_by_id', $id_user)->paginate(10);
-            $this->total_price = $participants->where('status', 'created')->sum('price');
-            $this->total_participant = $participants->where('status', 'created')->count();
-        } else {
-            $participants = Participant::paginate(10);
-            $this->total_price = $participants->sum('price');
-            $this->total_participant = $participants->count();
-        }
+        // if (Auth::user()->hasRole('User')) {
+        //     $participants = Participant::where('created_by_id', $id_user)->paginate(10);
+        //     $this->total_price = $participants->where('status', 'created')->sum('price');
+        //     $this->total_participant = $participants->where('status', 'created')->count();
+        // } else {
+        //     $participants = Participant::paginate(10);
+        //     $this->total_price = $participants->sum('price');
+        //     $this->total_participant = $participants->count();
+        // }
 
+      
 
+        $participants = Participant::orderBy(...array_values($this->sortBy))
+            ->paginate(10);
         $participants->getCollection()->transform(function ($val, $index) use ($participants) {
             $val->row_number = ($participants->currentPage() - 1) * $participants->perPage() + $index + 1;
             return $val;
         });
-        
+
         // Uncomment the line below to debug the total price
 
         $t_headers = [

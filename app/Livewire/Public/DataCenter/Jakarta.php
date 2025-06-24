@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Public\DataCenter;
 
+use App\Mail\ContactUsEmail;
 use App\Models\ContactUs;
 use App\Models\Menu;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class Jakarta extends Component
@@ -44,6 +46,8 @@ class Jakarta extends Component
             'message' => $this->message,
         ]);
 
+        Mail::to($this->email)->send(new ContactUsEmail());
+
         $this->reset([
             'first_name',
             'last_name',
@@ -57,14 +61,14 @@ class Jakarta extends Component
         ]);
 
         // Example: Mail::to('      ' )->send(new ContactUsMail($this->first_name, $this->last_name, $this->email, $this->message));
-        
+
         session()->flash('success', 'Thank you for contacting us! We will get back to you as soon as possible.');
     }
     public function render()
     {
         $menu = Menu::where('name', 'NeutraDC Jakarta')->first();
 
-        return view('livewire.public.data-center.jakarta')->layout('components.layouts.website', [            
+        return view('livewire.public.data-center.jakarta')->layout('components.layouts.website', [
             'title' => $menu->title,
             'description' => $menu->description,
             'keywords' => $menu->keywords,

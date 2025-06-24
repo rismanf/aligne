@@ -40,6 +40,7 @@ return new class extends Migration
             $table->string('type',75);
             $table->string('code',75);
             $table->string('name')->nullable();
+            $table->string('parent_code')->nullable();
             $table->string('description')->nullable();
             $table->boolean('is_active')->default(1);
             $table->timestamps();

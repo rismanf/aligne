@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Livewire\Auth;
+namespace App\Livewire\Public;
 
-use App\Models\Country;
+use App\Mail\NewRegisterEmail;
 use App\Models\Event;
 use App\Models\master_data;
 use App\Models\Participant;
 use App\Models\ParticipantAnswers;
 use App\Models\Questions;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -18,11 +17,15 @@ class Register extends Component
 {
     use Toast;
 
-    public $first_name, $last_name, $company, $job, $country, $phone, $email, $industry, $user_type;
+    public $first_name, $last_name, $company,  $phone, $email,  $user_type;
+    public $country = '';
+    public $job = '';
+    public $industry = '';
     public $answers = [];
     public $country_list, $job_list, $industry_list;
     public function save()
     {
+
         $this->validate([
             'user_type' => 'required',
             'first_name' => 'required|string|max:255',
@@ -127,13 +130,18 @@ class Register extends Component
                 }
             }
 
+
+
+            Mail::to('risman.firmansyah@neutradc.com')->send(new NewRegisterEmail());
+
             $this->success(
                 'Participant created successfully!',
-                redirectTo: route('public.register')
+                redirectTo: route('register')
             );
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e);
             $this->toast(
                 type: 'error',
                 title: 'Error',
@@ -166,7 +174,7 @@ class Register extends Component
     {
         $questions = Questions::with('options')->get();
 
-        return view('livewire.auth.register', [
+        return view('livewire.public.register', [
             'questions' => $questions,
         ])->layout('components.layouts.website', [
             'title' => 'Register | NeutraDC',

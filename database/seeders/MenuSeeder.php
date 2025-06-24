@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Menu;
+use App\Models\News;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -37,6 +38,7 @@ class MenuSeeder extends Seeder
                 'title' => 'NeutraDC Summit | NeutraDC',
                 'description' => 'Our sincerest gratitude to all partners and participants for making NeutraDC Summit 2024 truly spectacular!',
                 'keywords' => 'Our sincerest gratitude to all partners and participants for making NeutraDC Summit 2024 truly spectacular!',
+                'parent_id' => 99,
                 'created_by_id' => 1,
             ],
             [
@@ -110,6 +112,59 @@ class MenuSeeder extends Seeder
 
         foreach ($menu as $item) {
             Menu::create($item);
+        }
+
+        $news = [
+            [
+                "slug" => "50690",
+                "title_slug" => "neutradc-strengthens-education-for-tengger-children-in-bromo-through-technology-donations",
+                "title" => "NeutraDC Strengthens Education for Tengger Children in Bromo Through Technology Donations",
+                "description" => "NeutraDC Strengthens Education for Tengger Children in Bromo Through Technology Donations",
+                "keywords" => "NeutraDC Strengthens Education for Tengger Children in Bromo Through Technology Donations",
+                "author" => "Admin",
+                "image_original" => "news-covers/9ff1d689-5256-4be0-a0c9-b832ed57d002_original.webp",
+                "image_medium" => "news-covers/9ff1d689-5256-4be0-a0c9-b832ed57d002_medium.webp",
+                "image_small" => "news-covers/9ff1d689-5256-4be0-a0c9-b832ed57d002_small.webp",
+                "category" => null,
+                "tags" => null,
+                "body" => "<p dir=\"ltr\">&nbsp;</p>\n<p dir=\"ltr\"><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"https://lh7-rt.googleusercontent.com/docsz/AD_4nXfsSpI7SxkqNdHon9Rh7mycCkNklDXlk6i8t2cgbMYVOj21s_PDYDxJw_A2Fjai9e0gz1dChUar5ktNUaNtQi1fO9jTGk3RJjcIU9u5y9Cp7rmZYU1-QfApZIPVAOR67TaWSPSH?key=PI0ZMdLdo_xsFjeQDi58uWy-\" width=\"70%\" height=\"70%\"></p>\n<p dir=\"ltr\" style=\"text-align: center;\">A Pasraman teacher...</p>",
+                "month" => null,
+                "year" => null,
+                "is_active" => true,
+                "created_by_id" => 1,
+                "updated_by_id" => 1,
+                "created_at" => "2025-06-16T01:30:50.000Z",
+                "updated_at" => "2025-06-16T01:30:50.000Z",
+                "deleted_at" => null,
+                "published_at" => null,
+            ],
+            [
+                "slug" => "50688",
+                "title_slug" => "neutradcs-third-anniversary-strengthening-innovation-through-ai-digital-infrastructure",
+                "title" => "NeutraDC's Third Anniversary: Strengthening Innovation Through AI Digital Infrastructure",
+                "description" => "NeutraDC's Third Anniversary: Strengthening Innovation Through AI Digital Infrastructure",
+                "keywords" => "NeutraDC's Third Anniversary: Strengthening Innovation Through AI Digital Infrastructure",
+                "author" => "Admin",
+                "image_original" => "news-covers/926fa245-c280-4907-b28a-8752f68b4632_original.webp",
+                "image_medium" => "news-covers/926fa245-c280-4907-b28a-8752f68b4632_medium.webp",
+                "image_small" => "news-covers/926fa245-c280-4907-b28a-8752f68b4632_small.webp",
+                "category" => null,
+                "tags" => null,
+                "body" => "<p>&nbsp;</p>\n<p dir=\"ltr\"><img style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"https://lh7-rt.googleusercontent.com/docsz/AD_4nXcAuBlW4vJpxu89GT1MEsfAChOu7JDf2LNmfIMSlai-PYH77--DUwGvv4volygZaL6Zl5zIfwiv_mduKg9rdjg171nTzDYRzis1CZbWlcQjDWloRyTgcrzChy9eWjKD7UFZEI6TRA?key=PI0ZMdLdo_xsFjeQDi58uWy-\" width=\"75%\" height=\"75%\"></p>\n<p dir=\"ltr\"><br>Jakarta – Celebrating three years...</p>",
+                "month" => null,
+                "year" => null,
+                "is_active" => true,
+                "created_by_id" => 1,
+                "updated_by_id" => 1,
+                "created_at" => "2025-06-16T21:15:08.000Z",
+                "updated_at" => "2025-06-17T01:52:51.000Z",
+                "deleted_at" => null,
+                "published_at" => "2025-06-17",
+            ]
+        ];
+
+        foreach ($news as $item) {
+            News::create($item);
         }
     }
 }

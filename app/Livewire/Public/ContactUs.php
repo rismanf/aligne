@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Public;
 
+use App\Mail\ContactUsEmail;
 use App\Models\ContactUs as ModelsContactUs;
 use App\Models\Menu;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class ContactUs extends Component
@@ -45,6 +47,8 @@ class ContactUs extends Component
             'message' => $this->message,
         ]);
 
+        Mail::to($this->email)->send(new ContactUsEmail());
+
         $this->reset([
             'first_name',
             'last_name',
@@ -56,8 +60,6 @@ class ContactUs extends Component
             'message',
             'terms',
         ]);
-   
-        // Example: Mail::to('  )->send(new ContactUsMail($this->first_name, $this->last_name, $this->email, $this->message));
 
         session()->flash('success', 'Thank you for contacting us! We will get back to you as soon as possible.');
     }
