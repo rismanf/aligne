@@ -23,9 +23,12 @@
             @can('participant-list')
                 <x-menu-item title="Participants" icon="o-user-group" link="{{ route('admin.participant.index') }}" />
             @endcan
-            @can('question-list')
-                <x-menu-item title="Questions" icon="o-question" link="{{ route('admin.question.index') }}" />
-            @endcan
+            {{-- @can('sponsor-list') --}}
+                <x-menu-item title="Sponsor" icon="o-sparkles" link="{{ route('admin.sponsor.index') }}" />
+            {{-- @endcan --}}
+            {{-- @can('question-list') --}}
+                <x-menu-item title="Questions" icon="o-question-mark-circle" link="{{ route('admin.question.index') }}" />
+            {{-- @endcan --}}
             @can('invoice-list')
                 <x-menu-item title="Invoice" icon="o-banknotes" link="{{ route('admin.invoice.index') }}" />
             @endcan

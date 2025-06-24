@@ -94,7 +94,7 @@
         <div class="container">
             <div class="section__content">
                 <div class="btn__wrapper text-center mb-5">
-                    <a href="#" class="btn btn__danger btn--lg">
+                    <a href="{{ route('sponsor-register') }}" class="btn btn__danger btn--lg">
                         Become a SPONSOR for NeutraDC Summit 2025
                     </a>
                 </div>

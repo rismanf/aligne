@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('company')->nullable();
             $table->string('country')->nullable();
             $table->string('type_user')->nullable();
+            $table->string('industry')->nullable();
             $table->string('invoice_code')->nullable();
             $table->string('coupon_code')->nullable();
             $table->string('price')->nullable();

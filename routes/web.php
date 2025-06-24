@@ -14,6 +14,7 @@ use App\Livewire\Admin\Participant\PaymentParticipant;
 use App\Livewire\Admin\Question\ListQuestion;
 use App\Livewire\Admin\Role\ListRole;
 use App\Livewire\Admin\Role\RoleShow;
+use App\Livewire\Admin\Sponsor\ListSponsor;
 use App\Livewire\Admin\User\ListUser;
 use App\Livewire\Admin\Vcard\AddVcard;
 use App\Livewire\Admin\Vcard\EditVcard;
@@ -33,6 +34,7 @@ use App\Livewire\Public\NeutradcSummit;
 use App\Livewire\Public\News;
 use App\Livewire\Public\NewsDetail;
 use App\Livewire\Public\Service;
+use App\Livewire\Public\SponsorRegister;
 use App\Livewire\Public\TwoHandHub;
 use App\Livewire\Public\Vcard;
 use App\Models\User;
@@ -63,6 +65,7 @@ Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/two-hands-hub', TwoHandHub::class)->name('two-hands-hub');
 Route::get('/register', Register::class)->name('register');
+Route::get('/sponsor-register', SponsorRegister::class)->name('sponsor-register');
 Route::get('/vcard', Vcard::class)->name('vcard');
 
 // });
@@ -96,6 +99,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'domainCheck'])->gro
     Route::get('/vcard/{id}/edit', EditVcard::class)->name('vcard.edit');
 
     Route::get('/menu', ListMenu::class)->name('menu.index');
+
+    Route::get('/sponsor', ListSponsor::class)->name('sponsor.index');
 
 
     Route::get('/participant', ListParticipant::class)->name('participant.index');

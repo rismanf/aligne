@@ -54,14 +54,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
-
-
-
-
                         <div id="detail_pass_enduser" class="pass-detail" style="display: none;">
                             You have selected an End-User /Specifier Pass, which is free to those who qualify.
                             This pass provides you with access to both events taking place on June 16-18: DCD>Connect |
@@ -94,6 +86,21 @@
                             <input id="contactNameLast" name="last_name" wire:model="last_name" type="text"
                                 class="form-control" placeholder="Last Name" aria-label="Last Name" required />
                             @error('last_name')
+                                <span class="text">*{{ $message }}</span>
+                            @enderror
+                        </div>
+                         <div class="col-md-6">
+                            <input id="contactPhone" name="phone" wire:model="phone" type="text"
+                                inputmode="numeric" pattern="[0-9]+" class="form-control" placeholder="Phone Number"
+                                aria-label="Phone Number" required />
+                            @error('phone')
+                                <span class="text">*{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-6">
+                            <input id="contactEmail" name="email" wire:model="email" type="email"
+                                class="form-control" placeholder="Email" aria-label="Email" required />
+                            @error('email')
                                 <span class="text">*{{ $message }}</span>
                             @enderror
                         </div>
@@ -210,21 +217,6 @@
                                 </option>
                                 <option value="Others">Others</option>
                             </select>
-                        </div>
-                        <div class="col-md-6">
-                            <input id="contactPhone" name="phone" wire:model="phone" type="text"
-                                inputmode="numeric" pattern="[0-9]+" class="form-control" placeholder="Phone Number"
-                                aria-label="Phone Number" required />
-                            @error('phone')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-12">
-                            <input id="contactEmail" name="email" wire:model="email" type="email"
-                                class="form-control" placeholder="Email" aria-label="Email" required />
-                            @error('email')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
                         </div>
 
                         <hr class="border-gray-300 my-4" />

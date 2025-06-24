@@ -16,7 +16,7 @@ class Register extends Component
 {
     use Toast;
 
-    public $first_name, $last_name, $company, $job, $country, $phone, $email, $password, $password_confirmation,$user_type;
+    public $first_name, $last_name, $company, $job, $country, $phone, $email, $industry, $user_type;
     public $answers = [];
     public function save()
     {
@@ -126,7 +126,7 @@ class Register extends Component
             );
             DB::commit();
         } catch (\Exception $e) {
-            dd( $e->getMessage());  
+            dd($e->getMessage());
             DB::rollBack();
             $this->toast(
                 type: 'error',
