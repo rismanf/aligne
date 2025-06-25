@@ -2,13 +2,18 @@
 
 namespace App\Livewire\Public;
 
+use App\Events\NewUserRegistered;
+use App\Events\PodcastProcessed;
 use App\Mail\NewRegisterEmail;
+use App\Mail\NewRegisterPICMail;
 use App\Models\Event;
+use App\Models\ManageMail;
 use App\Models\master_data;
 use App\Models\Participant;
 use App\Models\ParticipantAnswers;
 use App\Models\Questions;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Mary\Traits\Toast;
@@ -23,9 +28,19 @@ class Register extends Component
     public $industry = '';
     public $answers = [];
     public $country_list, $job_list, $industry_list;
+    public $questionForm = false;
+    public function showQuestions()
+    {
+        $this->questionForm = true;
+    }
+
+
+    public function hideQuestions()
+    {
+        $this->questionForm = false;
+    }
     public function save()
     {
-
         $this->validate([
             'user_type' => 'required',
             'first_name' => 'required|string|max:255',
@@ -38,20 +53,23 @@ class Register extends Component
             'email' => 'required|email|unique:users,email',
         ]);
 
-        $questions  = Questions::with('options')->get();
-        // Cek apakah semua pertanyaan dijawab
-        foreach ($questions as $question) {
-            $qid = $question->id;
+        if ($this->user_type == 1) {
 
-            if ($question->question_type === 'multiple') {
-                // Validasi minimal 1 checkbox dicentang
-                if (empty($this->answers[$qid]) || !collect($this->answers[$qid])->filter()->count()) {
-                    $this->addError("answers.$qid", 'Select at least one answer.');
-                }
-            } else {
-                // Validasi radio wajib diisi
-                if (empty($this->answers[$qid])) {
-                    $this->addError("answers.$qid", 'This question is required.');
+            $questions  = Questions::with('options')->get();
+            // Cek apakah semua pertanyaan dijawab
+            foreach ($questions as $question) {
+                $qid = $question->id;
+
+                if ($question->question_type === 'multiple') {
+                    // Validasi minimal 1 checkbox dicentang
+                    if (empty($this->answers[$qid]) || !collect($this->answers[$qid])->filter()->count()) {
+                        $this->addError("answers.$qid", 'Select at least one answer.');
+                    }
+                } else {
+                    // Validasi radio wajib diisi
+                    if (empty($this->answers[$qid])) {
+                        $this->addError("answers.$qid", 'This question is required.');
+                    }
                 }
             }
         }
@@ -76,64 +94,89 @@ class Register extends Component
             $event_id = Event::where('is_active', true)->first()->id; // Ganti dengan event_id yang sesuai
             $id_user = 1;
             $price =  0;
+            $user_type_name = master_data::where('type', 'user_type')->where('code', $this->user_type)->first()->name;
+            // $user = Participant::create([
+            //     'event_id' => $event_id,
+            //     'full_name' => $this->first_name . ' ' . $this->last_name,
+            //     'first_name' => $this->first_name,
+            //     'last_name' => $this->last_name,
+            //     'phone' => $this->phone,
+            //     'email' => $this->email,
+            //     'company' => $this->company,
+            //     'country' => $this->country,
+            //     'job_title' => $this->job,
+            //     'industry' => $this->industry,
+            //     'user_type_id' => $this->user_type,
+            //     'user_type' => $user_type_name,
+            //     'price' => $price,
+            //     'status' => 'created',
+            //     'created_by_id' => $id_user,
+            //     'updated_by_id' => $id_user,
+            // ]);
 
+            // Simpan jawaban peserta
+            // if ($this->user_type == 1) {
+            //     foreach ($questions as $question) {
+            //         $qid = $question->id;
 
-            $user = Participant::create([
-                'event_id' => $event_id,
+            //         if ($question->question_type === 'multiple') {
+            //             foreach ($this->answers[$qid] ?? [] as $optionId => $isChecked) {
+            //                 if ($isChecked) {
+            //                     ParticipantAnswers::create([
+            //                         'event_id' => $event_id,
+            //                         'participant_id' => $user->id,
+            //                         'question_id' => $qid,
+            //                         'question' => $question->question,
+            //                         'answer_id' => $optionId,
+            //                         'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
+            //                         'created_by_id' => $id_user,
+            //                         'updated_by_id' => $id_user,
+            //                     ]);
+            //                 }
+            //             }
+            //         } else {
+            //             $optionId = $this->answers[$qid];
+            //             ParticipantAnswers::create([
+            //                 'event_id' => $event_id,
+            //                 'participant_id' => $user->id,
+            //                 'question_id' => $qid,
+            //                 'question' => $question->question,
+            //                 'answer_id' => $optionId,
+            //                 'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
+            //                 'created_by_id' => $id_user,
+            //                 'updated_by_id' => $id_user,
+            //             ]);
+            //         }
+            //     }
+            // }
+            //send mail User
+            Mail::to('risman.firmansyah@neutradc.com')->send(new NewRegisterEmail($this->first_name));
+
+            //send mail PIC
+            if ($this->user_type == 1) {
+                $type_mail = 'Register General';
+            } elseif ($this->user_type == 2) {
+                $type_mail = 'Register Sponsor';
+            } elseif ($this->user_type == 3) {
+                $type_mail = 'Register Partner';
+            }
+
+            $data_send_mail = [
                 'full_name' => $this->first_name . ' ' . $this->last_name,
-                'first_name' => $this->first_name,
-                'last_name' => $this->last_name,
                 'phone' => $this->phone,
                 'email' => $this->email,
                 'company' => $this->company,
                 'country' => $this->country,
                 'job_title' => $this->job,
                 'industry' => $this->industry,
-                'user_type' => $this->user_type,
-                'price' => $price,
-                'status' => 'created',
-                'created_by_id' => $id_user,
-                'updated_by_id' => $id_user,
-            ]);
-            // Simpan jawaban peserta
+                'user_type' => $user_type_name,
+            ];
 
-            foreach ($questions as $question) {
-                $qid = $question->id;
+            // Mail::to('risman.firmansyah@neutradc.com')->send(new NewRegisterPICMail($data_send_mail));
+            // Kirim event
+            event(new \App\Events\NewUserRegistered($data_send_mail, $type_mail));
 
-                if ($question->question_type === 'multiple') {
-                    foreach ($this->answers[$qid] ?? [] as $optionId => $isChecked) {
-                        if ($isChecked) {
-                            ParticipantAnswers::create([
-                                'event_id' => $event_id,
-                                'participant_id' => $user->id,
-                                'question_id' => $qid,
-                                'question' => $question->question,
-                                'answer_id' => $optionId,
-                                'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
-                                'created_by_id' => $id_user,
-                                'updated_by_id' => $id_user,
-                            ]);
-                        }
-                    }
-                } else {
-                    $optionId = $this->answers[$qid];
-                    ParticipantAnswers::create([
-                        'event_id' => $event_id,
-                        'participant_id' => $user->id,
-                        'question_id' => $qid,
-                        'question' => $question->question,
-                        'answer_id' => $optionId,
-                        'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
-                        'created_by_id' => $id_user,
-                        'updated_by_id' => $id_user,
-                    ]);
-                }
-            }
-
-
-
-            Mail::to('risman.firmansyah@neutradc.com')->send(new NewRegisterEmail());
-
+            Log::info("2222");
             $this->success(
                 'Participant created successfully!',
                 redirectTo: route('register')
@@ -141,7 +184,6 @@ class Register extends Component
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
             $this->toast(
                 type: 'error',
                 title: 'Error',
@@ -154,6 +196,7 @@ class Register extends Component
             );
         }
     }
+
 
     public function mount()
     {
@@ -168,7 +211,7 @@ class Register extends Component
             return $items->values()->toArray();
         })->toArray();
 
-        $this->industry_list = master_data::where('type', 'industry_sector')->get();
+        $this->industry_list = master_data::where('type', 'industries')->get();
     }
     public function render()
     {

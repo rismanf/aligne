@@ -38,7 +38,6 @@ class MenuSeeder extends Seeder
                 'title' => 'NeutraDC Summit | NeutraDC',
                 'description' => 'Our sincerest gratitude to all partners and participants for making NeutraDC Summit 2024 truly spectacular!',
                 'keywords' => 'Our sincerest gratitude to all partners and participants for making NeutraDC Summit 2024 truly spectacular!',
-                'parent_id' => 99,
                 'created_by_id' => 1,
             ],
             [
@@ -136,7 +135,7 @@ class MenuSeeder extends Seeder
                 "created_at" => "2025-06-16T01:30:50.000Z",
                 "updated_at" => "2025-06-16T01:30:50.000Z",
                 "deleted_at" => null,
-                "published_at" => null,
+                "published_at" => "2025-06-17",
             ],
             [
                 "slug" => "50688",

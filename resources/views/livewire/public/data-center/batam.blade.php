@@ -127,7 +127,7 @@
                                     <h5>Indrama YM Purba</h5>
                                     <p>
                                         CEO <br />
-                                        PT Telkom Data Ekosistem
+                                        NeutraDC Nxera Batam
                                     </p>
                                 </div>
                             </div>

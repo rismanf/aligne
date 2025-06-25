@@ -259,7 +259,7 @@
                                     <h5>Sendang Praptomo</h5>
                                     <p>
                                         CEO <br />
-                                        PT Telkom Data Ekosistem
+                                        NeutraDC Singapore
                                     </p>
                                 </div>
                             </div>

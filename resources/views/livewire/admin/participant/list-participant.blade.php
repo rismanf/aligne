@@ -1,21 +1,17 @@
 <div>
     <x-card>
         <x-hr target="gotoPage" />
-        <x-table class="text-xs" :headers="$t_headers" :rows="$participants" :sort-by="$sortBy" with-pagination per-page="perPage"
-            :per-page-values="[5, 10, 50]">
+        <x-table class="text-xs" :headers="$t_headers" :rows="$participants" :sort-by="$sortBy" with-pagination 
+            >
             {{-- Special `actions` slot --}}
 
 
             @scope('cell_action', $participants)
                 <div class="flex gap-1">
                     <x-button icon="o-check-circle" class="btn-xs btn-success" wire:click="showDetailModal({{ $participants->id }})" tooltip="Approve" />
-                </div>
-
-                <div class="flex gap-1">
+             
                     <x-button icon="o-x-circle" class="btn-xs btn-error" wire:click="showDetailModal({{ $participants->id }})" tooltip="Reject"/>
-                </div>
-
-                <div class="flex gap-1">
+              
                     <x-button icon="o-eye" class="btn-xs" wire:click="showDetailModal({{ $participants->id }})" tooltip="Detail"/>
                 </div>
             @endscope

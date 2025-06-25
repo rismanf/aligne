@@ -67,9 +67,9 @@ class EditNews extends Component
     public function togglePublished()
     {
         if ($this->published) {
-            $this->published_date_show = false;
-        } else {
             $this->published_date_show = true;
+        } else {
+            $this->published_date_show = false;
         }
         $this->published_at = $this->published_at ? now()->format('Y-m-d') : null;
     }
@@ -131,11 +131,11 @@ class EditNews extends Component
         // Generate slug based on current year and month, and a random number
         $title_slug = Str::slug($this->title);
 
-        if ($this->published) {
-            $published_at = $news_update->published_at;
-        } else {
-            $published_at = null;
-        }
+        // if ($this->published) {
+        //     $published_at = $news_update->published_at;
+        // } else {
+            $published_at = $this->published_at;
+        // }
 
         $news_update->update([
             'title' => $this->title,

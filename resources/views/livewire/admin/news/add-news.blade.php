@@ -22,10 +22,13 @@
             </x-choices>
 
             <div class="flex items-center gap-2">
-                <x-toggle label="Publish" wire:click="togglePublished()" hint="If checked it will be published" />
-                <div class="flex items-center gap-2 {{ $published ? '' : 'hidden' }}">
-                    <x-datetime label="Publish date" wire:model="published_at" min="{{ now()->format('Y-m-d') }}" />
-                </div>
+                <x-toggle label="Publish" wire:click="togglePublished({{ $published }})" hint="If checked it will be published" />
+                @if ($published)
+                    <div class="flex items-center gap-2 ">
+                        <x-datetime label="Publish date" wire:model="published_at" min="{{ now()->format('Y-m-d') }}" />
+                    </div>
+                @endif
+
             </div>
 
 

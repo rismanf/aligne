@@ -29,34 +29,34 @@
                     <h2 class="text-3xl font-bold mb-6">Why Join NeutraDC Summit Bali?</h2>
                 </div>
                 <div class="left-half">
-                    <p class="mb-3 leading-relaxed">
+                    <h3 class="mb-3 leading-relaxed">
                         This year, NeutraDC Summit 2025 takes you into the future of AI collaboration through an
                         immersive experience: the Theatre of AI.
-                    </p>
+                    </h3>
 
-                    <p class="mb-3 leading-relaxed">
+                    <h3 class="mb-3 leading-relaxed">
                         The summit brings together industry leaders, innovators, and policymakers to explore how
                         artificial intelligence is redefining business, infrastructure, and society. With bold ideas,
                         practical insights, and visionary conversations, the Theatre of AI provides a powerful stage to
                         uncover what’s next from data center innovation and digital sovereignty to interconnectivity and
                         sustainable AI infrastructure.
-                    </p>
+                    </h3>
 
-                    <p class="mb-3 leading-relaxed">
+                    <h3 class="mb-3 leading-relaxed">
                         Whether you're building the digital backbone of your enterprise or seeking strategic alliances,
                         NeutraDC Summit is where real collaboration begins.
-                    </p>
+                    </h3>
 
-                    <p class="mb-3 leading-relaxed">
+                    <h3 class="mb-3 leading-relaxed">
                         This is more than just exposure. It’s your opportunity to lead the conversation, shape industry
                         impact, and position your brand at the center of Indonesia’s digital future.
-                    </p>
+                    </h3>
 
-                    <p class="mb-1 leading-relaxed">
-                        Join us. Collaborate with us. Perform with us. </p>
-                    <p class="leading-relaxed">Because AI is not a solo act. It’s a
+                    <h3 class="mb-1 leading-relaxed">
+                        Join us. Collaborate with us. Perform with us. </h3>
+                    <h3 class="leading-relaxed">Because AI is not a solo act. It’s a
                         collaborative performance.
-                    </p>
+                    </h3>
                 </div>
 
 
@@ -75,19 +75,19 @@
                                 <h2 class="mb-4">Select the pass you are applying for</h2>
 
                                 <input class="form-check-input" type="radio" wire:model="user_type" name="user_type"
-                                    value="1" id="radio1" onclick="showDetails(1)" required>
+                                    value="1" id="radio1" wire:click="showQuestions" required>
                                 <label class="form-check-label" for="radio1">
                                     General Admission
                                 </label>
 
                                 <input class="form-check-input" type="radio" wire:model="user_type" name="user_type"
-                                    value="2" id="radio2" onclick="showDetails(2)">
+                                    value="2" id="radio2" wire:click="hideQuestions" >
                                 <label class="form-check-label" for="radio2">
                                     Sponsor
                                 </label>
 
                                 <input class="form-check-input" type="radio" wire:model="user_type" name="user_type"
-                                    value="3" id="radio3" onclick="showDetails(3)">
+                                    value="3" id="radio3"  wire:click="hideQuestions" >
                                 <label class="form-check-label" for="radio3">
                                     Partner
                                 </label>
@@ -196,7 +196,8 @@
                         </div>
 
                         <hr class="border-gray-300 my-4" />
-                        <div style="display: none;" id="detail_general_admission">
+                        @if($questionForm)
+                        <div id="detail_general_admission">
 
                             @foreach ($questions as $question)
                                 <div class="mb-4">
@@ -236,6 +237,7 @@
                                 </div>
                             @endforeach
                         </div>
+                        @endif
                         <div class="col-12">
                             <button label="save" type="submit" class="btn btn__primary" spinner="save">
                                 Submit

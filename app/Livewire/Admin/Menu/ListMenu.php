@@ -54,7 +54,7 @@ class ListMenu extends Component
             ],
         ];
 
-        $menus = Menu::where('parent_id', '!=', 99)->orderby('id')->paginate(15);
+        $menus = Menu::orderby('id')->paginate(15);
 
         $menus->getCollection()->transform(function ($menu, $index) use ($menus) {
             $menu->row_number = ($menus->currentPage() - 1) * $menus->perPage() + $index + 1;

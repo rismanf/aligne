@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\Log_login;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
@@ -32,6 +34,7 @@ class Login extends Component
             if (Auth::attempt(['email' => $email, 'password' => $password])) {
                 // if (Auth::user()->hasRole('admin')) {
                     session()->regenerate();
+                    Log_login::logUserAttempt('Auth-Login', Carbon::now(), $email, 'OK');
                     return redirect()->intended(route('admin.home'));
                 // } else {
                 //     session()->regenerate();
@@ -50,9 +53,11 @@ class Login extends Component
             $user = User::where('ad_name', '=', $username)->first();
             Auth::login($user);
             session()->regenerate();
+            Log_login::logUserAttempt('Auth-Login', Carbon::now(), $email, 'OK');
             return redirect()->intended(route('admin.home'));
         }
 
+        Log_login::logUserAttempt('Auth-Login', Carbon::now(), $email, 'Fail');
         throw ValidationException::withMessages([
             'email' => __('auth.failed'),
         ]);

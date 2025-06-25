@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Country;
 use App\Models\Event;
+use App\Models\ManageMail;
 use App\Models\master_data;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,14 +17,14 @@ class MasterSeeder extends Seeder
     {
         //Type User
         $request_status = [
-            'End-customer',
             'General Admission',
-            'Partner/Sponsor',
+            'Sponsor',
+            'Partner',
         ];
 
         foreach ($request_status as $v => $stat) {
             master_data::create([
-                'type' => 'Type User',
+                'type' => 'user_type',
                 'code' => $v + 1,
                 'name' => $stat,
             ]);
@@ -46,32 +46,37 @@ class MasterSeeder extends Seeder
             ]);
         }
 
-        $request_sectors = [
-            "Banking, Finance & Fintech",
-            "Construction & Design",
-            "Consumer Manufacturing & Retail",
-            "E-Commerce",
-            "Education & Research",
-            "Energy & Utilities",
-            "Government & Public Agencies",
-            "Healthcare & Pharmaceuticals",
-            "Hospitality & Tourism",
-            "Industrial Manufacturing",
-            "Logistics & Transport",
-            "Media & Entertainment",
-            "Primary Industries (Oil & Gas, mining, agriculture)",
+        $industries = [
+            "Information Technology / Software / Cloud",
             "Telecommunications",
-            "Cloud Service Provider",
-            "Data Center/Colocation Provider/REIT",
-            "IT Consultants & System Integrator",
-            "IT/DC Equipment Provider",
-            "IT/DC Solution & Service Provider",
+            "Data Center / Infrastructure Services",
+            "Financial Services / Banking / Insurance",
+            "Manufacturing",
+            "Retail / E-Commerce",
+            "Transportation / Logistics / Supply Chain",
+            "Energy / Utilities / Renewable Energy",
+            "Construction / Engineering",
+            "Real Estate / Property",
+            "Healthcare / Pharmaceuticals / Life Sciences",
+            "Education / Research / Training",
+            "Media / Entertainment / Creative Industry",
+            "Government / Public Sector",
+            "Defense / Aerospace",
+            "Hospitality / Tourism / F&B",
+            "FMCG",
+            "Automotive",
+            "Agriculture / Forestry",
+            "Mining / Oil & Gas",
+            "Legal / Consulting / Professional Services",
+            "Startups / VC / Investment",
+            "Non-profit / NGO / Social Enterprise",
             "Others"
         ];
 
-        foreach ($request_sectors as $v => $stat) {
+
+        foreach ($industries as $v => $stat) {
             master_data::create([
-                'type' => 'industry_sector',
+                'type' => 'industries',
                 'code' => $v + 1,
                 'name' => $stat,
             ]);
@@ -407,6 +412,33 @@ class MasterSeeder extends Seeder
                 'code' => $v + 1,
                 'name' => $stat['name'],
                 'parent_code' => $stat['parent']
+            ]);
+        }
+
+         //Type User
+        $send_mail = [
+            'Contact-Us NeutraDC',
+            'Contact-Us Jakarta',
+            'Contact-Us Batam',
+            'Contact-Us Singapore',
+            'Register General',
+            'Register Sponsor',
+            'Register Partner',
+        ];
+
+        foreach ($send_mail as $v => $stat) {
+            master_data::create([
+                'type' => 'mail_type',
+                'code' => $v + 1,
+                'name' => $stat,
+            ]);
+        }
+
+       foreach ($send_mail as $v => $stat) {
+            ManageMail::create([
+                'type' => $stat,
+                'name' => 'Risman Firmansyah',
+                'email' => 'risman.firmansyah@neutradc.com',
             ]);
         }
     }

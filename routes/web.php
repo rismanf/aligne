@@ -3,6 +3,7 @@
 use App\Livewire\Admin\Contact\ListContact;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Invoice\ListInvoice;
+use App\Livewire\Admin\Mail\ListPicMail;
 use App\Livewire\Admin\Menu\ListMenu;
 use App\Livewire\Admin\News\AddNews;
 use App\Livewire\Admin\News\EditNews;
@@ -103,6 +104,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'domainCheck'])->gro
     Route::get('/menu', ListMenu::class)->name('menu.index');
 
     Route::get('/sponsor', ListSponsor::class)->name('sponsor.index');
+
+    Route::get('/email', ListPicMail::class)->name('email.index');
 
 
     Route::get('/participant', ListParticipant::class)->name('participant.index');

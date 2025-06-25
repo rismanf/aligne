@@ -27,11 +27,13 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('log_invoices', function (Blueprint $table) {
+        Schema::create('log_systems', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable();
-            $table->string('event_name', 20);
-            $table->string('invoice_code')->nullable();
+            $table->string('user_id', 20)->nullable();
+            $table->string('ip', 20);
+            $table->string('event', 200)->nullable();
+            $table->string('extra')->nullable();
+            $table->text('additional')->nullable();
             $table->timestamps();
         });
 
@@ -55,7 +57,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('log_logins');
-        Schema::dropIfExists('log_invoices');
+        Schema::dropIfExists('log_systems');
         Schema::dropIfExists('master_data');
     }
 };

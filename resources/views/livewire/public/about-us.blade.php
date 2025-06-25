@@ -95,7 +95,7 @@
                                     <h5>Andreuw Th.A.F</h5>
                                     <p>
                                         CEO <br />
-                                        PT Telkom Data Ekosistem
+                                        NeutraDC
                                     </p>
                                 </div>
                             </div>

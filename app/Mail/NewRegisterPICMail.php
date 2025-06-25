@@ -9,17 +9,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewRegisterEmail extends Mailable
+class NewRegisterPICMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $name;
+    public $data;
     /**
      * Create a new message instance.
      */
-    public function __construct($name)
+    public function __construct($data)
     {
-        $this->name = $name;
+        $this->data = $data;
     }
 
     /**
@@ -28,7 +28,7 @@ class NewRegisterEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'NeutraDC | Thank you for registering!',
+            subject: 'You have a New Register',
         );
     }
 
@@ -37,8 +37,10 @@ class NewRegisterEmail extends Mailable
      */
     public function content(): Content
     {
+     
         return new Content(
-            view: 'email.newregister',
+             view: 'email.newregistertopic',
+            
         );
     }
 

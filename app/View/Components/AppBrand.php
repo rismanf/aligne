@@ -37,7 +37,7 @@ class AppBrand extends Component
                         <img x-show="!isDark" src="{{ asset('assets/img/logo-main.webp') }}" alt="Logo Light" class="h-10">
 
                         <!-- Logo untuk Dark Theme -->
-                        <img x-show="isDark" src="{{ asset('assets/img/logo-fav.webp') }}" alt="Logo Dark" class="h-10">
+                        <img x-show="isDark" src="{{ asset('assets/img/logo-main.webp') }}" alt="Logo Dark" class="h-10">
                     </div>
 
 
@@ -46,8 +46,8 @@ class AppBrand extends Component
                 </div>
 
                 <!-- Display when collapsed -->
-                <div class="display-when-collapsed hidden flex items-center justify-center mb-3 h-fit mt-2">
-                     <img src="{{ asset('assets/img/logo-fav.webp') }}" alt="mini-Logo" class="h-full w-auto object-contain" />
+                <div class="display-when-collapsed hidden flex items-center justify-center mb-3 h-fit mt-2 gap-2 pl-2 pr-2">
+                     <img src="{{ asset('assets/img/logo-fav.webp') }}" alt="mini-Logo" class="h-15 w-auto object-contain" />
                 </div>
             </a>
         HTML;
