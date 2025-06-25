@@ -95,7 +95,7 @@
                                     <h5>Andreuw Th.A.F</h5>
                                     <p>
                                         CEO <br />
-                                        NeutraDC
+                                        NeutraDC Group
                                     </p>
                                 </div>
                             </div>

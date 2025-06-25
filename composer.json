@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "endroid/qr-code": "^6.0",
         "intervention/image": "^3.11",
         "laravel-frontend-presets/tall": "^9.1",
         "laravel/framework": "^12.0",

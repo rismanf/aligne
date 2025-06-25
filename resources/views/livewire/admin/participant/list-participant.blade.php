@@ -1,18 +1,23 @@
 <div>
     <x-card>
         <x-hr target="gotoPage" />
-        <x-table class="text-xs" :headers="$t_headers" :rows="$participants" :sort-by="$sortBy" with-pagination 
-            >
+        <x-table class="text-xs" :headers="$t_headers" :rows="$participants" :sort-by="$sortBy" with-pagination>
             {{-- Special `actions` slot --}}
 
 
             @scope('cell_action', $participants)
                 <div class="flex gap-1">
-                    <x-button icon="o-check-circle" class="btn-xs btn-success" wire:click="showDetailModal({{ $participants->id }})" tooltip="Approve" />
-             
-                    <x-button icon="o-x-circle" class="btn-xs btn-error" wire:click="showDetailModal({{ $participants->id }})" tooltip="Reject"/>
-              
-                    <x-button icon="o-eye" class="btn-xs" wire:click="showDetailModal({{ $participants->id }})" tooltip="Detail"/>
+                    @can('participant-edit')
+                        @if ($participants->status == 'created')
+                            <x-button icon="o-check-circle" class="btn-xs btn-success"
+                                wire:click="showConfirmModal({{ $participants->id }}, 'approved')" tooltip="Approve" />
+
+                            <x-button icon="o-x-circle" class="btn-xs btn-error"
+                                wire:click="showConfirmModal({{ $participants->id }}, 'rejected')" tooltip="Reject" />
+                        @endif
+                    @endcan
+                    <x-button icon="o-eye" class="btn-xs" wire:click="showDetailModal({{ $participants->id }})"
+                        tooltip="Detail" />
                 </div>
             @endscope
         </x-table>
@@ -23,12 +28,22 @@
     <x-modal wire:model="showModal" title="Participant Details" class="backdrop-blur">
         <x-form wire:submit="save">
             @if (!empty($detail_participants))
+                <h1 class="text-xs mb-2">Type: {{ $detail_participants->user_type }}</h1>
                 <h1 class="text-xs mb-2">Full Name: {{ $detail_participants->full_name }}</h1>
                 <h1 class="text-xs mb-2">Email: {{ $detail_participants->email }}</h1>
                 <h1 class="text-xs mb-2">Phone: {{ $detail_participants->phone }}</h1>
                 <h1 class="text-xs mb-2">Company: {{ $detail_participants->company }}</h1>
                 <h1 class="text-xs mb-2">Job Title: {{ $detail_participants->job_title }}</h1>
-                <h1 class="text-xs mb-2">Price: Rp.{{ number_format($detail_participants->price, 0, ',', '.') }}</h1>
+                <h1 class="text-xs mb-2">Country: {{ $detail_participants->country }}</h1>
+                <h1 class="text-xs mb-2">Industry: {{ $detail_participants->industry }}</h1>
+                @if ($detail_participants->user_type_id == 1)
+                    <hr>
+                    <h1 class="text-xs mb-2">Answer:</h1>
+                    @foreach ($detail_participants->answers as $val)
+                        <h1 class="text-xs mb-2">{{ $val->question }}: {{ $val->answer }}</h1>
+                    @endforeach
+                @endif
+
             @endif
             <x-slot:actions>
                 <x-button label="Close" @click="$wire.showModal = false" />
@@ -54,16 +69,25 @@
     </x-modal>
 
     {{-- modal-confrim-muncul --}}
-    <x-modal wire:model="confirmModal" title="Summary of Your Participant">
+    <x-modal wire:model="confirmModal" title="Are you sure {{ $status_participant }}?" subtitle="please confirm">
         <x-form no-separator>
             <div class="text-xs  mb-4">
-                <h1>Participant Total: {{ $total_participant }}</h1>
-                <h1>Total Price: Rp.{{ number_format($total_price, 0, ',', '.') }}</h1>
+                @if (!empty($detail_participants))
+                    <h1 class="text-xs mb-2">Type: {{ $detail_participants->user_type }}</h1>
+                    <h1 class="text-xs mb-2">Full Name: {{ $detail_participants->full_name }}</h1>
+                    <h1 class="text-xs mb-2">Email: {{ $detail_participants->email }}</h1>
+                    <h1 class="text-xs mb-2">Phone: {{ $detail_participants->phone }}</h1>
+                    <h1 class="text-xs mb-2">Company: {{ $detail_participants->company }}</h1>
+                    <h1 class="text-xs mb-2">Job Title: {{ $detail_participants->job_title }}</h1>
+                    <h1 class="text-xs mb-2">Country: {{ $detail_participants->country }}</h1>
+                    <h1 class="text-xs mb-2">Industry: {{ $detail_participants->industry }}</h1>
+                @endif
             </div>
             {{-- Notice we are using now the `actions` slot from `x-form`, not from modal --}}
             <x-slot:actions>
                 <x-button label="Cancel" @click="$wire.confirmModal = false" />
-                <x-button label="Confirm" class="btn-primary" @click="$wire.confirm({{ $selectedUserId }})" spinner />
+                <x-button label="Confirm" class="btn-primary"
+                    @click="$wire.confirm({{ $selectedUserId }}, '{{ $status_participant }}')" spinner />
             </x-slot:actions>
         </x-form>
     </x-modal>

@@ -41,6 +41,7 @@ class Register extends Component
     }
     public function save()
     {
+
         $this->validate([
             'user_type' => 'required',
             'first_name' => 'required|string|max:255',
@@ -94,61 +95,66 @@ class Register extends Component
             $event_id = Event::where('is_active', true)->first()->id; // Ganti dengan event_id yang sesuai
             $id_user = 1;
             $price =  0;
+
+
             $user_type_name = master_data::where('type', 'user_type')->where('code', $this->user_type)->first()->name;
-            // $user = Participant::create([
-            //     'event_id' => $event_id,
-            //     'full_name' => $this->first_name . ' ' . $this->last_name,
-            //     'first_name' => $this->first_name,
-            //     'last_name' => $this->last_name,
-            //     'phone' => $this->phone,
-            //     'email' => $this->email,
-            //     'company' => $this->company,
-            //     'country' => $this->country,
-            //     'job_title' => $this->job,
-            //     'industry' => $this->industry,
-            //     'user_type_id' => $this->user_type,
-            //     'user_type' => $user_type_name,
-            //     'price' => $price,
-            //     'status' => 'created',
-            //     'created_by_id' => $id_user,
-            //     'updated_by_id' => $id_user,
-            // ]);
+            $participant_count = Participant::count();
+            $code = rand(1, 9) . substr(date('Y'), -1) . str_pad(date('m'), 2, '0', STR_PAD_LEFT) . str_pad($participant_count + 1, 3, '0', STR_PAD_LEFT) . rand(1, 9);
+            $user = Participant::create([
+                'code' => $code,
+                'event_id' => $event_id,
+                'full_name' => $this->first_name . ' ' . $this->last_name,
+                'first_name' => $this->first_name,
+                'last_name' => $this->last_name,
+                'phone' => $this->phone,
+                'email' => $this->email,
+                'company' => $this->company,
+                'country' => $this->country,
+                'job_title' => $this->job,
+                'industry' => $this->industry,
+                'user_type_id' => $this->user_type,
+                'user_type' => $user_type_name,
+                'price' => $price,
+                'status' => 'created',
+                'created_by_id' => $id_user,
+                'updated_by_id' => $id_user,
+            ]);
 
             // Simpan jawaban peserta
-            // if ($this->user_type == 1) {
-            //     foreach ($questions as $question) {
-            //         $qid = $question->id;
+            if ($this->user_type == 1) {
+                foreach ($questions as $question) {
+                    $qid = $question->id;
 
-            //         if ($question->question_type === 'multiple') {
-            //             foreach ($this->answers[$qid] ?? [] as $optionId => $isChecked) {
-            //                 if ($isChecked) {
-            //                     ParticipantAnswers::create([
-            //                         'event_id' => $event_id,
-            //                         'participant_id' => $user->id,
-            //                         'question_id' => $qid,
-            //                         'question' => $question->question,
-            //                         'answer_id' => $optionId,
-            //                         'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
-            //                         'created_by_id' => $id_user,
-            //                         'updated_by_id' => $id_user,
-            //                     ]);
-            //                 }
-            //             }
-            //         } else {
-            //             $optionId = $this->answers[$qid];
-            //             ParticipantAnswers::create([
-            //                 'event_id' => $event_id,
-            //                 'participant_id' => $user->id,
-            //                 'question_id' => $qid,
-            //                 'question' => $question->question,
-            //                 'answer_id' => $optionId,
-            //                 'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
-            //                 'created_by_id' => $id_user,
-            //                 'updated_by_id' => $id_user,
-            //             ]);
-            //         }
-            //     }
-            // }
+                    if ($question->question_type === 'multiple') {
+                        foreach ($this->answers[$qid] ?? [] as $optionId => $isChecked) {
+                            if ($isChecked) {
+                                ParticipantAnswers::create([
+                                    'event_id' => $event_id,
+                                    'participant_id' => $user->id,
+                                    'question_id' => $qid,
+                                    'question' => $question->question,
+                                    'answer_id' => $optionId,
+                                    'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
+                                    'created_by_id' => $id_user,
+                                    'updated_by_id' => $id_user,
+                                ]);
+                            }
+                        }
+                    } else {
+                        $optionId = $this->answers[$qid];
+                        ParticipantAnswers::create([
+                            'event_id' => $event_id,
+                            'participant_id' => $user->id,
+                            'question_id' => $qid,
+                            'question' => $question->question,
+                            'answer_id' => $optionId,
+                            'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
+                            'created_by_id' => $id_user,
+                            'updated_by_id' => $id_user,
+                        ]);
+                    }
+                }
+            }
             //send mail User
             Mail::to('risman.firmansyah@neutradc.com')->send(new NewRegisterEmail($this->first_name));
 

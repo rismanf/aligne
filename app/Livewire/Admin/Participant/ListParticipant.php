@@ -2,9 +2,15 @@
 
 namespace App\Livewire\Admin\Participant;
 
+use App\Mail\ApproveRegisterMail;
+use App\Mail\RejectedRegisterMail;
 use App\Models\Invoice;
 use App\Models\Participant;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
@@ -16,7 +22,8 @@ class ListParticipant extends Component
 
     public $selectedUserId,
         $total_price,
-        $total_participant;
+        $total_participant,
+        $status_participant;
     public $detail_participants = [];
     public bool $confirmModal = false;
     public bool $showModal = false;
@@ -26,7 +33,7 @@ class ListParticipant extends Component
 
     public function showDeleteModal($userId)
     {
-        $this->detail_participants = Participant::find($userId);
+        $this->detail_participants = Participant::with('answers')->find($userId);
         $this->selectedUserId = $userId;
         $this->deleteModal = true;
     }
@@ -54,41 +61,48 @@ class ListParticipant extends Component
         $this->selectedUserId = $id_user;
         $this->showModal = true;
     }
-    public function showConfirmModal($id_user)
+    public function showConfirmModal($id_user, $status)
     {
         $this->selectedUserId = $id_user;
-        $participants = Participant::where('created_by_id', $id_user)->get();
-        $this->total_participant = $participants->count();
-        $this->total_price = $participants->sum('price');
+        $this->detail_participants = Participant::find($id_user);
+        $this->status_participant = $status;
         $this->confirmModal = true;
     }
 
-    public function confirm($id)
+    public function confirm($id, $status)
     {
-        $participants = Participant::where('created_by_id', $id)->get();
-        $inv_count = Invoice::count();
-        $invoice_code = substr(date('Y'), -1) . str_pad(date('m'), 2, '0', STR_PAD_LEFT) . str_pad($inv_count + 1, '0', STR_PAD_LEFT);
-        Invoice::create([
-            'event_id' =>  $participants->first()->event_id,
-            'invoice_code' => $invoice_code,
-            'total_price' => $this->total_price,
-            'total_participants' => $this->total_participant,
-            'status' => 'unpaid',
-            'created_by_id' => Auth::id(),
-            'updated_by_id' => Auth::id(),
+        // dd($id, $status);
+        $participants = Participant::find($id);
+
+        if ($status == 'approved') {
+
+
+            $qr = new QrCode($participants->code);
+            $writer = new PngWriter();
+            $result = $writer->write($qr);
+
+            $filename = "qrcodes/{$participants->code}.png";
+
+            // Upload ke MinIO (pastikan visibility = public)
+            Storage::disk('s3')->put($filename, $result->getString(), 'public');
+
+            // Dapatkan URL publik
+            $qr_url = Storage::disk('s3')->url($filename);
+
+            Mail::to($participants->email)->send(new ApproveRegisterMail($participants->full_name, $participants->code, $qr_url));
+        }else{
+            Mail::to($participants->email)->send(new RejectedRegisterMail($participants->full_name));
+        }
+
+        $participants->update([
+            'status' => $status,
         ]);
 
-        $participants->each(function ($participant) use ($invoice_code) {
-            $participant->update([
-                'invoice_code' => $invoice_code,
-                'status' => 'unpaid',
-            ]);
-        });
 
         $this->success(
             'Success',
-            'Invoice created successfully!',
-            redirectTo: route('admin.invoice.index')
+            'Participant updated to ' . $status . ' successfully!',
+            redirectTo: route('admin.participant.index')
         );
     }
 
@@ -117,7 +131,7 @@ class ListParticipant extends Component
         //     $this->total_participant = $participants->count();
         // }
 
-      
+
 
         $participants = Participant::orderBy(...array_values($this->sortBy))
             ->paginate(10);
@@ -130,10 +144,11 @@ class ListParticipant extends Component
 
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
+            ['key' => 'user_type', 'label' => 'Type'],
             ['key' => 'full_name', 'label' => 'Name'],
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'company', 'label' => 'Company'],
-            ['key' => 'price', 'label' => 'Price'],
+            ['key' => 'job_title', 'label' => 'Job Title'],
             ['key' => 'status', 'label' => 'Status'],
             ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
         ];

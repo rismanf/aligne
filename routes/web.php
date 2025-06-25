@@ -56,6 +56,7 @@ Route::get('/logout', function () {
 // Redirect '/' tergantung status login
 Route::get('/', Home::class)->name('/');
 Route::get('/neutradc-summit', NeutradcSummit::class)->name('neutradc-summit');
+Route::get('/neutradc-summit', NeutradcSummit::class)->name('event');
 // Route::get('/data-center', DataCenterHome::class);
 Route::get('/data-center/jakarta-hq', Jakarta::class)->name('data-center.jakarta-hq');
 Route::get('/data-center/batam', Batam::class)->name('data-center.batam');
@@ -106,7 +107,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/sponsor', ListSponsor::class)->name('sponsor.index');
 
     Route::get('/email', ListPicMail::class)->name('email.index');
-
 
     Route::get('/participant', ListParticipant::class)->name('participant.index');
     Route::get('/participant/create', AddParticipant::class)->name('participant.create');

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Participant extends Model
 {
     protected $fillable = [
+        'code',
         'event_id',
         'full_name',
         'first_name',
