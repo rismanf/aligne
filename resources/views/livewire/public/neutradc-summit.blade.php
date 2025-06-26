@@ -93,11 +93,11 @@
         </div>
         <div class="container">
             <div class="section__content">
-                <div class="btn__wrapper text-center mb-5">
+                {{-- <div class="btn__wrapper text-center mb-5">
                     <a href="{{ route('sponsor-register') }}" class="btn btn__danger btn--lg">
                         Become a SPONSOR for NeutraDC Summit 2025
                     </a>
-                </div>
+                </div> --}}
                 <div class="section__heading section__heading--lg text-center text--danger">
                     <h2>Stay connected with NeutraDC</h2>
                     <h3>

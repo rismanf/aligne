@@ -21,7 +21,7 @@
     </style>
     <section id="hero2" class="hero banner wrapper__relative">
         <div class="bg__img wrapper__absolute">
-            <img src="/assets/img/banner-2-bg.webp" alt="Banner" />
+            <img src="/assets/img/banner-2-bg.webp" alt="Banner" class="!h-full-screen"/>
         </div>
         <div class="container">
             <div class="section__content">

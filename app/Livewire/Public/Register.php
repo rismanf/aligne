@@ -156,7 +156,7 @@ class Register extends Component
                 }
             }
             //send mail User
-            Mail::to('risman.firmansyah@neutradc.com')->send(new NewRegisterEmail($this->first_name));
+            Mail::to($this->email)->send(new NewRegisterEmail($this->first_name));
 
             //send mail PIC
             if ($this->user_type == 1) {
