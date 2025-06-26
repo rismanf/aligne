@@ -6,6 +6,7 @@ use App\Events\NewUserRegistered;
 use App\Events\PodcastProcessed;
 use App\Mail\NewRegisterEmail;
 use App\Mail\NewRegisterPICMail;
+use App\Mail\RegisterSponsorPatnerEmail;
 use App\Models\Event;
 use App\Models\ManageMail;
 use App\Models\master_data;
@@ -115,7 +116,7 @@ class Register extends Component
                 'user_type_id' => $this->user_type,
                 'user_type' => $user_type_name,
                 'price' => $price,
-                'status' => 'created',
+                'status' => 'Waiting',
                 'created_by_id' => $id_user,
                 'updated_by_id' => $id_user,
             ]);
@@ -155,16 +156,21 @@ class Register extends Component
                     }
                 }
             }
-            //send mail User
-            Mail::to($this->email)->send(new NewRegisterEmail($this->first_name));
+
 
             //send mail PIC
             if ($this->user_type == 1) {
                 $type_mail = 'Register General';
+                //send mail User
+                Mail::to($this->email)->send(new NewRegisterEmail($this->first_name));
             } elseif ($this->user_type == 2) {
                 $type_mail = 'Register Sponsor';
+                //send mail User
+                Mail::to($this->email)->send(new RegisterSponsorPatnerEmail($this->first_name));
             } elseif ($this->user_type == 3) {
                 $type_mail = 'Register Partner';
+                //send mail User
+                Mail::to($this->email)->send(new RegisterSponsorPatnerEmail($this->first_name));
             }
 
             $data_send_mail = [

@@ -33,4 +33,14 @@ class Participant extends Model
     {
         return $this->hasMany(ParticipantAnswers::class, 'participant_id');
     }
+
+    public function topicAnswer()
+    {
+        return $this->hasOne(ParticipantAnswers::class)->where('question_id', 5);
+    }
+
+    public function golfAnswer()
+    {
+        return $this->hasOne(ParticipantAnswers::class)->where('question_id', 6);
+    }
 }

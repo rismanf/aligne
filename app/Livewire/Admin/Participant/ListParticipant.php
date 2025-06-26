@@ -6,6 +6,7 @@ use App\Mail\ApproveRegisterMail;
 use App\Mail\RejectedRegisterMail;
 use App\Models\Invoice;
 use App\Models\Participant;
+use App\Models\Questions_option;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,24 @@ class ListParticipant extends Component
     public bool $confirmModal = false;
     public bool $showModal = false;
     public bool $deleteModal = false;
+
+    public $select_status = '';
+    public $select_type_participant = '';
+    public $select_golf = '';
+    public $select_topic = '';
+    public $status = [
+        ['id' => 'Waiting', 'name' => 'Waiting'],
+        ['id' => 'Approved', 'name' => 'Approved'],
+        ['id' => 'Rejected', 'name' => 'Rejected']
+    ];
+    public $type_participant = [
+        ['id' => 'General Admission', 'name' => 'General Admission'],
+        ['id' => 'Sponsor', 'name' => 'Sponsor'],
+        ['id' => 'Partner', 'name' => 'Partner']
+    ];
+    public $options_topic = [];
+    public $options_golf = [];
+
 
     public array $sortBy = ['column' => 'full_name', 'direction' => 'asc'];
 
@@ -74,7 +93,7 @@ class ListParticipant extends Component
         // dd($id, $status);
         $participants = Participant::find($id);
 
-        if ($status == 'approved') {
+        if ($status == 'Approved') {
 
 
             $qr = new QrCode($participants->code);
@@ -90,7 +109,7 @@ class ListParticipant extends Component
             $qr_url = Storage::disk('s3')->url($filename);
 
             Mail::to($participants->email)->send(new ApproveRegisterMail($participants->full_name, $participants->code, $qr_url));
-        }else{
+        } else {
             Mail::to($participants->email)->send(new RejectedRegisterMail($participants->full_name));
         }
 
@@ -104,6 +123,18 @@ class ListParticipant extends Component
             'Participant updated to ' . $status . ' successfully!',
             redirectTo: route('admin.participant.index')
         );
+    }
+    public function mount()
+    {
+        // $this->status = [
+        //     'created' => 'created',
+        //     'approved' => 'approved',
+        //     'rejected' => 'rejected'
+        // ];
+
+        $options = Questions_option::wherein('question_id', [5, 6])->get();
+        $this->options_topic = $options->where('question_id', 5)->map(fn($o) => ['id' => $o->option, 'name' => $o->option])->values()->toArray();
+        $this->options_golf = $options->where('question_id', 6)->map(fn($o) => ['id' => $o->option, 'name' => $o->option])->values()->toArray();
     }
 
     public function render()
@@ -121,26 +152,54 @@ class ListParticipant extends Component
             ],
         ];
         $id_user = Auth::id();
-        // if (Auth::user()->hasRole('User')) {
-        //     $participants = Participant::where('created_by_id', $id_user)->paginate(10);
-        //     $this->total_price = $participants->where('status', 'created')->sum('price');
-        //     $this->total_participant = $participants->where('status', 'created')->count();
-        // } else {
-        //     $participants = Participant::paginate(10);
-        //     $this->total_price = $participants->sum('price');
-        //     $this->total_participant = $participants->count();
-        // }
 
+        $query = Participant::with('answers', 'topicAnswer', 'golfAnswer');
 
+        if ($this->select_status) {
+            $query->where('status', $this->select_status);
+        }
 
-        $participants = Participant::orderBy(...array_values($this->sortBy))
-            ->paginate(10);
+        if ($this->select_type_participant) {
+            $query->where('user_type', $this->select_type_participant);
+        }
+        if ($this->select_topic) {
+            $query->whereHas('topicAnswer', function ($q) {
+                $q->where('answer', $this->select_topic);
+            });
+        }
+
+        if ($this->select_golf) {
+            $query->whereHas('golfAnswer', function ($q) {
+                $q->where('answer', $this->select_golf);
+            });
+        }
+
+        $sortableColumns = ['full_name', 'email', 'company', 'job_title', 'status', 'user_type'];
+
+        if (in_array($this->sortBy['column'], $sortableColumns)) {
+            $query->orderBy($this->sortBy['column'], $this->sortBy['direction']);
+        }
+
+        $participants = $query->paginate(10);
+
         $participants->getCollection()->transform(function ($val, $index) use ($participants) {
             $val->row_number = ($participants->currentPage() - 1) * $participants->perPage() + $index + 1;
             return $val;
         });
 
-        // Uncomment the line below to debug the total price
+        if ($this->sortBy['column'] === 'topic_answers') {
+            $sorted = $participants->getCollection()->sortBy(function ($participant) {
+                return $participant->topicAnswer?->answer ?? '';
+            }, SORT_REGULAR, $this->sortBy['direction'] === 'desc');
+
+            $participants->setCollection($sorted->values());
+        } else if ($this->sortBy['column'] === 'golf_answers') {
+            $sorted = $participants->getCollection()->sortBy(function ($participant) {
+                return $participant->golfAnswer?->answer ?? '';
+            }, SORT_REGULAR, $this->sortBy['direction'] === 'desc');
+
+            $participants->setCollection($sorted->values());
+        }
 
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
@@ -149,6 +208,8 @@ class ListParticipant extends Component
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'company', 'label' => 'Company'],
             ['key' => 'job_title', 'label' => 'Job Title'],
+            ['key' => 'topic_answers', 'label' => 'Topic'],
+            ['key' => 'golf_answers', 'label' => 'Golf'],
             ['key' => 'status', 'label' => 'Status'],
             ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
         ];

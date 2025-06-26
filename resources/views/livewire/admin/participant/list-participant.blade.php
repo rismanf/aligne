@@ -1,19 +1,58 @@
 <div>
     <x-card>
         <x-hr target="gotoPage" />
+        <div class="flex gap-1">
+            <x-select wire:model="select_status" :options="$status" placeholder="Filter by Status"
+                wire:change="gotoPage(1)" />
+            <x-select wire:model="select_type_participant" :options="$type_participant" placeholder="Filter by Type"
+                wire:change="gotoPage(1)" />
+            <x-select wire:model="select_topic" :options="$options_topic" placeholder="Filter by Topic"
+                wire:change="gotoPage(1)" />
+            <x-select wire:model="select_golf" :options="$options_golf" placeholder="Filter by Golf"
+                wire:change="gotoPage(1)" />
+        </div>
+        <p class="text-xs text-gray-500">
+            @php
+                $filters = [];
+
+                if ($select_status) {
+                    $filters[] = $select_status;
+                }
+                if ($select_type_participant) {
+                    $filters[] = $select_type_participant;
+                }
+                if ($select_topic) {
+                    $filters[] = $select_topic;
+                }
+                if ($select_golf) {
+                    $filters[] = $select_golf;
+                }
+            @endphp
+
+            @if (count($filters) > 0)
+                <p class="text-xs text-gray-500">
+                    Filter: {{ implode(' | ', $filters) }}
+                </p>
+            @endif
+        </p>
         <x-table class="text-xs" :headers="$t_headers" :rows="$participants" :sort-by="$sortBy" with-pagination>
             {{-- Special `actions` slot --}}
 
-
+            @scope('cell_topic_answers', $participants)
+                {{ $participants->answers->where('question_id', 5)->pluck('answer')->implode(', ') }}
+            @endscope
+            @scope('cell_golf_answers', $participants)
+                {{ $participants->answers->where('question_id', 6)->pluck('answer')->implode(', ') }}
+            @endscope
             @scope('cell_action', $participants)
                 <div class="flex gap-1">
                     @can('participant-edit')
-                        @if ($participants->status == 'created')
+                        @if ($participants->status == 'Waiting')
                             <x-button icon="o-check-circle" class="btn-xs btn-success"
-                                wire:click="showConfirmModal({{ $participants->id }}, 'approved')" tooltip="Approve" />
+                                wire:click="showConfirmModal({{ $participants->id }}, 'Approved')" tooltip="Approve" />
 
                             <x-button icon="o-x-circle" class="btn-xs btn-error"
-                                wire:click="showConfirmModal({{ $participants->id }}, 'rejected')" tooltip="Reject" />
+                                wire:click="showConfirmModal({{ $participants->id }}, 'Rejected')" tooltip="Reject" />
                         @endif
                     @endcan
                     <x-button icon="o-eye" class="btn-xs" wire:click="showDetailModal({{ $participants->id }})"
