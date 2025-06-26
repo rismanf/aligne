@@ -24,10 +24,10 @@ class AppBrand extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <a href="{{ route('admin.home') }}" wire:navigate>
+            <a href="{{ route('/') }}" target="_blank" >
                 <!-- Hidden when collapsed -->
                 <div {{ $attributes->class(["hidden-when-collapsed"]) }}>
-                    <div class="flex text-justify   gap-2">
+                    <div class="flex text-justify gap-2">
                         <div x-data="{ isDark: document.documentElement.getAttribute('data-theme') === 'dark' }" x-init="
                         new MutationObserver(() => {
                             isDark = document.documentElement.getAttribute('data-theme') === 'dark'
@@ -38,10 +38,7 @@ class AppBrand extends Component
 
                         <!-- Logo untuk Dark Theme -->
                         <img x-show="isDark" src="{{ asset('assets/img/logo-main.webp') }}" alt="Logo Dark" class="h-10">
-                    </div>
-
-
-                        
+                    </div>                        
                     </div>
                 </div>
 

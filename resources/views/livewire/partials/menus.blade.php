@@ -2,8 +2,8 @@
     {{-- Menu --}}
     <x-menu class="text-xs space-y-0 p-1" active-bg-color="font-black" activate-by-route>
         <h2 class="menu-title">Menu</h2>
-        <x-menu-item title="Home" icon="o-home" link="{{ route('admin.home') }}" />
-        @canany(['news-list', 'vcard-list', 'contactus-list', 'menu-list','email-list'])
+        <x-menu-item title="Dashboard" icon="o-chart-bar-square" link="{{ route('admin.home') }}" />
+        @canany(['news-list', 'vcard-list', 'contactus-list', 'menu-list', 'email-list','participant-list'])
             @can('news-list')
                 <x-menu-item title="News" icon="o-newspaper" link="{{ route('admin.news.index') }}" />
             @endcan
@@ -19,21 +19,23 @@
             @can('email-list')
                 <x-menu-item title="Email" icon="o-envelope" link="{{ route('admin.email.index') }}" />
             @endcan
-
-        @endcanany
-        <li></li>
-        @canany(['participant-list', 'invoice-list', 'question-list'])
             @can('participant-list')
                 <x-menu-item title="Participants" icon="o-user-group" link="{{ route('admin.participant.index') }}" />
             @endcan
-           
+        @endcanany
+        {{-- <li></li> --}}
+        {{-- @canany(['participant-list', 'invoice-list', 'question-list'])
+            @can('participant-list')
+                <x-menu-item title="Participants" icon="o-user-group" link="{{ route('admin.participant.index') }}" />
+            @endcan
+
             @can('question-list')
                 <x-menu-item title="Questions" icon="o-question-mark-circle" link="{{ route('admin.question.index') }}" />
             @endcan
-            {{-- @can('invoice-list')
+            @can('invoice-list')
                 <x-menu-item title="Invoice" icon="o-banknotes" link="{{ route('admin.invoice.index') }}" />
-            @endcan --}}
-        @endcanany
+            @endcan
+        @endcanany --}}
         <li></li>
         {{-- <x-menu-item title="Messages" icon="o-envelope" link="#" /> --}}
         @canany(['user-list', 'role-list'])

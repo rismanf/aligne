@@ -83,7 +83,7 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="{{asset('/assets/img/sng-1.webp')}}" class="img-fluid rounded-start"
+                                        <img src="{{asset('/assets/img/sng-1a.webp')}}" class="img-fluid rounded-start"
                                             alt="SNG-1" />
                                         <h4 class="card-title">
                                             SNG-1
@@ -127,7 +127,7 @@
                             <div class="row g-4">
                                 <div class="col-md-4">
                                     <div class="card__img">
-                                        <img src="{{asset('/assets/img/sng-2.webp')}}" class="img-fluid rounded-start"
+                                        <img src="{{asset('/assets/img/sng-2a.webp')}}" class="img-fluid rounded-start"
                                             alt="SNG-2" />
                                         <h4 class="card-title">
                                             SNG-2
