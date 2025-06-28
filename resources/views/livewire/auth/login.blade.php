@@ -1,21 +1,56 @@
-<div class="h-screen flex items-center justify-center">
+<div>
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing section">
 
-    <x-card class="min-w-md">
-        <x-slot name="title">Login</x-slot>
-        <x-slot:menu>
-            <x-button icon="o-arrow-left" class="btn-xs" label="Back to Home"
-                onclick="window.location.href='{{ route('/') }}'" title="Back to Home" />
-        </x-slot:menu>
-        <form wire:submit="login" class="space-y-4">
-            <x-input label="Email" type="email" wire:model.defer="email" placeholder="Email" icon="o-user"
-                hint="" class="w-full pr-0" required />
+        <div class="container">
 
-            <x-input label="Password" type="password" wire:model.defer="password" placeholder="Password"
-                icon="o-lock-closed" class="w-full pr-0" required />
+            <div class="row gy-4 justify-content-center text-center align-items-center">
 
-            {{-- <x-checkbox label="Remember me" wire:model="remember" /> --}}
+                <div class="col-lg-4">
+                    <div class="pricing-item">
+                        <h3>Login</h3>
 
-            <x-button label="Login" type="submit" class="btn-primary w-full" spinner="login" />
-        </form>
-    </x-card>
+
+                        <form wire:submit="login" role="form" class="php-email-form">
+
+                            <div class="form-group mt-3">
+
+                                <input type="email" wire:model.defer="email" name="email" class="form-control"
+                                    placeholder="Email" required>
+                            </div>
+                            <div class="form-group mt-3">
+
+                                <input type="password" wire:model.defer="password" name="password" class="form-control"
+                                    placeholder="Password" required>
+                            </div>
+                            @error('email')
+                                <span class="text">*{{ $message }}</span>
+                            @enderror
+                            <div class="row">
+                                <button class="cta-btn">Login</button>
+                                <div class="col">
+                                    <p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- End Pricing Item -->
+
+            </div>
+
+        </div>
+
+    </section><!-- /Pricing Section -->
+
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        @endif
+    </script>
 </div>

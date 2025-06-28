@@ -1,273 +1,163 @@
 <div>
-    <section id="hero" class="hero banner">
-        <div class="grid grid__stack">
-            <div class="bg__img section__vh">
-                <img class="only__desktop" src="{{asset('/assets/img/banner-home-hero-latest-2a.webp')}}" alt="Banner" />
-                <img class="only__mobile" src="{{asset('/assets/img/banner-home-hero-latest-2a.webp')}}" alt="Banner" />
-            </div>
-            <div class="section__content align__center">
+    <section id="hero" class="hero section dark-background">
+
+        <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+
+            <div class="carousel-item active">
+                <img src="assets/img/home/image1.jpg" alt="">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="section__heading">
-                                <p>
-                                    <span> Welcome to NeutraDC </span>
-                                </p>
-                                <h1>
-                                    YOUR DIGITAL ECOSYSTEM PARTNER IN
-                                    SOUTHEAST ASIA’S FASTEST GROWING
-                                    ECONOMY
-                                </h1>
-                            </div>
-
-                            <div class="link__wrapper">
-                                <a href="{{ route('about-us') }}" class="btn btn__danger btn--round">
-                                    Leverage our capabilities
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <h2>We are professional</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                        laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <a href="#" class="btn-get-started">Read More</a>
                 </div>
-            </div>
-        </div>
-    </section>
+            </div><!-- End Carousel Item -->
 
-    <section id="intro" class="intro">
+
+
+        </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
         <div class="container">
-            <div class="section__content">
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="section__heading">
-                            <h2>
-                                LEVERAGE OUR INFRASTRUCTURE FOR
-                                <span> SEAMLESS CONNECTIVITY </span>
-                            </h2>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <p>
-                            As a subsidiary of Telkom Group, NeutraDC
-                            can combine the group’s capabilities to
-                            offer tailor-made, comprehensive solutions.
-                            We offer end-to-end solutions through a
-                            digital ecosystem and connectivity hub for
-                            connectivity, which includes peering,
-                            transit, point-to-point and submarine cables
-                            for seamless connectivity to the rest of the
-                            world.
-                        </p>
-                        <p>Discover Our Data Centers</p>
 
-                        <div class="link__wrapper">
-                            <a href="{{ route('data-center.jakarta-hq') }}" class="btn btn__danger btn--round">
-                                Jakarta
-                            </a>
-                            <a href="{{ route('data-center.batam') }}" class="btn btn__danger btn--round">
-                                Batam
-                            </a>
-                            <a href="{{ route('data-center.singapore') }}" class="btn btn__danger btn--round">
-                                Singapore
-                            </a>
+            <div class="row position-relative">
+
+                <div class="col-lg-7 about-img" data-aos="zoom-out" data-aos-delay="200"><img
+                        src="assets/img/home/image2.webp" alt=""></div>
+
+                <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
+                    <h2 class="inner-title">Consequatur eius et magnam</h2>
+                    <div class="our-story">
+                        <h3>Our Story</h3>
+                        <p>Inventore aliquam beatae at et id alias. Ipsa dolores amet consequuntur minima quia maxime
+                            autem. Quidem id sed ratione. Tenetur provident autem in reiciendis rerum at dolor. Aliquam
+                            consectetur laudantium temporibus dicta minus dolor.</p>
+                        <ul>
+                            <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea
+                                    commo</span></li>
+                            <li><i class="bi bi-check-circle"></i> <span>Duis aute irure dolor in reprehenderit
+                                    in</span></li>
+                            <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea</span>
+                            </li>
+                        </ul>
+                        <p>Vitae autem velit excepturi fugit. Animi ad non. Eligendi et non nesciunt suscipit
+                            repellendus porro in quo eveniet. Molestias in maxime doloremque.</p>
+
+                        <div class="watch-video d-flex align-items-center position-relative">
+                            <i class="bi bi-play-circle"></i>
+                            <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox stretched-link">Watch
+                                Video</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="row row-cols-1 row-cols-md-2 g-4 row--space">
-                    <div class="col">
-                        <div class="card intro__card">
-                            <div class="row g-0">
-                                <div class="col-lg-4">
-                                    <div class="card__img">
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-infrastructure"></use>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="card-body">
-                                        <h3 class="card-title">
-                                            Best-in-Class Infrastructure
-                                        </h3>
-                                        <p class="card-text">
-                                            Distributed redundant N+1
-                                            power and cooling
-                                            configuration to ensure
-                                            continuous operations.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card intro__card">
-                            <div class="row g-0">
-                                <div class="col-lg-4">
-                                    <div class="card__img">
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-data-center"></use>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="card-body">
-                                        <h3 class="card-title">
-                                            All data center locations
-                                            are secured
-                                        </h3>
-                                        <p class="card-text">
-                                            With server room access
-                                            restricted by up to 8 layers
-                                            of security.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card intro__card">
-                            <div class="row g-0">
-                                <div class="col-lg-4">
-                                    <div class="card__img">
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-certifications"></use>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="card-body">
-                                        <h3 class="card-title">
-                                            Enterprise-Grade
-                                            Certifications
-                                        </h3>
-                                        <p class="card-text">
-                                            Achieved Uptime Institute
-                                            Tier III Design
-                                            certification (TCCD) to
-                                            ensure concurrent
-                                            maintainability.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card intro__card">
-                            <div class="row g-0">
-                                <div class="col-lg-4">
-                                    <div class="card__img">
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-facilities"></use>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="card-body">
-                                        <h3 class="card-title">
-                                            Best-Practice-Based
-                                            Facilities
-                                        </h3>
-                                        <p class="card-text">
-                                            Space, power, network,
-                                            personnel and internal
-                                            infrastructure are optimised
-                                            for seamless enterprise
-                                            computing.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+
         </div>
-    </section>
 
-    <section id="growth" class="growth">
-        <div class="container container__full">
-            <div class="section__content">
-                <div class="grid grid__growth">
-                    <div class="grid__growth--item">
-                        <div class="container">
-                            <div class="section__heading text__xl">
-                                <h2>
-                                    FUEL YOUR
-                                    <span class="text__bg">GROWTH</span>
-                                </h2>
-                                <p>
-                                    Scale with NeutraDC. Our digital
-                                    ecosystem helps
-                                    <br />
-                                    expand your business across the Asia
-                                    Pacific.
-                                </p>
-                            </div>
-                            <a href="{{ route('services') }}" class="btn btn__danger btn--round">
-                                View Service
-                            </a>
-                        </div>
-                    </div>
+    </section><!-- /About Section -->
 
-                    <div class="grid__growth--item">
-                        <div class="growth__line">
-                            <img src="{{ asset('assets/img/growth-map-latest-2.webp') }}" alt="map" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="news" class="news">
+    <!-- Blog Posts Section -->
+    <section id="blog-posts" class="blog-posts section">
+
         <div class="container">
-            <div class="section__content">
-                <div class="section__heading text-center text__lg">
-                    <h2>
-                        News
-                        <a href="{{ route('news') }}" class="btn btn__danger--alt btn--lg">Read our latest news</a>
-                    </h2>
-                </div>
 
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                        @foreach ($news as $item)
-                            <div class="col">
-                                <div class="card news__card">
-                                    <div class="card__img">
-                                        <picture>
-                                            <source media="(max-width: 600px)"
-                                                srcset="{{ Storage::disk('s3')->url($item->image_small) }}">
-                                            <source media="(max-width: 1200px)"
-                                                srcset="{{ Storage::disk('s3')->url($item->image_medium) }}">
-                                            <img src="{{ Storage::disk('s3')->url($item->image_original) }}"
-                                                class="card-img-top" alt="{{ $item->title }}">
-                                        </picture>
-                                        <div class="wrapper__absolute">
-                                            <span class="cta cta__light">
-                                                View More
-                                                <svg class="icon" aria-hidden="true">
-                                                    <use xlink:href="#svg-arrow-right"></use>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <span class="card__date">
-                                            {{ \Carbon\Carbon::parse($item->created_at)->format('d F Y') }}
-                                        </span>
-                                        <h3 class="card-title">
-                                            {{ $item->title }}
-                                        </h3>
-                                        <a href="/news/{{ $item->slug . '/' . $item->title_slug }}"
-                                            class="stretched-link"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+            <div class="section-header" data-aos="fade-up">
+                <h2>Class</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+            </div>
+            <div class="row gy-4">
+
+                <div class="col-lg-4">
+                    <article class="position-relative h-100">
+
+                        <div class="post-img position-relative overflow-hidden">
+                            <img src="assets/img/class/image1.jpeg" class="img-fluid" alt="">
+                        </div>
+
+                        <div class="post-content d-flex flex-column">
+
+                            <h3 class="post-title">Dolorum optio tempore voluptas dignissimos cumque fuga qui quibusdam
+                                quia</h3>
+
+                            <p>
+                                Similique neque nam consequuntur ad non maxime aliquam quas. Quibusdam animi
+                                praesentium. Aliquam et laboriosam eius aut nostrum quidem aliquid dicta.
+                            </p>
+
+                            <hr>
+
+                            <a href="blog-details.html" class="readmore stretched-link"><span>Select</span><i
+                                    class="bi bi-arrow-right"></i></a>
+
+                        </div>
+
+                    </article>
+                </div><!-- End post list item -->
+
+                <div class="col-lg-4">
+                    <article class="position-relative h-100">
+
+                        <div class="post-img position-relative overflow-hidden">
+                            <img src="assets/img/class/image2.jpg" class="img-fluid" alt="">
+                        </div>
+
+                        <div class="post-content d-flex flex-column">
+
+                            <h3 class="post-title">Nisi magni odit consequatur autem nulla dolorem</h3>
+
+                      
+
+                            <p>
+                                Incidunt voluptate sit temporibus aperiam. Quia vitae aut sint ullam quis illum
+                                voluptatum et. Quo libero rerum voluptatem pariatur nam.
+                            </p>
+
+                            <hr>
+
+                            <a href="blog-details.html" class="readmore stretched-link"><span>Select</span><i
+                                    class="bi bi-arrow-right"></i></a>
+
+                        </div>
+
+                    </article>
+                </div><!-- End post list item -->
+
+                <div class="col-lg-4">
+                    <article class="position-relative h-100">
+
+                        <div class="post-img position-relative overflow-hidden">
+                            <img src="assets/img/class/image3.webp" class="img-fluid" alt="">
+                        </div>
+
+                        <div class="post-content d-flex flex-column">
+
+                            <h3 class="post-title">Possimus soluta ut id suscipit ea ut. In quo quia et soluta libero
+                                sit sint.</h3>
+
+                            <p>
+                                Aut iste neque ut illum qui perspiciatis similique recusandae non. Fugit autem dolorem
+                                labore omnis et. Eum temporibus fugiat voluptate enim tenetur sunt omnis.
+                            </p>
+
+                            <hr>
+
+                            <a href="blog-details.html" class="readmore stretched-link"><span>Select</span><i
+                                    class="bi bi-arrow-right"></i></a>
+
+                        </div>
+
+                    </article>
+                </div><!-- End post list item -->
+
             </div>
         </div>
-    </section>
+
+    </section><!-- /Blog Posts Section -->
 </div>

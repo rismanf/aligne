@@ -1,160 +1,77 @@
 <div>
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
-    </style>
-    <section id="hero" class="hero banner contact">
-        <div class="grid grid__stack">
-            <div class="bg__right bg__img">
-                <img class="only__desktop" src="{{ asset('/assets/img/banner-bg-contact.webp') }}" alt="Banner" />
-                <img class="only__mobile" src="{{ asset('/assets/img/banner-bg-contact.webp') }}" alt="Banner" />
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="section__content">
-                            <div class="section__heading text--danger text__xl">
-                                <h1>Get in Touch</h1>
-                                <p>
-                                    Want to learn more about NeutraDC
-                                    data center, network &
-                                    infrastructure capabilities? Get in
-                                    touch with us now
-                                </p>
-                                <div class="link__wrapper vstack">
-                                    <a href="mailto:sales.admin@neutradc.com" class="cta cta__alt">
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-email"></use>
-                                        </svg>
-                                        sales.admin@neutradc.com
-                                    </a>
-                                    <a href="#" class="cta cta__alt" target="_blank">
-                                        <svg class="icon" aria-hidden="true">
-                                            <use xlink:href="#svg-pin"></use>
-                                        </svg>
-                                        Telkom Landmark Tower, 5th
-                                        Floor, Jl. Gatot Subroto South
-                                        Jakarta, Indonesia
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+
+      <div class="mb-5">
+        <iframe style="width: 100%; height: 400px;" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" allowfullscreen=""></iframe>
+      </div><!-- End Google Maps -->
+
+      <div class="container" data-aos="fade">
+
+        <div class="row gy-5 gx-lg-5">
+
+          <div class="col-lg-4">
+
+            <div class="info">
+              <h3>Get in touch</h3>
+              <p>Et id eius voluptates atque nihil voluptatem enim in tempore minima sit ad mollitia commodi minus.</p>
+
+              <div class="info-item d-flex">
+                <i class="bi bi-geo-alt flex-shrink-0"></i>
+                <div>
+                  <h4>Location:</h4>
+                  <p>A108 Adam Street, New York, NY 535022</p>
                 </div>
-            </div>
-        </div>
-    </section>
+              </div><!-- End Info Item -->
 
-    <section id="contact" class="contact">
-        <div class="container">
-
-            <div class="section__content">
-
-                <div class="form__wrapper bg__danger bg__danger--linear bg__danger">
-
-                    <form class="row g-4" wire:submit="save">
-                        <div class="col-md-6">
-                            <input id="contactNameFirst" type="text" class="form-control" placeholder="First Name"
-                                aria-label="First Name" wire:model.defer="first_name" required />
-                            @error('first_name')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <input id="contactNameLast" type="text" class="form-control" placeholder="Last Name"
-                                aria-label="Last Name" wire:model.defer="last_name" required />
-                            @error('last_name')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <input id="contactCompany" type="text" class="form-control" placeholder="Company Name"
-                                aria-label="Company Name" wire:model.defer="company" required />
-                            @error('company')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <input id="contactJob" type="text" class="form-control" placeholder="Job Title"
-                                aria-label="Job Title" wire:model.defer="job" required />
-                            @error('job')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <input id="contactCountry" type="text" class="form-control" placeholder="Country"
-                                aria-label="Country" wire:model.defer="country" required />
-                            @error('country')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <input id="contactPhone" type="text" inputmode="numeric" pattern="[0-9]+"
-                                class="form-control" placeholder="Phone Number" aria-label="Phone Number"
-                                wire:model.defer="phone" required />
-                            @error('phone')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-12">
-                            <input id="contactEmail" type="email" class="form-control" placeholder="Email"
-                                aria-label="Email" wire:model.defer="email" required />
-                            @error('email')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col-12">
-                            <textarea id="contactMessage" class="form-control" placeholder="Message" aria-label="Message" required rows="4"
-                                wire:model.defer="message"></textarea>
-                            @error('message')
-                                <span class="text">*{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="col-12">
-                            <div class="form-check">
-                                @error('terms')
-                                    <span class="text">*{{ $message }}</span>
-                                @enderror
-                                <input class="form-check-input" type="checkbox" value="" id="contactTerms"
-                                    aria-describedby="contactTermsFeedback" wire:model.defer="terms" required />
-                                <label class="form-check-label" for="contactTerms">
-                                    I By submitting this Contact Us
-                                    form, you consent to receiving
-                                    information related to NeutraDC
-                                    products and services. (you must
-                                    agree before submitting) NeutraDC
-                                    Privacy Policy
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <button label="save" type="submit" class="btn btn__primary" spinner="save">
-                                Submit
-                            </button>
-                        </div>
-                        @if (session('success'))
-                            <div x-data="{ show: true }" x-show="show" x-cloak
-                                style="background-color:#d1fae5; border:1px solid #34d399; color:#065f46; padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;width: 100%;">
-
-                                <span style="flex-grow: 1;">
-                                    {{ session('success') }}
-
-                                </span>
-
-                                <button @click="show = false"
-                                    style="background: none; border: none; font-weight: bold;
-                   font-size: 1.25rem; color: #065f46; cursor: pointer;
-                   margin-left: 1rem; line-height: 1;">
-                                    &times;
-                                </button>
-                            </div>
-                        @endif
-                    </form>
+              <div class="info-item d-flex">
+                <i class="bi bi-envelope flex-shrink-0"></i>
+                <div>
+                  <h4>Email:</h4>
+                  <p>info@example.com</p>
                 </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex">
+                <i class="bi bi-phone flex-shrink-0"></i>
+                <div>
+                  <h4>Call:</h4>
+                  <p>+1 5589 55488 55</p>
+                </div>
+              </div><!-- End Info Item -->
+
             </div>
+
+          </div>
+
+          <div class="col-lg-8">
+            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required="">
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required="">
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required="">
+              </div>
+              <div class="form-group mt-3">
+                <textarea class="form-control" name="message" placeholder="Message" required=""></textarea>
+              </div>
+              <div class="my-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
+          </div><!-- End Contact Form -->
+
         </div>
-    </section>
+
+      </div>
+
+    </section><!-- /Contact Section -->
 </div>

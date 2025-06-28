@@ -13,6 +13,7 @@ use App\Models\master_data;
 use App\Models\Participant;
 use App\Models\ParticipantAnswers;
 use App\Models\Questions;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -23,7 +24,7 @@ class Register extends Component
 {
     use Toast;
 
-    public $first_name, $last_name, $company,  $phone, $email,  $user_type;
+    public $name, $phone, $email,  $password, $password_confirmation;
     public $country = '';
     public $job = '';
     public $industry = '';
@@ -44,156 +45,34 @@ class Register extends Component
     {
 
         $this->validate([
-            'user_type' => 'required',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'company' => 'required|string|max:255',
-            'job' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'industry' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'phone' => 'required|numeric',
-            'email' => 'required|email|unique:users,email',
+            // 'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        if ($this->user_type == 1) {
-
-            $questions  = Questions::with('options')->get();
-            // Cek apakah semua pertanyaan dijawab
-            foreach ($questions as $question) {
-                $qid = $question->id;
-
-                if ($question->question_type === 'multiple') {
-                    // Validasi minimal 1 checkbox dicentang
-                    if (empty($this->answers[$qid]) || !collect($this->answers[$qid])->filter()->count()) {
-                        $this->addError("answers.$qid", 'Select at least one answer.');
-                    }
-                } else {
-                    // Validasi radio wajib diisi
-                    if (empty($this->answers[$qid])) {
-                        $this->addError("answers.$qid", 'This question is required.');
-                    }
-                }
-            }
-        }
-
-        // Jika ada error, jangan lanjut simpan
-        if ($this->getErrorBag()->isNotEmpty()) {
-            $this->toast(
-                type: 'error',
-                title: 'Validation Error',
-                description: 'Please fix the errors before submitting.',
-                position: 'toast-top toast-end',
-                icon: 'o-information-circle',
-                css: 'alert-warning',
-                timeout: 3000,
-                redirectTo: null
-            );
-            return;
-        }
 
         DB::beginTransaction();
         try {
-            $event_id = Event::where('is_active', true)->first()->id; // Ganti dengan event_id yang sesuai
-            $id_user = 1;
-            $price =  0;
+            // $user = User::create([
+            //     'name' => $this->name,
+            //     'email' => $this->email,
+            //     'password' => bcrypt($this->password), // default password atau form password sendiri
+            // ]);
 
+            // $user->assignRole('User');
+            try {
+                Mail::to($this->email)->send(new NewRegisterEmail($this->name));
 
-            $user_type_name = master_data::where('type', 'user_type')->where('code', $this->user_type)->first()->name;
-            $participant_count = Participant::count();
-            $code = rand(1, 9) . substr(date('Y'), -1) . str_pad(date('m'), 2, '0', STR_PAD_LEFT) . str_pad($participant_count + 1, 3, '0', STR_PAD_LEFT) . rand(1, 9);
-            $user = Participant::create([
-                'code' => $code,
-                'event_id' => $event_id,
-                'full_name' => $this->first_name . ' ' . $this->last_name,
-                'first_name' => $this->first_name,
-                'last_name' => $this->last_name,
-                'phone' => $this->phone,
-                'email' => $this->email,
-                'company' => $this->company,
-                'country' => $this->country,
-                'job_title' => $this->job,
-                'industry' => $this->industry,
-                'user_type_id' => $this->user_type,
-                'user_type' => $user_type_name,
-                'price' => $price,
-                'status' => 'Waiting',
-                'created_by_id' => $id_user,
-                'updated_by_id' => $id_user,
-            ]);
-
-            // Simpan jawaban peserta
-            if ($this->user_type == 1) {
-                foreach ($questions as $question) {
-                    $qid = $question->id;
-
-                    if ($question->question_type === 'multiple') {
-                        foreach ($this->answers[$qid] ?? [] as $optionId => $isChecked) {
-                            if ($isChecked) {
-                                ParticipantAnswers::create([
-                                    'event_id' => $event_id,
-                                    'participant_id' => $user->id,
-                                    'question_id' => $qid,
-                                    'question' => $question->question,
-                                    'answer_id' => $optionId,
-                                    'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
-                                    'created_by_id' => $id_user,
-                                    'updated_by_id' => $id_user,
-                                ]);
-                            }
-                        }
-                    } else {
-                        $optionId = $this->answers[$qid];
-                        ParticipantAnswers::create([
-                            'event_id' => $event_id,
-                            'participant_id' => $user->id,
-                            'question_id' => $qid,
-                            'question' => $question->question,
-                            'answer_id' => $optionId,
-                            'answer' => $question->options->where('id', $optionId)->first()->option ?? null,
-                            'created_by_id' => $id_user,
-                            'updated_by_id' => $id_user,
-                        ]);
-                    }
-                }
+                Log::info('send mail ' . $this->email);
+            } catch (\Exception $e) {
+                Log::error('Gagal kirim email: ' . $e->getMessage());
             }
 
-
-            //send mail PIC
-            if ($this->user_type == 1) {
-                $type_mail = 'Register General';
-                //send mail User
-                Mail::to($this->email)->send(new NewRegisterEmail($this->first_name));
-            } elseif ($this->user_type == 2) {
-                $type_mail = 'Register Sponsor';
-                //send mail User
-                Mail::to($this->email)->send(new RegisterSponsorPatnerEmail($this->first_name));
-            } elseif ($this->user_type == 3) {
-                $type_mail = 'Register Partner';
-                //send mail User
-                Mail::to($this->email)->send(new RegisterSponsorPatnerEmail($this->first_name));
-            }
-
-            $data_send_mail = [
-                'full_name' => $this->first_name . ' ' . $this->last_name,
-                'phone' => $this->phone,
-                'email' => $this->email,
-                'company' => $this->company,
-                'country' => $this->country,
-                'job_title' => $this->job,
-                'industry' => $this->industry,
-                'user_type' => $user_type_name,
-            ];
-
-            // Mail::to('risman.firmansyah@neutradc.com')->send(new NewRegisterPICMail($data_send_mail));
-            // Kirim event
-            event(new \App\Events\NewUserRegistered($data_send_mail, $type_mail));
-
-            Log::info("2222");
-            $this->success(
-                'Participant created successfully!',
-                redirectTo: route('register')
-            );
             DB::commit();
+
+            session()->flash('success', 'Registration successful!');
+            $this->reset();
         } catch (\Exception $e) {
             DB::rollBack();
             $this->toast(

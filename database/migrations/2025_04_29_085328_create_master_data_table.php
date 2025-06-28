@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('event_name', 20);
             $table->string('status', 50);
-            $table->timestamp('event_time', 20);
+            $table->timestamp('event_time');
             $table->integer('user_id')->nullable();
             $table->string('email', 30);            
             $table->text('status_description')->nullable();

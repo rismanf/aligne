@@ -25,11 +25,11 @@ use Illuminate\Support\Facades\Route;
 
 use App\Livewire\Auth\Login;
 use App\Livewire\Public\AboutUs;
+use App\Livewire\Public\Classes;
 use App\Livewire\Public\ContactUs;
-use App\Livewire\Public\DataCenter\Batam;
-use App\Livewire\Public\DataCenter\Jakarta;
-use App\Livewire\Public\DataCenter\Singapore;
+use App\Livewire\Public\DetailClass;
 use App\Livewire\Public\Home;
+use App\Livewire\Public\Membership;
 use App\Livewire\Public\NeutradcSummit;
 use App\Livewire\Public\News;
 use App\Livewire\Public\NewsDetail;
@@ -55,21 +55,14 @@ Route::get('/logout', function () {
 // Route::middleware(['domainCheck'])->group(function () {
 // Redirect '/' tergantung status login
 Route::get('/', Home::class)->name('/');
-Route::get('/neutradc-summit', NeutradcSummit::class)->name('neutradc-summit');
-Route::get('/neutradc-summit', NeutradcSummit::class)->name('event');
-// Route::get('/data-center', DataCenterHome::class);
-Route::get('/data-center/jakarta-hq', Jakarta::class)->name('data-center.jakarta-hq');
-Route::get('/data-center/batam', Batam::class)->name('data-center.batam');
-Route::get('/data-center/singapore', Singapore::class)->name('data-center.singapore');
-Route::get('/services', Service::class)->name('services');
 Route::get('/about-us', AboutUs::class)->name('about-us');
+Route::get('/classes', Classes::class)->name('classes');
+Route::get('/classes-detail/{id}/{date}', DetailClass::class)->name('detail-class');
+Route::get('/membership', Membership::class)->name('membership');
+Route::get('/contact-us', ContactUs::class)->name('contact-us'); 
 Route::get('/news', News::class)->name('news');
 Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');
-Route::get('/contact-us', ContactUs::class)->name('contact-us');
-Route::get('/two-hands-hub', TwoHandHub::class)->name('two-hands-hub');
 Route::get('/register', Register::class)->name('register');
-Route::get('/sponsor-register', SponsorRegister::class)->name('sponsor-register');
-Route::get('/whistleblower', Whistleblower::class)->name('whistleblower');
 Route::get('/vcard', Vcard::class)->name('vcard');
 
 // });

@@ -13,7 +13,7 @@
 
 
 
-    <p style="margin-top: 40px;">Best regards,<br>NeutraDC Team</p>
+    <p style="margin-top: 40px;">Best regards,<br>Aligne Team</p>
 </body>
 
 </html>

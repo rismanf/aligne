@@ -28,7 +28,7 @@ class NewRegisterEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'NeutraDC | Thank you for registering!',
+            subject: 'Aligne | Thank you for registering!',
         );
     }
 

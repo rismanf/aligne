@@ -1,57 +1,31 @@
-<header id="header" class="header fixed-top">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <img src="/assets/img/logo-main.webp" alt="Brand" />
-            </a>
-            <button class="btn btn__toggler navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Button Menu">
-                <span></span><span></span><span></span>
-            </button>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel" data-bs-backdrop="static">
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/neutradc-summit/">NeutraDC Summit</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="/data-center/" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                Data Center
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="nav-link dropdown-item" href="/data-center/jakarta-hq/">NeutraDC
-                                        Jakarta</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link dropdown-item" href="/data-center/batam/">NeutraDC Batam</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link dropdown-item" href="/data-center/singapore/">NeutraDC
-                                        Singapore</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/services/">Services</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/about-us/">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/news/">News</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/contact-us/">Contact Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/two-hands-hub/">Two Hands Hub</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
+  <header id="header" class="header d-flex align-items-center sticky-top">
+      <div class="container position-relative d-flex align-items-center">
+
+          <a href="{{ route('/') }}" class="logo d-flex align-items-center me-auto">
+              <!-- Uncomment the line below if you also wish to use an image logo -->
+              <!-- <img src="assets/img/logo.png" alt=""> -->
+              <h1 class="sitename">{{ config('app.name') }}</h1><span>.</span>
+          </a>
+
+          <nav id="navmenu" class="navmenu">
+              <ul>
+
+                  <li><a href="{{ route('about-us') }}">About</a></li>
+                  <li><a href="{{ route('classes') }}">Class</a></li>
+                  <li><a href="{{ route('membership') }}">Membership</a></li>
+                  <li><a href="{{ route('contact-us') }}">Contact</a></li>
+                  <li>
+                      <form action="{{ route('login') }}" method="GET">
+                          <button type="submit" class="cta-btn">Login</button>
+                      </form>
+                  </li>
+
+              </ul>
+              <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+          </nav>
+
+
+
+
+      </div>
+  </header>
