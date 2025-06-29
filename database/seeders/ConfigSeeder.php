@@ -25,7 +25,7 @@ class ConfigSeeder extends Seeder
             'nik' => '2205022',
             'title' => 'Administrator2',
             'department' => 'Enterprise IT System & Automation',
-            'email' => 'admin@neutradc.com',
+            'email' => 'admin@admin.com',
             'type_user' => 'Internal',
             'country' => 'Indonesia',
             'company' => 'NeutraDC',
@@ -37,66 +37,6 @@ class ConfigSeeder extends Seeder
         $admin->assignRole('Admin');
         $role_admin->syncPermissions($permissions);
 
-        $role_user = Role::create(['name' => 'User']);
-        $role_user->givePermissionTo(
-            [
-                'participant-list',
-                'participant-create',
-                'participant-edit',
-                'participant-delete',
-                'invoice-list',
-                'invoice-confirm',
-                'invoice-cancel',
-            ]
-        );
-
-        $role_finance = Role::create(['name' => 'Finance']);
-        $role_finance->givePermissionTo(
-            [
-                'invoice-list',
-                'invoice-approve',
-                'invoice-reject',
-            ]
-        );
-
-        $role_corsec = Role::create(['name' => 'Corsec']);
-        $role_corsec->givePermissionTo(
-            [
-                'news-list',
-                'news-create',
-                'news-edit',
-                'news-delete',
-                'menu-list',
-                'menu-create',
-                'menu-edit',
-                'menu-delete',
-                'vcard-list',
-                'vcard-create',
-                'vcard-edit',
-                'vcard-delete',
-                'contactus-list',
-                'contactus-create',
-                'contactus-edit',
-                'contactus-delete',
-                'question-list',
-                'question-create',
-                'question-edit',
-                'question-delete',
-            ]
-        );
-
-        $role_sales = Role::create(['name' => 'Sales']);
-        $role_sales->givePermissionTo(
-            [
-                'participant-list',
-                'participant-create',
-                'participant-edit',
-                'participant-delete',
-                'sponsor-list',
-                'sponsor-create',
-                'sponsor-edit',
-                'sponsor-delete',
-            ]
-        );
+       
     }
 }

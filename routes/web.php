@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Admin\Class\ClassList;
 use App\Livewire\Admin\Contact\ListContact;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Invoice\ListInvoice;
@@ -16,6 +17,8 @@ use App\Livewire\Admin\Question\ListQuestion;
 use App\Livewire\Admin\Role\ListRole;
 use App\Livewire\Admin\Role\RoleShow;
 use App\Livewire\Admin\Sponsor\ListSponsor;
+use App\Livewire\Admin\Trainer\TrainerList;
+use App\Livewire\Admin\Transaction\TransactionList;
 use App\Livewire\Admin\User\ListUser;
 use App\Livewire\Admin\Vcard\AddVcard;
 use App\Livewire\Admin\Vcard\EditVcard;
@@ -90,6 +93,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/news/create', AddNews::class)->name('news.create');
     Route::get('/news/{id}', NewsShow::class)->name('news.show');
     Route::get('/news/{id}/edit', EditNews::class)->name('news.edit');
+
+    Route::get('/class', ClassList::class)->name('class.index');
+    Route::get('/trainer', TrainerList::class)->name('trainer.index');
+    Route::get('/transaction', TransactionList::class)->name('transaction.index');
+    Route::get('/product', TransactionList::class)->name('product.index');
+
 
     Route::get('/vcard', ListVcard::class)->name('vcard.index');
     Route::get('/vcard/create', AddVcard::class)->name('vcard.create');

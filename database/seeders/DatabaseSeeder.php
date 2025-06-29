@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             ConfigSeeder::class,
             MasterSeeder::class,
             MenuSeeder::class,
-            QuestionSeeder::class,
+            // QuestionSeeder::class,
         ]);
     }
 }

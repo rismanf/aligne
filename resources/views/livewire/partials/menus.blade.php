@@ -5,23 +5,27 @@
         <x-menu-item title="Dashboard" icon="o-chart-bar-square" link="{{ route('admin.home') }}" />
         @canany(['news-list', 'vcard-list', 'contactus-list', 'menu-list', 'email-list','participant-list'])
             @can('news-list')
-                <x-menu-item title="News" icon="o-newspaper" link="{{ route('admin.news.index') }}" />
+                {{-- <x-menu-item title="News" icon="o-newspaper" link="{{ route('admin.news.index') }}" /> --}}
             @endcan
-            @can('vcard-list')
+            {{-- @can('vcard-list')
                 <x-menu-item title="Vcard" icon="o-device-tablet" link="{{ route('admin.vcard.index') }}" />
-            @endcan
+            @endcan --}}
             @can('contactus-list')
                 <x-menu-item title="Contact Us" icon="o-identification" link="{{ route('admin.contact.index') }}" />
             @endcan
             @can('menu-list')
-                <x-menu-item title="Menu" icon="o-wallet" link="{{ route('admin.menu.index') }}" />
+                {{-- <x-menu-item title="Menu" icon="o-wallet" link="{{ route('admin.menu.index') }}" /> --}}
             @endcan
             @can('email-list')
                 <x-menu-item title="Email" icon="o-envelope" link="{{ route('admin.email.index') }}" />
+                <x-menu-item title="transaction" icon="o-envelope" link="{{ route('admin.transaction.index') }}" />
+                <x-menu-item title="Class" icon="o-envelope" link="{{ route('admin.class.index') }}" />
+                <x-menu-item title="Trainer" icon="o-envelope" link="{{ route('admin.trainer.index') }}" />
+                <x-menu-item title="Product" icon="o-envelope" link="{{ route('admin.product.index') }}" />
             @endcan
-            @can('participant-list')
+            {{-- @can('participant-list')
                 <x-menu-item title="Participants" icon="o-user-group" link="{{ route('admin.participant.index') }}" />
-            @endcan
+            @endcan --}}
         @endcanany
         {{-- <li></li> --}}
         {{-- @canany(['participant-list', 'invoice-list', 'question-list'])

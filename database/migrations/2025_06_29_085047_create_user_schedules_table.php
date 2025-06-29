@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contact_us', function (Blueprint $table) {
+        Schema::create('user_schedules', function (Blueprint $table) {
             $table->id();
-            $table->string('source')->nullable();
-            $table->string('name');
-            $table->string('email');    
-            $table->string('subject')->nullable();
-            $table->string('message');
+            $table->integer('user_id');
+            $table->integer('schedule_id');
+            $table->boolean('is_active')->default(1);
+            $table->integer('created_by_id')->nullable();
+            $table->integer('updated_by_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contact_us');
+        Schema::dropIfExists('user_schedules');
     }
 };

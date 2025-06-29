@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>NeutraDC</title>
+    <title>Aligne</title>
 </head>
 
 <body>
@@ -16,7 +16,7 @@
     <p>Otherwise, we will reply by email as soon as possible.</p>
     <br />
     <br />
-    <p>Talk to you soon, NeutraDC</p>
+    <p>Talk to you soon,Aligne</p>
     <br />
 </body>
 

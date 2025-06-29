@@ -27,7 +27,7 @@ class ContactUsEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'NeutraDC | Thanks for getting in touch!',
+            subject: 'Aligne | Thanks for getting in touch!',
         );
     }
 
