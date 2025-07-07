@@ -3,20 +3,22 @@
 namespace App\Livewire\Admin\Trainer;
 
 use App\Models\Trainer;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\Toast;
 
 class TrainerList extends Component
 {
-    use Toast,WithFileUploads;
+    use Toast, WithFileUploads;
 
     public $id, $avatar, $name, $title, $x_app, $facebook, $instagram, $description;
+    public $trainer;
     public bool $createForm = false;
     public bool $editForm = false;
     public bool $detailForm = false;
     public bool $deleteForm = false;
-    public $photo;
+    public $photo,$avatar_edit;
     public function render()
     {
         $title = 'Trainer Management';
@@ -71,6 +73,7 @@ class TrainerList extends Component
             'title' => 'required|string|max:255',
             'avatar' => 'required|image|max:1024',
         ]);
+
         if ($this->avatar) {
             $url = $this->avatar->store('trainer', 'public');
         }
@@ -96,12 +99,51 @@ class TrainerList extends Component
     //Edit
     public function showEditModal($id)
     {
-        $trainer = Trainer::find($id);
+        $trainer = Trainer::where('id', $id)->firstOrFail();
+        $this->trainer = $trainer;
         $this->id = $id;
         $this->name = $trainer->name;
         $this->title = $trainer->title;
-        $this->avatar = $trainer->avatar;
+        $this->avatar_edit = $trainer->avatar;
         // $this->photo = $trainer;
         $this->editForm = true;
+    }
+
+    public function update()
+    {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'avatar' => 'image|max:1024',
+        ]);
+
+        $trainer = Trainer::find($this->id);
+
+        if ($this->avatar) {
+            if ($trainer->avatar && Storage::disk('public')->exists($trainer->avatar)) {
+                Storage::disk('public')->delete($trainer->avatar);
+            }
+
+            $url = $this->avatar->store('trainer', 'public');
+            $trainer->avatar = $url;
+        }
+
+        $trainer->name = $this->name;
+        $trainer->title = $this->title;
+        $trainer->avatar = $url;
+        $trainer->save();
+
+        $this->reset();
+        $this->editForm = false;
+        $this->toast(
+            type: 'success',
+            title: 'Trainer Updated',               // optional (text)
+            description: null,                  // optional (text)
+            position: 'toast-top toast-end',    // optional (daisyUI classes)
+            icon: 'o-information-circle',       // Optional (any icon)
+            css: 'alert-info',                  // Optional (daisyUI classes)
+            timeout: 3000,                      // optional (ms)
+            redirectTo: null                    // optional (uri)
+        );
     }
 }

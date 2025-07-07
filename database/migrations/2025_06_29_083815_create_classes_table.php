@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 200);
             $table->text('description')->nullable();
+            $table->string('image_original')->nullable();
             $table->boolean('is_active')->default(1);
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();

@@ -108,49 +108,116 @@
 
         <div class="calendar">
             @foreach ($days as $day)
+                @php
+                    $hasSchedule = $schedule->contains(function ($s) use ($day) {
+                        return \Carbon\Carbon::parse($s->schedule_at)->toDateString() === $day->toDateString();
+                    });
+                @endphp
                 <a href="{{ route('detail-class', ['id' => 1, 'date' => $day->toDateString()]) }}" class="day">
                     <div class="day-name">{{ $day->format('D') }}</div>
                     <div class="date {{ $day->format('Y-m-d') === $date ? 'today' : '' }}">
                         {{ $day->format('j') }}
                     </div>
-                    <div class="dot"></div>
+                    @if ($hasSchedule)
+                        <div class="dot"></div>
+                    @endif
                 </a>
             @endforeach
         </div>
 
     </div>
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="testimonials section">
+    @if ($schedule_now->count() > 0)
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials section">
 
-        <div class="container">
+            <div class="container">
+                @foreach ($schedule_now as $val)
+                    <div class="row gy-4">
+                        <div class="col-lg-12" data-aos="fade-up" data-aos-delay="100">
+                            <div class="testimonial-item">
+                                <div
+                                    class="border rounded p-3 bg-light d-flex justify-content-between align-items-center">
+                                    <!-- Left Section -->
+                                    <div class="d-flex align-items-center" style="gap: 1rem;">
+                                        <div class="fw-bold fs-5">{{ Carbon::parse($val->schedule_at)->format('H:i') }}
+                                            -
+                                            {{ Carbon::parse($val->schedule_at)->addMinutes($val->duration)->format('H:i') }}
+                                        </div>
+                                        <div>
+                                            <div class="fw-semibold">{{ $val->name }}</div>
 
-            <div class="row gy-4">
+                                        </div>
+                                    </div>
 
-                <div class="col-lg-12" data-aos="fade-up" data-aos-delay="100">
-                    <div class="testimonial-item">
-                        <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-                        <h3>Saul Goodman</h3>
-                        <h4>Ceo &amp; Founder</h4>
-                        <div class="stars">
-                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                class="bi bi-star-fill"></i>
-                        </div>
-                        <p>
-                            <i class="bi bi-quote quote-icon-left"></i>
-                            <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit
-                                rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam,
-                                risus at semper.</span>
-                            <i class="bi bi-quote quote-icon-right"></i>
-                        </p>
+                                    <!-- Middle Section -->
+                                    <div class="text-center">
+                                        <div class="fw-semibold">{{ $val->trainer->name }}</div>
+                                        <div class="text-muted">{{ $val->duration }} min</div>
+                                    </div>
+
+                                    <!-- Right Section -->
+                                    <div class="text-end">
+                                        <div class="text-muted mb-1">{{ $val->kuota }}</div>
+                                        <button class="btn btn-secondary rounded-pill px-4" >Choose</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End testimonial item -->
                     </div>
-                </div><!-- End testimonial item -->
+                @endforeach
 
 
+
+                <div class="row gy-4">
+
+                    <div class="col-lg-12" data-aos="fade-up" data-aos-delay="100">
+                        <div class="testimonial-item">
+                            <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img"
+                                alt="">
+                            <h3>Saul Goodman</h3>
+                            <h4>Ceo &amp; Founder</h4>
+                            <div class="stars">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                    class="bi bi-star-fill"></i>
+                            </div>
+                            <p>
+                                <i class="bi bi-quote quote-icon-left"></i>
+                                <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit
+                                    rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam,
+                                    risus at semper.</span>
+                                <i class="bi bi-quote quote-icon-right"></i>
+                            </p>
+                        </div>
+                    </div><!-- End testimonial item -->
+
+
+
+                </div>
+            </div>
+
+        </section><!-- /Testimonials Section -->
+    @else
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials section">
+
+            <div class="container">
+
+                <div class="row gy-4">
+
+                    <div class="col-lg-12" data-aos="fade-up" data-aos-delay="100">
+                        <div class="testimonial-item">
+                            <h3>No Schedule</h3>
+                        </div>
+                    </div><!-- End testimonial item -->
+
+
+
+                </div>
 
             </div>
 
-        </div>
+        </section><!-- /Testimonials Section -->
+    @endif
 
-    </section><!-- /Testimonials Section -->
 </div>

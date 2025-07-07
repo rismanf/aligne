@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Livewire\Admin\Class;
+namespace App\Livewire\Admin\Product;
 
-use App\Models\Classes;
+use App\Models\Product;
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
-class ClassList extends Component
+class ProductList extends Component
 {
-    use Toast, WithFileUploads, WithPagination;
+    use Toast;
 
-    public $id, $name, $image,$image_edit, $description;
+    public $id, $name, $description, $kuota, $price;
+
     public bool $createForm = false;
     public bool $editForm = false;
     public bool $detailForm = false;
@@ -20,7 +19,7 @@ class ClassList extends Component
 
     public function render()
     {
-        $title = 'Class Management';
+        $title = 'Membership Management';
         $breadcrumbs = [
             [
                 'link' => route("admin.home"), // route('home') = nama route yang ada di web.php
@@ -29,14 +28,14 @@ class ClassList extends Component
             ],
             [
                 // 'link' => route("admin.role.index"), // route('home') = nama route yang ada di web.php
-                'label' => 'Class',
+                'label' => 'Membership',
             ],
         ];
 
-        $news = Classes::orderBy('created_at', 'desc')->paginate(5);
+        $data_all = Product::orderBy('created_at', 'desc')->paginate(5);
 
-        $news->getCollection()->transform(function ($val, $index) use ($news) {
-            $val->row_number = ($news->currentPage() - 1) * $news->perPage() + $index + 1;
+        $data_all->getCollection()->transform(function ($val, $index) use ($data_all) {
+            $val->row_number = ($data_all->currentPage() - 1) * $data_all->perPage() + $index + 1;
             return $val;
         });
 
@@ -44,21 +43,22 @@ class ClassList extends Component
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
             ['key' => 'name', 'label' => 'Name'],
+            ['key' => 'price', 'label' => 'Price'],
+            ['key' => 'kuota', 'label' => 'Kuota'],
             ['key' => 'description', 'label' => 'Description'],
             ['key' => 'updated_at', 'label' => 'Updated At'],
             ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
         ];
 
-        return view('livewire.admin.class.class-list', [
+        return view('livewire.admin.product.product-list', [
             't_headers' => $t_headers,
-            'class' => $news,
+            'products' => $data_all,
         ])->layout('components.layouts.app', [
             'breadcrumbs' => $breadcrumbs,
             'title' => $title,
         ]);
     }
 
-    //  Add
     public function showAddModal()
     {
         $this->createForm = true;
@@ -66,19 +66,19 @@ class ClassList extends Component
 
     public function save()
     {
+
         $this->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255|min:10',
+            'kuota' => 'required|numeric',
+            'price' => 'required|numeric',
         ]);
 
-        if ($this->image) {
-            $url = $this->image->store('class', 'public');
-        }
-
-        Classes::create([
+        Product::create([
             'name' => $this->name,
             'description' => $this->description,
-            'image_original' => $url
+            'kuota' => $this->kuota,
+            'price' => $this->price,
         ]);
 
         $this->reset();
@@ -86,26 +86,24 @@ class ClassList extends Component
 
         $this->toast(
             type: 'success',
-            title: 'Class Created',
+            title: 'Product Created',
             description: null,                  // optional (text)
             position: 'toast-top toast-end',    // optional (daisyUI classes)
             icon: 'o-information-circle',       // Optional (any icon)
             css: 'alert-info',                  // Optional (daisyUI classes)
             timeout: 3000,                      // optional (ms)
-            redirectTo: null                    // optional (uri)
+            redirectTo: null                    // optional (uri)   
         );
     }
-
-
-    //Edit
     public function showEditModal($id)
     {
-        $class = Classes::find($id);
-        $this->id = $id;
-        $this->name = $class->name;
-        $this->description = $class->description;
-        $this->image = $class->image_original;
         $this->editForm = true;
+        $product = Product::find($id);
+        $this->name = $product->name;
+        $this->description = $product->description;
+        $this->kuota = $product->kuota;
+        $this->price = $product->price;
+        $this->id = $id;
     }
 
     public function update()
@@ -113,24 +111,23 @@ class ClassList extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255|min:10',
+            'kuota' => 'required|numeric',
+            'price' => 'required|numeric',
         ]);
 
-        $class = Classes::find($this->id);
-        $url = $class->image_original;
-        if ($this->image_edit) {
-            $url = $this->image->store('class', 'public');
-        }
-        $class->name = $this->name;
-        $class->description = $this->description;
-        $class->image_original = $url;
-        $class->save();
+        $product = Product::find($this->id);
+        $product->name = $this->name;
+        $product->description = $this->description;
+        $product->kuota = $this->kuota;
+        $product->price = $this->price;
+        $product->save();
 
         $this->reset();
         $this->editForm = false;
 
         $this->toast(
             type: 'success',
-            title: 'Class Updated',
+            title: 'Product Updated',
             description: null,                  // optional (text)
             position: 'toast-top toast-end',    // optional (daisyUI classes)
             icon: 'o-information-circle',       // Optional (any icon)
@@ -139,30 +136,29 @@ class ClassList extends Component
             redirectTo: null                    // optional (uri)
         );
     }
-    // Detail
+
     public function showDetailModal($id)
     {
-        $class = Classes::find($id);
-        $this->name = $class->name;
-        $this->description = $class->description;
-        $this->image = $class->image_original;
         $this->detailForm = true;
+        $product = Product::find($id);
+        $this->name = $product->name;
+        $this->description = $product->description;
+        $this->kuota = $product->kuota;
+        $this->price = $product->price;
     }
-
-    //Delete
     public function showDeleteModal($id)
     {
         $this->id = $id;
         $this->deleteForm = true;
     }
-
     public function delete()
     {
-        Classes::find($this->id)->delete();
+        Product::find($this->id)->delete();
+        $this->reset();
         $this->deleteForm = false;
         $this->toast(
             type: 'success',
-            title: 'Class Deleted',
+            title: 'Product Deleted',
             description: null,                  // optional (text)
             position: 'toast-top toast-end',    // optional (daisyUI classes)
             icon: 'o-information-circle',       // Optional (any icon)

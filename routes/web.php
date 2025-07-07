@@ -13,9 +13,11 @@ use App\Livewire\Admin\News\NewsShow;
 use App\Livewire\Admin\Participant\AddParticipant;
 use App\Livewire\Admin\Participant\ListParticipant;
 use App\Livewire\Admin\Participant\PaymentParticipant;
+use App\Livewire\Admin\Product\ProductList;
 use App\Livewire\Admin\Question\ListQuestion;
 use App\Livewire\Admin\Role\ListRole;
 use App\Livewire\Admin\Role\RoleShow;
+use App\Livewire\Admin\Schedule\ScheduleList;
 use App\Livewire\Admin\Sponsor\ListSponsor;
 use App\Livewire\Admin\Trainer\TrainerList;
 use App\Livewire\Admin\Transaction\TransactionList;
@@ -28,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Livewire\Auth\Login;
 use App\Livewire\Public\AboutUs;
+use App\Livewire\Public\Checkout;
 use App\Livewire\Public\Classes;
 use App\Livewire\Public\ContactUs;
 use App\Livewire\Public\DetailClass;
@@ -62,6 +65,7 @@ Route::get('/about-us', AboutUs::class)->name('about-us');
 Route::get('/classes', Classes::class)->name('classes');
 Route::get('/classes-detail/{id}/{date}', DetailClass::class)->name('detail-class');
 Route::get('/membership', Membership::class)->name('membership');
+Route::get('/checkout/{id}', Checkout::class)->name('checkout');
 Route::get('/contact-us', ContactUs::class)->name('contact-us'); 
 Route::get('/news', News::class)->name('news');
 Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');
@@ -80,7 +84,8 @@ Route::get('/vcard', Vcard::class)->name('vcard');
 // Route yang butuh login & domain valid
 
 Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
-    Route::get('/dashboard', App\Livewire\User\Home::class)->name('home');
+    Route::get('/profile', App\Livewire\User\Profile::class)->name('profile');
+    Route::get('/dashboard', App\Livewire\User\Home::class)->name('dashboard');
 
     Route::get('/participant', App\Livewire\User\Participant\AddParticipant::class)->name('participant.index');
     Route::get('/participant/create', AddParticipant::class)->name('participant.create');
@@ -97,7 +102,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/class', ClassList::class)->name('class.index');
     Route::get('/trainer', TrainerList::class)->name('trainer.index');
     Route::get('/transaction', TransactionList::class)->name('transaction.index');
-    Route::get('/product', TransactionList::class)->name('product.index');
+    Route::get('/product', ProductList::class)->name('product.index');
+    Route::get('/schedule', ScheduleList::class)->name('schedule.index');
 
 
     Route::get('/vcard', ListVcard::class)->name('vcard.index');

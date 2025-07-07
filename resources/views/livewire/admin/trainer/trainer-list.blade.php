@@ -48,11 +48,13 @@
     {{-- modal-edit-muncul --}}
     <x-modal wire:model="editForm" title="Edit Trainer" class="backdrop-blur">
         <x-form wire:submit="update">
+            @if ($avatar_edit != null)
+                <x-file label="Foto" wire:model="avatar" accept="image/png, image/jpeg" crop-after-change>
+                    <img src="{{ $trainer->avatar ? asset('storage/' . $trainer->avatar) : '/image/empty-user.webp' }}"
+                        class="h-36 rounded-lg" />
+                </x-file>
+            @endif
 
-            <x-file label="{{ $avatar }}" wire:model="avatar" wire:accept="image/png, image/jpeg" crop-after-change>
-                <img src="{{ asset('storage/' . $avatar) }}"  label="{{ $avatar }}"
-                    class="h-40 rounded-lg" />
-            </x-file>
             {{-- /image/empty-user.webp --}}
             <x-input label="Name" wire:model="name" />
             <x-input label="Title" wire:model="title" />
@@ -60,7 +62,7 @@
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
 
             <x-slot:actions>
-                <x-button label="Cancel" @click="$wire.createForm = false" />
+                <x-button label="Cancel" @click="$wire.editForm = false" />
                 <x-button label="Save" class="btn-primary" type="submit" spinner="save" />
             </x-slot:actions>
         </x-form>
@@ -77,7 +79,7 @@
         {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
 
         <x-slot:actions>
-            <x-button label="Cancel" @click="$wire.createForm = false" />
+            <x-button label="Cancel" @click="$wire.detailForm = false" />
         </x-slot:actions>
     </x-modal>
 

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Event;
 use App\Models\ManageMail;
 use App\Models\master_data;
+use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -415,15 +416,12 @@ class MasterSeeder extends Seeder
             ]);
         }
 
-         //Type User
+        //Type User
         $send_mail = [
-            'Contact-Us NeutraDC',
-            'Contact-Us Jakarta',
-            'Contact-Us Batam',
-            'Contact-Us Singapore',
-            'Register General',
-            'Register Sponsor',
-            'Register Partner',
+            'Contact-Us',
+            'New Member',
+            'New Transaction',
+            'New Payment',
         ];
 
         foreach ($send_mail as $v => $stat) {
@@ -434,12 +432,19 @@ class MasterSeeder extends Seeder
             ]);
         }
 
-       foreach ($send_mail as $v => $stat) {
+        foreach ($send_mail as $v => $stat) {
             ManageMail::create([
                 'type' => $stat,
                 'name' => 'Risman Firmansyah',
-                'email' => 'risman.firmansyah@neutradc.com',
+                'email' => 'risman.firmansyah45@gmail.com',
             ]);
         }
+
+        Product::create([
+            'name' => 'Free',
+            'kuota' => 1,
+            'price' => 350000,
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ]);
     }
 }

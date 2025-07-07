@@ -5,21 +5,24 @@ namespace App\Livewire\Public;
 use App\Models\Menu;
 use App\Models\Product;
 use Livewire\Component;
+use Mary\Traits\Toast;
 
-class Membership extends Component
+class Checkout extends Component
 {
-    public $title, $description, $keywords;
-    public $products;
-    public function mount()
+    use Toast;
+
+    public $id, $product;
+    public function mount($id)
     {
-        $this->products = Product::all();
-       
+        $this->id = $id;
+        $this->product = Product::find($id);
     }
     public function render()
     {
+
         $menu = Menu::where('name', 'About Us')->first();
 
-        return view('livewire.public.membership')->layout('components.layouts.website', [
+        return view('livewire.public.checkout')->layout('components.layouts.website', [
             'title' => $menu->title,
             'description' => $menu->description,
             'keywords' => $menu->keywords,

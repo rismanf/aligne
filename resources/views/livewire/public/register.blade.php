@@ -43,12 +43,15 @@
                                     </ul>
                                 </div>
                             @endif
-                            <div class="row">
-                                <button class="cta-btn">Create</button>
-
-                            </div>
-
-
+                            
+                            <button type="submit" class="cta-btn" wire:loading.attr="disabled" wire:target="save">
+                                <span wire:loading.remove wire:target="save">Register</span>
+                                <span wire:loading wire:target="save">
+                                    <span class="spinner-border spinner-border-sm me-1" role="status"
+                                        aria-hidden="true"></span>
+                                    Processing...
+                                </span>
+                            </button>
                         </form>
                     </div>
                 </div><!-- End Pricing Item -->
@@ -58,6 +61,21 @@
         </div>
 
     </section><!-- /Pricing Section -->
+
+    <script>
+        function handleCheckout(event) {
+            event.preventDefault();
+
+            const btn = document.getElementById('checkout-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Processing...';
+
+            // Simulasi delay (ganti ini dengan submit asli atau AJAX)
+            setTimeout(() => {
+                document.getElementById('checkout-form').submit();
+            }, 1000);
+        }
+    </script>
 
     <script>
         @if (session('success'))

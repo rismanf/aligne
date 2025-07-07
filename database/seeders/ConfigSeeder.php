@@ -18,17 +18,9 @@ class ConfigSeeder extends Seeder
         //
         $admin = User::create([
             'name' => 'Risman Firmansyah',
-            'first_name' => 'Risman',
-            'last_name' => 'Firmansyah',
-            'ad_name' => 'admin',
             'phone' => '0812345678',
-            'nik' => '2205022',
-            'title' => 'Administrator2',
-            'department' => 'Enterprise IT System & Automation',
+            'title' => 'Administrator',
             'email' => 'admin@admin.com',
-            'type_user' => 'Internal',
-            'country' => 'Indonesia',
-            'company' => 'NeutraDC',
             'password' => bcrypt('password')
         ]);
 
@@ -37,6 +29,6 @@ class ConfigSeeder extends Seeder
         $admin->assignRole('Admin');
         $role_admin->syncPermissions($permissions);
 
-       
+       $role_user = Role::create(['name' => 'User']);
     }
 }

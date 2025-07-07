@@ -10,19 +10,15 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
 
-class SendNewUserRegistrationMail 
+class SendNewUserRegistrationMail
 {
     use InteractsWithQueue;
 
     public function handle(NewUserRegistered $event): void
     {
-        $listMailPIC = ManageMail::where('type', $event->typeMail)->get();
-
+        $listMailPIC = ManageMail::where('type', $event->typeMail)->pluck('email')->toArray();
         Log::info("START  Sending email to PIC for type: " . $event->typeMail);
-        foreach ($listMailPIC as $mailPIC) {
-            Log::info("mail :" . $mailPIC->email);
-            Mail::to($mailPIC->email)->send(new NewRegisterPICMail($event->userData));
-        }
+        Mail::to($listMailPIC)->send(new NewRegisterPICMail($event->userData));
     }
 
     public function failed(NewUserRegistered $event, Throwable $exception): void

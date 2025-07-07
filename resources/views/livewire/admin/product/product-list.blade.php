@@ -3,7 +3,14 @@
         $config = [
             'spellChecker' => true,
             'toolbar' => ['heading', 'bold', 'italic', '|', 'preview'],
-            'maxHeight' => '200px',
+            'maxHeight' => '70px',
+        ];
+
+        $config_money = [
+            'prefix' => '',
+            'thousands' => ',',
+            'decimal' => '.',
+            'precision' => 0,
         ];
     @endphp
 
@@ -14,26 +21,27 @@
         </div>
 
         <x-hr target="gotoPage" />
-        <x-table class="text-xs" :headers="$t_headers" :rows="$class">
+        <x-table class="text-xs" :headers="$t_headers" :rows="$products">
             {{-- Special `row_number` scope --}}
 
 
             {{-- Special `actions` slot --}}
-            @scope('cell_action', $news)
+            @scope('cell_action', $products)
                 <div class="flex gap-1">
-                    <x-button icon="o-pencil" wire:click="showEditModal({{ $news->id }})" spinner class="btn-xs" />
-                    <x-button icon="o-eye" wire:click="showDetailModal({{ $news->id }})" spinner class="btn-xs" />
-                    <x-button icon="o-trash" wire:click="showDeleteModal({{ $news->id }})" spinner class="btn-xs" />
+                    <x-button icon="o-pencil" wire:click="showEditModal({{ $products->id }})" spinner class="btn-xs" />
+                    <x-button icon="o-eye" wire:click="showDetailModal({{ $products->id }})" spinner class="btn-xs" />
+                    <x-button icon="o-trash" wire:click="showDeleteModal({{ $products->id }})" spinner class="btn-xs" />
                 </div>
             @endscope
         </x-table>
     </x-card>
 
     {{-- modal-create-muncul --}}
-    <x-modal wire:model="createForm" title="New Class" class="backdrop-blur">
+    <x-modal wire:model="createForm" title="New Product" class="backdrop-blur">
         <x-form wire:submit="save">
-            <x-file label="Cover Image" wire:model="image" accept="image/*" required />
             <x-input label="Name" wire:model="name" />
+            <x-input label="Price" wire:model="price" money />
+            <x-input label="Kouta" wire:model="kuota" />
             <x-markdown label="Description" wire:model="description" :config="$config" />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
@@ -48,13 +56,9 @@
     {{-- modal-edit-muncul --}}
     <x-modal wire:model="editForm" title="New Class" class="backdrop-blur">
         <x-form wire:submit="update">
-            <x-file label="Cover Image" wire:model="image_edit" accept="image/*" hint="if you don't want to change the image, just leave it blank" />
-            @if ($image)
-                <div class="mb-4">
-                    <img src="{{ asset('storage/' . $image) }}"class="w-32 h-auto rounded shadow" />
-                </div>
-            @endif
             <x-input label="Name" wire:model="name" />
+            <x-input label="Price" wire:model="price" money />
+            <x-input label="Kouta" wire:model="kuota" />
             <x-markdown label="Description" wire:model="description" :config="$config" />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
@@ -70,8 +74,11 @@
     <x-modal wire:model="detailForm" title="Detail Class" class="backdrop-blur">
 
         <label for="name">Name</label>
-        <img src="{{ asset('storage/' . $image) }}" alt="" width="100px">
         <p>{{ $name }}</p>
+        <label for="description">Price</label>
+        <p>{{ $price }}</p>
+        <label for="description">Kuota</label>
+        <p>{{ $kuota }}</p>
         <label for="description">Description</label>
         <p>{{ $description }}</p>
         {{-- Notice `omit-error` --}}

@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 200);
             $table->integer('trainer_id');
             $table->integer('class_id');
-            $table->date('date');
+            $table->dateTime('schedule_at');
+            $table->integer('duration');
             $table->integer('kuota');
+            $table->integer('kuota_book')->default(0);
             $table->boolean('is_active')->default(1);
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();
