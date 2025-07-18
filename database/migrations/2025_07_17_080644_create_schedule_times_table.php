@@ -11,20 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedules', function (Blueprint $table) {
+        Schema::create('schedule_times', function (Blueprint $table) {
             $table->id();
-            $table->date('schedule_date');
+            $table->string('name', 200);
             $table->integer('group_class_id')->nullable();
-            $table->string('group_class_name', 100)->nullable();
-            $table->integer('class_id');
-            $table->integer('trainer_id');
-            $table->integer('level_class_id')->nullable();
-            $table->string('level_class', 50)->nullable();
-            $table->integer('time_id');
+            $table->string('group_class_name', 200)->nullable();
             $table->time('time');
-            $table->integer('duration')->nullable();
-            $table->integer('quota');
-            $table->integer('quota_book')->default(0);
             $table->boolean('is_active')->default(1);
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();
@@ -38,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedules');
+        Schema::dropIfExists('schedule_times');
     }
 };

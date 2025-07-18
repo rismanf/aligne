@@ -4,7 +4,9 @@ namespace App\Livewire\Admin\Schedule;
 
 use App\Models\Classes;
 use App\Models\Schedule;
+use App\Models\ScheduleTime;
 use App\Models\Trainer;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
@@ -13,111 +15,110 @@ class ScheduleList extends Component
 {
     use Toast, WithPagination;
 
-    public bool $createForm = false;
     public bool $editForm = false;
-    public bool $detailForm = false;
-    public bool $deleteForm = false;
 
-    public $id, $name, $duration, $schedule_at, $kuota, $trainer, $calases;
+    public $schedule_data;
+    public $selectedDate;
+    public $availableDates = [];
 
+    public $all_schedule_times;
+
+    public $class_level_id, $trainer_id, $class_id, $quota, $id;
+    public $class_level = [
+        ['id' => '1', 'name' => 'BEGINNER'],
+        ['id' => '2', 'name' => 'INTERMEDIATE'],
+        ['id' => '3', 'name' => 'ADVANCED'],
+        ['id' => '4', 'name' => 'ALL LEVEL'],
+    ];
+
+    public $calases;
+    public $trainer_data;
+
+    public function mount()
+    {
+        $this->calases = Classes::select('id', 'name')->get()->toArray();
+        $this->trainer_data = Trainer::select('id', 'name')->get()->toArray();
+
+        for ($i = 0; $i < 14; $i++) {
+            $this->availableDates[] = Carbon::today()->addDays($i)->format('Y-m-d');
+        }
+
+        $this->selectedDate = $this->availableDates[0] ?? now()->format('Y-m-d');
+    }
+
+    public function classChanged()
+    {
+        $this->reset(['editForm', 'class_level_id', 'trainer_id', 'class_id', 'quota', 'id']);
+    }
+
+    public function showEditModal($timeId)
+    {
+        $this->id = $timeId;
+
+        $schedule = Schedule::where('schedule_date', $this->selectedDate)
+            ->where('time_id', $timeId)
+            ->first();
+
+        if ($schedule) {
+            $this->class_level_id = $schedule->level_class_id;
+            $this->class_id = $schedule->class_id;
+            $this->trainer_id = $schedule->trainer_id;
+            $this->quota = $schedule->quota;
+        } else {
+            $this->reset(['class_level_id', 'trainer_id', 'class_id', 'quota']);
+        }
+
+        $this->editForm = true;
+    }
+
+    public function update()
+    {
+        $this->validate([
+            'class_level_id' => 'required',
+            'class_id' => 'required',
+            'trainer_id' => 'required',
+            'quota' => 'required|integer|min:1',
+        ]);
+
+        Schedule::updateOrCreate(
+            [
+                'schedule_date' => $this->selectedDate,
+                'group_class_id' => 1,
+                'group_class_name' => 'REFORMER CLASS',
+                'time_id' => $this->id,
+            ],
+            [
+                'trainer_id' => $this->trainer_id,
+                'level_class_id' => $this->class_level_id,
+                'level_class' => $this->class_level[$this->class_level_id - 1]['name'] ?? null,
+                'class_id' => $this->class_id,
+                'time' => ScheduleTime::find($this->id)?->time,
+                'quota' => $this->quota,
+            ]
+        );
+
+        $this->reset(['editForm', 'class_level_id', 'trainer_id', 'class_id', 'quota', 'id']);
+        $this->toast('success', 'Schedule Updated');
+    }
 
     public function render()
     {
-        $title = 'Schedule Management';
-        $breadcrumbs = [
-            [
-                'link' => route("admin.home"), // route('home') = nama route yang ada di web.php
-                'label' => 'Home', // label yang ditampilkan di breadcrumb
-                'icon' => 's-home',
-            ],
-            [
-                // 'link' => route("admin.role.index"), // route('home') = nama route yang ada di web.php
-                'label' => 'Schedule',
-            ],
-        ];
-
-        $data = Schedule::with('trainer', 'classes')->orderBy('created_at', 'desc')->paginate(5);
-
-        $data->getCollection()->transform(function ($val, $index) use ($data) {
-            $val->row_number = ($data->currentPage() - 1) * $data->perPage() + $index + 1;
-            return $val;
-        });
-
-
-        $t_headers = [
-            ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
-            ['key' => 'schedule_at', 'label' => 'Date'],
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'duration', 'label' => 'Duration'],
-            ['key' => 'kuota', 'label' => 'Kuota'],
-            ['key' => 'trainer.name', 'label' => 'Trainer'],
-            ['key' => 'classes.name', 'label' => 'Class'],
-            ['key' => 'updated_at', 'label' => 'Updated At'],
-            ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
-        ];
-
-        $trainer_data = Trainer::all();
-        $calases_data = Classes::all();
+        $this->all_schedule_times = ScheduleTime::all();
+        $this->schedule_data = Schedule::with('trainer', 'classes')
+            ->where('schedule_date', $this->selectedDate)
+            ->get();
 
         return view('livewire.admin.schedule.schedule-list', [
-            't_headers' => $t_headers,
-            'schedules' => $data,
-            'trainer_data' => $trainer_data,
-            'calases_data' => $calases_data,
+            'schedule_data' => $this->schedule_data,
+            'all_schedule_times' => $this->all_schedule_times,
+            't_headers' => [], // kosongkan jika tak dipakai
+            'schedules' => [],
         ])->layout('components.layouts.app', [
-            'breadcrumbs' => $breadcrumbs,
-            'title' => $title,
+            'breadcrumbs' => [
+                ['link' => route("admin.home"), 'label' => 'Home', 'icon' => 's-home'],
+                ['label' => 'Schedule'],
+            ],
+            'title' => 'Schedule Management',
         ]);
-
-        return view('livewire.admin.schedule.schedule-list');
-    }
-
-    public function save()
-    {
-        $this->validate([
-            'name' => 'required',
-            'duration' => 'required',
-            'schedule_at' => 'required',
-            'kuota' => 'required',
-            'trainer' => 'required',
-            'calases' => 'required',
-        ]);
-
-        Schedule::create([
-            'name' => $this->name,
-            'duration' => $this->duration,
-            'schedule_at' => $this->schedule_at,
-            'kuota' => $this->kuota,
-            'trainer_id' => $this->trainer,
-            'class_id' => $this->calases,
-        ]);
-
-        $this->reset();
-        $this->createForm = false;
-        $this->toast(
-            type: 'success',
-            title: 'Schedule Added',               // optional (text)
-            description: null,                  // optional (text)
-            position: 'toast-top toast-end',    // optional (daisyUI classes)
-            icon: 'o-information-circle',       // Optional (any icon)
-            css: 'alert-info',                  // Optional (daisyUI classes)
-            timeout: 3000,                      // optional (ms)
-            redirectTo: null                    // optional (uri)
-        );
-    }
-
-    //Edit
-    public function showEditModal($id)
-    {
-        $Schedule = Schedule::where('id', $id)->firstOrFail();
-        $this->id = $id;
-        $this->name = $Schedule->name;
-        $this->duration = $Schedule->duration;
-        $this->schedule_at = $Schedule->schedule_at;
-        $this->kuota = $Schedule->kuota;
-        $this->trainer = $Schedule->trainer_id;
-        $this->calases = $Schedule->class_id;
-        // $this->photo = $trainer;
-        $this->editForm = true;
     }
 }

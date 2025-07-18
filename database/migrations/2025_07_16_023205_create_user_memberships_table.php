@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_produks', function (Blueprint $table) {
+        Schema::create('user_memberships', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number')->nullable();
             $table->integer('user_id');
@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('unique_code')->nullable();
             $table->decimal('price', 10, 2)->default(0.00);
             $table->decimal('total_price', 10, 2)->default(0.00);
-            $table->integer('kuota')->nullable();
-            $table->string('payment_method')->nullable(); // e.g., bank transfer, credit card
-            $table->string('payment_proof')->nullable(); // unpaid, paid
+            $table->integer('quota')->nullable();
+            $table->string('payment_method')->nullable(); 
+            $table->string('payment_proof')->nullable(); // path to payment proof file
             $table->string('payment_status')->default('unpaid'); // unpaid, paid
             $table->timestamp('paid_at')->nullable(); // timestamp when payment was made
             $table->integer('confirmed_by')->nullable();
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();
             $table->timestamps();
-            $table->softDeletes(); // for soft delete functionality
+            $table->softDeletes();
         });
     }
 
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_produks');
+        Schema::dropIfExists('user_memberships');
     }
 };

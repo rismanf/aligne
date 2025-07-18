@@ -34,17 +34,27 @@ class AppBrand extends Component
                         }).observe(document.documentElement, { attributes: true })
                     ">
                         <!-- Logo untuk Light Theme -->
-                        <img x-show="!isDark" src="{{ asset('assets/img/logo-main.webp') }}" alt="Logo Light" class="h-10">
+                        <img x-show="!isDark" src="{{ asset('image/Aligne_Black.webp') }}" alt="Logo Light" class="h-10">
 
                         <!-- Logo untuk Dark Theme -->
-                        <img x-show="isDark" src="{{ asset('assets/img/logo-main.webp') }}" alt="Logo Dark" class="h-10">
+                        <img x-show="isDark" src="{{ asset('image/Aligne_White.webp') }}" alt="Logo Dark" class="h-10">
                     </div>                        
                     </div>
                 </div>
 
                 <!-- Display when collapsed -->
-                <div class="display-when-collapsed hidden flex items-center justify-center mb-3 h-fit mt-2 gap-2 pl-2 pr-2">
-                     <img src="{{ asset('assets/img/logo-fav.webp') }}" alt="mini-Logo" class="h-15 w-auto object-contain" />
+                <div class="display-when-collapsed hidden flex items-center justify-center mb-3 h-fit mt-2 gap-2 pl-2 pr-2" x-data="{ isDark: document.documentElement.getAttribute('data-theme') === 'dark' }" x-init="
+                        new MutationObserver(() => {
+                            isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+                        }).observe(document.documentElement, { attributes: true })
+                    ">
+                    <!-- Logo untuk Light Theme -->
+                        <img x-show="!isDark" src="{{ asset('image/Aligne_Black.webp') }}" alt="mini-Logo Light" class="h-15 w-auto object-contain">
+
+                        <!-- Logo untuk Dark Theme -->
+                        <img x-show="isDark" src="{{ asset('image/Aligne_White.webp') }}" alt="mini-Logo Dark" class="h-15 w-auto object-contain">
+
+                     <!-- <img x-show="isDark"src="{{ asset('image/Aligne_Black.webp') }}" alt="mini-Logo" class="h-15 w-auto object-contain" /> -->
                 </div>
             </a>
         HTML;

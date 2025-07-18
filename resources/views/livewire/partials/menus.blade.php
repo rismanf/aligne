@@ -3,7 +3,7 @@
     <x-menu class="text-xs space-y-0 p-1" active-bg-color="font-black" activate-by-route>
         <h2 class="menu-title">Menu</h2>
         <x-menu-item title="Dashboard" icon="o-chart-bar-square" link="{{ route('admin.home') }}" />
-        @canany(['news-list', 'vcard-list', 'contactus-list', 'menu-list', 'email-list','participant-list'])
+        @canany(['news-list', 'vcard-list', 'contactus-list', 'menu-list', 'email-list', 'participant-list'])
             @can('news-list')
                 {{-- <x-menu-item title="News" icon="o-newspaper" link="{{ route('admin.news.index') }}" /> --}}
             @endcan
@@ -19,7 +19,12 @@
             @can('email-list')
                 <x-menu-item title="Email" icon="o-envelope" link="{{ route('admin.email.index') }}" />
                 <x-menu-item title="Transaction" icon="o-envelope" link="{{ route('admin.transaction.index') }}" />
-                <x-menu-item title="Class" icon="o-envelope" link="{{ route('admin.class.index') }}" />
+
+                <x-menu-sub title="Class Management" icon="o-rectangle-group" link="#">
+                    <x-menu-item title="Class" icon="o-stop" link="{{ route('admin.class.index') }}" />
+                    <x-menu-item title="Class Group" icon="o-stop" link="{{ route('admin.groupclass.index') }}" />
+                </x-menu-sub>
+
                 <x-menu-item title="Trainer" icon="o-envelope" link="{{ route('admin.trainer.index') }}" />
                 <x-menu-item title="Membership" icon="o-envelope" link="{{ route('admin.product.index') }}" />
                 <x-menu-item title="Schedule" icon="o-envelope" link="{{ route('admin.schedule.index') }}" />

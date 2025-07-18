@@ -6,7 +6,7 @@
             <div class="carousel-item active">
                 <img src="assets/img/home/image1.jpg" alt="">
                 <div class="container">
-                    <h2>We are professional</h2>
+                    <h2>Discover Your Strongest Self</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                         labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
                         laboris nisi ut aliquip ex ea commodo consequat.</p>
@@ -31,28 +31,24 @@
                         src="assets/img/home/image2.webp" alt=""></div>
 
                 <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
-                    <h2 class="inner-title">Consequatur eius et magnam</h2>
+                    <h2 class="inner-title">More Than Movement — It’s a Way of Living.</h2>
                     <div class="our-story">
                         <h3>Our Story</h3>
-                        <p>Inventore aliquam beatae at et id alias. Ipsa dolores amet consequuntur minima quia maxime
-                            autem. Quidem id sed ratione. Tenetur provident autem in reiciendis rerum at dolor. Aliquam
-                            consectetur laudantium temporibus dicta minus dolor.</p>
-                        <ul>
-                            <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea
-                                    commo</span></li>
-                            <li><i class="bi bi-check-circle"></i> <span>Duis aute irure dolor in reprehenderit
-                                    in</span></li>
-                            <li><i class="bi bi-check-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea</span>
-                            </li>
-                        </ul>
-                        <p>Vitae autem velit excepturi fugit. Animi ad non. Eligendi et non nesciunt suscipit
-                            repellendus porro in quo eveniet. Molestias in maxime doloremque.</p>
+                        <p>Aligné was born from a belief that movement should be meaningful. Founded by passionate women
+                            and led by certified instructors, our mission is to create a space where every body feels
+                            empowered, supported, and aligned — physically and mentally.</p>
 
-                        <div class="watch-video d-flex align-items-center position-relative">
+                        <p>Whether you come for strength, stillness, or support, Aligné offers more than just fitness.
+                        </p>
+                        <p>Our programs also serve as a gentle yet effective approach to physical rehabilitation,
+                            helping those recovering from injuries, managing scoliosis, knee pain, postural imbalances,
+                            and more. Movement is not one-size-fits-all — and neither is your journey.</p>
+
+                        {{-- <div class="watch-video d-flex align-items-center position-relative">
                             <i class="bi bi-play-circle"></i>
                             <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox stretched-link">Watch
                                 Video</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -112,7 +108,7 @@
 
                             <h3 class="post-title">Nisi magni odit consequatur autem nulla dolorem</h3>
 
-                      
+
 
                             <p>
                                 Incidunt voluptate sit temporibus aperiam. Quia vitae aut sint ullam quis illum

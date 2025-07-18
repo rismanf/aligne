@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Admin\Class\ClassList;
+use App\Livewire\Admin\Class\GroupClassList;
 use App\Livewire\Admin\Contact\ListContact;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Invoice\ListInvoice;
@@ -45,6 +46,7 @@ use App\Livewire\Public\SponsorRegister;
 use App\Livewire\Public\TwoHandHub;
 use App\Livewire\Public\Vcard;
 use App\Livewire\Public\Whistleblower;
+use App\Models\GroupClass;
 use App\Models\User;
 
 // Route bawaan login (Livewire)
@@ -66,7 +68,7 @@ Route::get('/classes', Classes::class)->name('classes');
 Route::get('/classes-detail/{id}/{date}', DetailClass::class)->name('detail-class');
 Route::get('/membership', Membership::class)->name('membership');
 Route::get('/checkout/{id}', Checkout::class)->name('checkout');
-Route::get('/contact-us', ContactUs::class)->name('contact-us'); 
+Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/news', News::class)->name('news');
 Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');
 Route::get('/register', Register::class)->name('register');
@@ -85,6 +87,7 @@ Route::get('/vcard', Vcard::class)->name('vcard');
 
 Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
     Route::get('/profile', App\Livewire\User\Profile::class)->name('profile');
+    Route::get('/order', App\Livewire\User\Order::class)->name('order');
     Route::get('/dashboard', App\Livewire\User\Home::class)->name('dashboard');
 
     Route::get('/participant', App\Livewire\User\Participant\AddParticipant::class)->name('participant.index');
@@ -99,6 +102,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/news/{id}', NewsShow::class)->name('news.show');
     Route::get('/news/{id}/edit', EditNews::class)->name('news.edit');
 
+    Route::get('/groupclass', GroupClassList::class)->name('groupclass.index');
     Route::get('/class', ClassList::class)->name('class.index');
     Route::get('/trainer', TrainerList::class)->name('trainer.index');
     Route::get('/transaction', TransactionList::class)->name('transaction.index');

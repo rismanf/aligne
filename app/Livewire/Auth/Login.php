@@ -25,21 +25,20 @@ class Login extends Component
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
         $email = trim(strtolower($this->email));
         $password = trim($this->password);
 
         if (env('LOGIN_TYPE', 'local') == 'local') {
             // if (strpos($email, '@neutradc.com') > 0) {
             if (Auth::attempt(['email' => $email, 'password' => $password])) {
-                // if (Auth::user()->hasRole('admin')) {
+                if (Auth::user()->hasRole('Admin')) {
                     session()->regenerate();
                     Log_login::logUserAttempt('Auth-Login', Carbon::now(), $email, 'OK');
                     return redirect()->intended(route('admin.home'));
-                // } else {
-                //     session()->regenerate();
-                //     return redirect()->intended(route('user.home'));
-                // }
+                } else {
+                    session()->regenerate();
+                    return redirect()->intended(route('user.profile'));
+                }
             }
             // }
             // if ($email == $password) {

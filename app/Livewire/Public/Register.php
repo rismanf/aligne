@@ -15,6 +15,7 @@ use App\Models\Participant;
 use App\Models\ParticipantAnswers;
 use App\Models\Questions;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -89,14 +90,12 @@ class Register extends Component
             }
 
             DB::commit();
-
+            Auth::login($user);
             session()->flash('success', 'Registration successful!');
             $this->reset();
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
             session()->flash('error', 'Failed to create participant: ' . $e->getMessage());
-
         }
     }
 

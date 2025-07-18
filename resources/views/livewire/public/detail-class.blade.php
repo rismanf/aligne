@@ -98,19 +98,41 @@
     <!-- Blog Posts Section -->
 
     <div class="wrapper">
+        @php
+
+            $currentDate = \Carbon\Carbon::parse($date);
+            $today = \Carbon\Carbon::today();
+
+            $startOfCurrentWeek = $today->copy()->startOfWeek();
+            $endLimit = $today->copy()->addMonth(); // batas maksimal ke depan (1 bulan)
+
+            $prevDate = $currentDate->copy()->subWeek()->toDateString();
+            $nextDate = $currentDate->copy()->addWeek()->toDateString();
+        @endphp
+
         <div class="nav">
-            {{-- <a href="{{ route('schedule', ['date' => $prev]) }}">&lt;</a> --}}
-            <a href="">&lt;</a>
-            <h2>{{ $days->first()->format('M') }} - {{ $days->last()->format('M Y') }}</h2>
-            <a href="">&gt;</a>
-            {{-- <a href="{{ route('schedule', ['date' => $next]) }}">&gt;</a> --}}
+            {{-- Tombol Prev: hanya aktif kalau tanggal sekarang > minggu ini --}}
+            @if ($currentDate->greaterThan($startOfCurrentWeek))
+                <a href="{{ route('detail-class', ['id' => $id, 'date' => $prevDate]) }}">&lt;</a>
+            @else
+                <span class="text-muted">&lt;</span>
+            @endif
+
+            <h2>{{ $currentDate->startOfWeek()->format('M d') }} - {{ $currentDate->endOfWeek()->format('M d, Y') }}
+            </h2>
+            {{-- Tombol Next: hanya aktif kalau currentDate < 1 bulan ke depan --}}
+            @if ($currentDate->lessThan($endLimit))
+                <a href="{{ route('detail-class', ['id' => $id, 'date' => $nextDate]) }}">&gt;</a>
+            @else
+                <span class="text-muted">&gt;</span>
+            @endif
         </div>
 
         <div class="calendar">
             @foreach ($days as $day)
                 @php
                     $hasSchedule = $schedule->contains(function ($s) use ($day) {
-                        return \Carbon\Carbon::parse($s->schedule_at)->toDateString() === $day->toDateString();
+                        return \Carbon\Carbon::parse($s->schedule_date)->toDateString() === $day->toDateString();
                     });
                 @endphp
                 <a href="{{ route('detail-class', ['id' => 1, 'date' => $day->toDateString()]) }}" class="day">
@@ -139,61 +161,29 @@
                                     class="border rounded p-3 bg-light d-flex justify-content-between align-items-center">
                                     <!-- Left Section -->
                                     <div class="d-flex align-items-center" style="gap: 1rem;">
-                                        <div class="fw-bold fs-5">{{ Carbon::parse($val->schedule_at)->format('H:i') }}
-                                            -
-                                            {{ Carbon::parse($val->schedule_at)->addMinutes($val->duration)->format('H:i') }}
+                                        <div class="fw-bold fs-5">{{ Carbon::parse($val->time)->format('h:i A') }}
                                         </div>
                                         <div>
-                                            <div class="fw-semibold">{{ $val->name }}</div>
-
+                                            <div class="fw-semibold">{{ $val->classes->name }}</div>
+                                            <div class="fw-muted">{{ $val->level_class }}</div>
                                         </div>
                                     </div>
 
                                     <!-- Middle Section -->
                                     <div class="text-center">
-                                        <div class="fw-semibold">{{ $val->trainer->name }}</div>
-                                        <div class="text-muted">{{ $val->duration }} min</div>
+                                        <div class="fw-muted ">Trainer : {{ $val->trainer->name }}</div>
+                                        <div class="text-muted mb-1">Quota Available : {{ $val->quota }}</div>
                                     </div>
 
                                     <!-- Right Section -->
                                     <div class="text-end">
-                                        <div class="text-muted mb-1">{{ $val->kuota }}</div>
-                                        <button class="btn btn-secondary rounded-pill px-4" >Choose</button>
+                                        <button class="btn btn-secondary rounded-pill px-4">Choose</button>
                                     </div>
                                 </div>
                             </div>
                         </div><!-- End testimonial item -->
                     </div>
                 @endforeach
-
-
-
-                <div class="row gy-4">
-
-                    <div class="col-lg-12" data-aos="fade-up" data-aos-delay="100">
-                        <div class="testimonial-item">
-                            <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img"
-                                alt="">
-                            <h3>Saul Goodman</h3>
-                            <h4>Ceo &amp; Founder</h4>
-                            <div class="stars">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                    class="bi bi-star-fill"></i>
-                            </div>
-                            <p>
-                                <i class="bi bi-quote quote-icon-left"></i>
-                                <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit
-                                    rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam,
-                                    risus at semper.</span>
-                                <i class="bi bi-quote quote-icon-right"></i>
-                            </p>
-                        </div>
-                    </div><!-- End testimonial item -->
-
-
-
-                </div>
             </div>
 
         </section><!-- /Testimonials Section -->

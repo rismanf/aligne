@@ -2,33 +2,34 @@
 
 namespace App\Livewire\Admin\Class;
 
-use App\Models\Classes;
 use App\Models\GroupClass;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
-use Mary\View\Components\Group;
 
-class ClassList extends Component
+class GroupClassList extends Component
 {
     use Toast, WithFileUploads, WithPagination;
 
     public $id, $name, $image, $image_edit, $description;
-    public $class_type = [];
-    public $class_level_id;
+
+    public $class_type = [
+        ['id' => '1', 'name' => 'REFORMER CLASS'],
+        ['id' => '2', 'name' => 'CHAIR CLASS'],
+        ['id' => '3', 'name' => 'FUNCTIONAL CLASS'],
+    ];
 
     public $class_level = [
         ['id' => '1', 'name' => 'BEGINNER'],
         ['id' => '2', 'name' => 'INTERMEDIATE'],
         ['id' => '3', 'name' => 'ADVANCED'],
-        ['id' => '4', 'name' => 'ALL LEVEL'],
-        ['id' => '5', 'name' => 'YOGA'],
-        ['id' => '6', 'name' => 'STRETCH YOGA'],
-        ['id' => '7', 'name' => 'MAT PILATES'],
-        ['id' => '8', 'name' => 'BARRE'],
-        ['id' => '9', 'name' => 'AERIAL'],
-        ['id' => '10', 'name' => 'DANCE / FUSION'],
+        ['id' => '4', 'name' => 'YOGA'],
+        ['id' => '5', 'name' => 'STRETCH YOGA'],
+        ['id' => '6', 'name' => 'MAT PILATES'],
+        ['id' => '7', 'name' => 'BARRE'],
+        ['id' => '8', 'name' => 'AERIAL'],
+        ['id' => '9', 'name' => 'DANCE / FUSION'],
     ];
 
     public bool $createForm = false;
@@ -51,33 +52,26 @@ class ClassList extends Component
             ],
         ];
 
-        $news = Classes::orderBy('created_at', 'desc')->paginate(5);
+        $class = GroupClass::orderBy('created_at', 'desc')->paginate(5);
 
-        $news->getCollection()->transform(function ($val, $index) use ($news) {
-            $val->row_number = ($news->currentPage() - 1) * $news->perPage() + $index + 1;
+        $class->getCollection()->transform(function ($val, $index) use ($class) {
+            $val->row_number = ($class->currentPage() - 1) * $class->perPage() + $index + 1;
             return $val;
         });
 
 
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
-            ['key' => 'group_class', 'label' => 'Group Class'],
-            // ['key' => 'level_class', 'label' => 'Level Class'],
+            ['key' => 'image_original', 'label' => 'Image'],
             ['key' => 'name', 'label' => 'Name'],
-            // ['key' => 'mood_class', 'label' => 'Mood Class'],
+            ['key' => 'description', 'label' => 'Description'],
             ['key' => 'updated_at', 'label' => 'Updated At'],
             ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
         ];
-        $this->class_type = GroupClass::all()->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-            ];
-        })->toArray();
-        return view('livewire.admin.class.class-list', [
+
+        return view('livewire.admin.class.group-class-list', [
             't_headers' => $t_headers,
-            'class' => $news,
-            'class_type' => $this->class_type,
+            'class' => $class,
         ])->layout('components.layouts.app', [
             'breadcrumbs' => $breadcrumbs,
             'title' => $title,
@@ -93,22 +87,19 @@ class ClassList extends Component
     public function save()
     {
         $this->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'name' => 'required|string|max:255',
-            'class_type' => 'required|integer',
-            'class_level_id' => 'required|integer',
+            'description' => 'nullable|string|max:255|min:10',
         ]);
 
         if ($this->image) {
             $url = $this->image->store('class', 'public');
         }
 
-        Classes::create([
+        GroupClass::create([
             'name' => $this->name,
-            'group_class_id' => $this->class_type,
-            'group_class' => GroupClass::find($this->class_type)->name,
-            'level_class_id' => $this->class_level_id,
-            'level_class' => $this->class_level[$this->class_level_id - 1]['name'],
-            'created_by_id' => auth()->user()->id,
+            'description' => $this->description,
+            'image_original' => $url
         ]);
 
         $this->reset();
@@ -130,7 +121,7 @@ class ClassList extends Component
     //Edit
     public function showEditModal($id)
     {
-        $class = Classes::find($id);
+        $class = GroupClass::find($id);
         $this->id = $id;
         $this->name = $class->name;
         $this->description = $class->description;
@@ -146,7 +137,7 @@ class ClassList extends Component
             'description' => 'nullable|string|max:255|min:10',
         ]);
 
-        $class = Classes::find($this->id);
+        $class = GroupClass::find($this->id);
         $url = $class->image_original;
         if ($this->image_edit) {
             $url = $this->image->store('class', 'public');
@@ -173,7 +164,7 @@ class ClassList extends Component
     // Detail
     public function showDetailModal($id)
     {
-        $class = Classes::find($id);
+        $class = GroupClass::find($id);
         $this->name = $class->name;
         $this->description = $class->description;
         $this->image = $class->image_original;
@@ -189,7 +180,7 @@ class ClassList extends Component
 
     public function delete()
     {
-        Classes::find($this->id)->delete();
+        GroupClass::find($this->id)->delete();
         $this->deleteForm = false;
         $this->toast(
             type: 'success',

@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('classes', function (Blueprint $table) {
+        Schema::create('group_classes', function (Blueprint $table) {
             $table->id();
-            $table->integer('group_class_id')->nullable();
-            $table->string('group_class', 100)->nullable();
             $table->string('name', 200);
-            $table->integer('level_class_id')->nullable();
-            $table->string('level_class', 50)->nullable();
-            $table->integer('mood_class_id')->nullable();
-            $table->string('mood_class', 100)->nullable();
             $table->text('description')->nullable();
             $table->string('image_original')->nullable();
             $table->boolean('is_active')->default(1);
@@ -35,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('classes');
+        Schema::dropIfExists('group_classes');
     }
 };

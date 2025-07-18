@@ -8,17 +8,12 @@
 
                 <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="services-list">
-                        <a href="#" class="active">Web Design</a>
-                        <a href="#">Software Development</a>
-                        <a href="#">Product Management</a>
-                        <a href="#">Graphic Design</a>
-                        <a href="#">Marketing</a>
+                        <a href="{{ route('user.profile') }}" class="active">Profile</a>
+                        <a href="#">My Booking</a>
+                        <a href="{{ route('user.order') }}">My Order</a>
+                        <a href="{{ route('logout') }}">Logout</a>
                     </div>
 
-                    <h4>Enim qui eos rerum in delectus</h4>
-                    <p>Nam voluptatem quasi numquam quas fugiat ex temporibus quo est. Quia aut quam quod facere ut non
-                        occaecati ut aut. Nesciunt mollitia illum tempore corrupti sed eum reiciendis. Maxime modi
-                        rerum.</p>
                 </div>
 
                 <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">

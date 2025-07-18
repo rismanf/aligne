@@ -3,9 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\Event;
+use App\Models\GroupClass;
 use App\Models\ManageMail;
 use App\Models\master_data;
 use App\Models\Product;
+use App\Models\ScheduleTime;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -446,5 +449,76 @@ class MasterSeeder extends Seeder
             'price' => 350000,
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         ]);
+
+        $class_list = [[
+            'name' => 'REFORMER CLASS',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'image_original' => 'class/89i7zR0lfSDGaf0sBhqSTqVvCr7NKXGV4X5xNyUh.png',
+            'created_by_id' => 1,
+        ], [
+            'name' => 'CHAIR CLASS',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'image_original' => 'class/89i7zR0lfSDGaf0sBhqSTqVvCr7NKXGV4X5xNyUh.png',
+            'created_by_id' => 1,
+        ], [
+            'name' => 'FUNCTIONAL CLASS',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'image_original' => 'class/89i7zR0lfSDGaf0sBhqSTqVvCr7NKXGV4X5xNyUh.png',
+            'created_by_id' => 1,
+        ]];
+
+        $schedule_time_reformer = [
+            '6:30 AM',
+            '7:30 AM',
+            '8:30 AM',
+            '9:30 AM',
+            '11:00 AM',
+            '12:00 PM',
+            '1:00 PM',
+            '2:00 PM',
+            '3:00 PM',
+            '4:00 PM',
+            '5:00 PM',
+            '6:30 PM',
+            '7:30 PM',
+        ];
+
+        $schedule_time_functional = [
+            '6:30 AM',
+            '8:00 AM',
+            '9:30 AM',
+            '12:00 PM',
+            '1:00 PM',
+            '2:00 PM',
+            '3:00 PM',
+            '4:30 PM',
+            '6:30 PM',
+            '7:30 PM',
+        ];
+
+        foreach ($class_list as $v => $stat) {
+            $groupclass = GroupClass::create($stat);
+            if ($stat['name'] == 'FUNCTIONAL CLASS') {
+                foreach ($schedule_time_functional as $time) {
+                    ScheduleTime::create([
+                        'group_class_id' => $groupclass->id,
+                        'group_class_name' => $groupclass->name,
+                        'name' => $time,
+                        'time' => Carbon::createFromFormat('g:i A', $time)->format('H:i:s'),
+                        'created_by_id' => 1,
+                    ]);
+                }
+            } else {
+                foreach ($schedule_time_reformer as $time) {
+                    ScheduleTime::create([
+                        'group_class_id' => $groupclass->id,
+                        'group_class_name' => $groupclass->name,
+                        'name' => $time,
+                        'time' => Carbon::createFromFormat('g:i A', $time)->format('H:i:s'),
+                        'created_by_id' => 1,
+                    ]);
+                }
+            }
+        }
     }
 }

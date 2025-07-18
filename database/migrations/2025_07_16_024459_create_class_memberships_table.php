@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_kuotas', function (Blueprint $table) {
+        Schema::create('class_memberships', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('product_id');
-            $table->string('invoice_number')->nullable();
-            $table->integer('kuota');
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
-            $table->boolean('is_active')->default(1);
+            $table->integer('membership_id')->nullable();
+            $table->integer('class_id')->nullable();
+            $table->integer('quota')->nullable();
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();
             $table->timestamps();
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_kuotas');
+        Schema::dropIfExists('class_memberships');
     }
 };

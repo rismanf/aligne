@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Public;
 
-use App\Models\Classes as ModelsClasses;
+use App\Models\GroupClass;
 use App\Models\Menu;
 use Livewire\Component;
 
@@ -12,7 +12,7 @@ class Classes extends Component
     public $classes;
     public function mount()
     {
-        $this->classes = ModelsClasses::all();
+        $this->classes = GroupClass::all();
     }
     public function render()
     {

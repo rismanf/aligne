@@ -17,17 +17,19 @@
         <x-hr target="gotoPage" />
         <x-table class="text-xs" :headers="$t_headers" :rows="$class">
             {{-- Special `row_number` scope --}}
-
-
+            @scope('cell_image_original', $class)
+                <img src="{{ asset('storage/' . $class->image_original) }}" alt="Image"
+                    class="w-50 h-20 rounded shadow" />
+            @endscope
             {{-- Special `actions` slot --}}
-            @scope('cell_action', $news)
+            @scope('cell_action', $class)
                 <div class="flex gap-1">
-                    <x-button icon="o-eye" wire:click="showDetailModal({{ $news->id }})" spinner class="btn-xs" />
+                    <x-button icon="o-eye" wire:click="showDetailModal({{ $class->id }})" spinner class="btn-xs" />
                     @can('class-edit')
-                        <x-button icon="o-pencil" wire:click="showEditModal({{ $news->id }})" spinner class="btn-xs" />
+                        <x-button icon="o-pencil" wire:click="showEditModal({{ $class->id }})" spinner class="btn-xs" />
                     @endcan
                     @can('class-delete')
-                        <x-button icon="o-trash" wire:click="showDeleteModal({{ $news->id }})" spinner class="btn-xs" />
+                        <x-button icon="o-trash" wire:click="showDeleteModal({{ $class->id }})" spinner class="btn-xs" />
                     @endcan
                 </div>
             @endscope
@@ -37,11 +39,9 @@
     {{-- modal-create-muncul --}}
     <x-modal wire:model="createForm" title="New Class" class="backdrop-blur">
         <x-form wire:submit="save">
-            <x-select label="Class Type" wire:model="class_type" :options="$class_type" option-label="name" option-value="id"
-                placeholder="Select Class Type" required />
-            <x-select label="Class Level" wire:model="class_level_id" :options="$class_level" option-label="name"
-                placeholder="Select Class Level" option-value="id" required />
+            <x-file label="Cover Image" wire:model="image" accept="image/*" required />
             <x-input label="Name" wire:model="name" required />
+            <x-markdown label="Description" wire:model="description" :config="$config" />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
 

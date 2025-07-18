@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Admin\Mail;
 
+use App\Models\Log_system;
 use App\Models\ManageMail;
 use App\Models\master_data;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
@@ -13,18 +15,21 @@ class ListPicMail extends Component
     use Toast;
     use WithPagination;
 
-    public $name, $email, $type;
+    public $name, $email, $type, $type_mail_id;
     public $select_id;
-    public $createForm = false;
-    public $mail_type = [];
-    public function mount()
-    {
-        // $this->mail_type = master_data::where('type', 'mail_type')->pluck('name','name' )->toArray();
-        $this->mail_type = master_data::select('name', 'code as id')->where('type', 'mail_type')->get();
-  
-    }
+
+    public bool $createModal = false;
+    public bool $detailModal = false;
+    public bool $editModal = false;
+    public bool $deleteModal = false;
+    public $detail;
+
+    public array $sortBy = ['column' => 'updated_at', 'direction' => 'desc'];
+
+
     public function render()
     {
+        $mail_type = master_data::select('name', 'code as id')->where('type', 'mail_type')->get();
 
         $title = 'Recipient Mail Management';
         $breadcrumbs = [
@@ -58,6 +63,7 @@ class ListPicMail extends Component
         return view('livewire.admin.mail.list-pic-mail', [
             't_headers' => $t_headers,
             'manages_mails' => $manages_mails,
+            'mail_type' => $mail_type,
         ])
             ->layout('components.layouts.app', [
                 'breadcrumbs' => $breadcrumbs,
@@ -80,9 +86,82 @@ class ListPicMail extends Component
         ]);
 
         $this->toast('success', 'Success', 'Data has been saved');
-        $this->createForm = false;
-        $this->name = '';
-        $this->email = '';
-        $this->type = '';
+        $this->createModal = false;
+        $this->reset();
+    }
+
+    
+    public function showDeleteModal($id)
+    {
+       
+        $this->select_id = $id;
+        $this->deleteModal = true;
+    }
+
+    public function showDetailModal($id)
+    {
+        $data = ManageMail::find($id);
+        $this->name = $data->name;
+        $this->email = $data->email;
+        $this->type = $data->type;
+        $this->select_id = $id;
+        $this->detailModal = true;
+    }
+
+    public function showEditModal($id)
+    {
+        $data = ManageMail::find($id);
+        $this->name = $data->name;
+        $this->email = $data->email;
+        $this->type_mail_id = $data->type_mail_id;
+        $this->select_id = $id;
+        $this->editModal = true;
+    }
+
+    public function update()
+    {
+        $this->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'type_mail_id' => 'required',
+        ]);
+
+        $id = Auth::user()->id;
+        $mail_type = master_data::where('code', $this->type_mail_id)->where('type', 'mail_type')->first();
+
+        $data = ManageMail::find($this->select_id);
+        $data->name = $this->name;
+        $data->email = $this->email;
+        $data->type =  $mail_type->name;
+        $data->type_mail_id = $this->type_mail_id;
+        $data->updated_by_id = $id;
+        $data->save();
+
+        Log_system::record($id, 'Mail updated successfully!', $data->name);
+        $this->editModal = false;
+        $this->reset();
+        $this->toast('success', 'Success', 'Data has been updated');
+    }
+
+    public function delete($select_id)
+    {
+        
+        $id = Auth::user()->id;
+        $data = ManageMail::find($select_id);
+   
+        if ($data) {
+            Log_system::record($id, 'Mail deleted successfully!', $data->name);
+            $data->delete();
+            $this->toast(
+                type: 'success',
+                title: 'User Mail Deleted',
+                description: null,                  // optional (text)
+                position: 'toast-top toast-end',    // optional (daisyUI classes)
+                icon: 'o-information-circle',       // Optional (any icon)
+                css: 'alert-info',                  // Optional (daisyUI classes)
+                timeout: 3000,                      // optional (ms)
+            );
+        }
+        $this->deleteModal = false;
     }
 }

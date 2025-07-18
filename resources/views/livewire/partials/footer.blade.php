@@ -4,7 +4,7 @@
          <div class="row gy-4">
              <div class="col-lg-12 col-md-12 footer-about align-items-center">
                  <a href="index.html" class="logo d-flex align-items-center">
-                     <span class="sitename">{{ config('app.name') }}</span>
+                    <img src="{{ asset('image/Aligne_White.webp') }}" alt="Logo">                     
                  </a>
                  <div class="footer-contact pt-3">
                      <p>A108 Adam Street</p>

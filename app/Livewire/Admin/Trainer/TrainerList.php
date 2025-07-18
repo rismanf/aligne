@@ -70,10 +70,10 @@ class TrainerList extends Component
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'title' => 'required|string|max:255',
-            'avatar' => 'required|image|max:1024',
+            'title' => 'nullable|string|max:255',
+            'avatar' => 'nullable|image|max:1024',
         ]);
-
+$url = null;
         if ($this->avatar) {
             $url = $this->avatar->store('trainer', 'public');
         }

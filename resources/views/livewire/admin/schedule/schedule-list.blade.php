@@ -1,60 +1,79 @@
 <div>
     <x-card>
-        <div class="flex justify-end mb-4">
-            {{-- <x-input label="Search" placeholder="Search" wire:model="search" class="w-1/2" /> --}}
-            <x-button label="Add" icon="o-plus" @click="$wire.createForm = true" class="btn-primary btn-xs p-2" />
+        <div>
+            <div class="mb-4">
+                <label class="font-semibold">Pilih Tanggal:</label>
+                <select wire:model="selectedDate" class="border rounded p-2 w-full max-w-xs"
+                    wire:change="classChanged($event.target.value)">
+                    @foreach ($availableDates as $date)
+                        <option value="{{ $date }}">
+                            {{ \Carbon\Carbon::parse($date)->translatedFormat('l, d M Y') }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+<hr>
+            <div>
+                <h1> Tanggal: {{ $selectedDate }}</h1>
+
+
+                @foreach ($all_schedule_times as $time)
+                    <div class="p-4 border rounded shadow-sm bg-gray-50">
+                        <div class="grid grid-cols-12 gap-4 items-start mb-4">
+                            <div class="col-span-2">
+                                <h4 class="font-bold">{{ $time->name }}</h4>
+                            </div>
+                            <div class="col-span-8">
+                                @php
+                                    $schedule_data_tmp = $schedule_data->where('time_id', $time->id)->first();
+
+                                @endphp
+                                @if (isset($schedule_data_tmp))
+                                    <p>{{ $schedule_data_tmp->level_class }}
+                                    </p>
+                                    <p>{{ $schedule_data_tmp->classes->name }}
+                                    </p>
+                                    <p>{{ $schedule_data_tmp->trainer->name }}
+                                    </p>
+                                    <p>{{ $schedule_data_tmp->quota }}
+                                    </p>
+                                @else
+                                    <p>Tidak ada data</p>
+                                @endif
+                            </div>
+
+                            <div class="col-span-2">
+                                <button wire:click="showEditModal({{ $time->id }})"
+                                    class="mt-2 px-3 py-1 bg-blue-500 text-white rounded">Update</button>
+                                {{-- Tampilkan error jika ada --}}
+                                @if (isset($errorsPerTimeId[$time->id]))
+                                    <div class="text-danger mt-1">
+                                        {{ $errorsPerTimeId[$time->id] }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
-
-        <x-hr target="gotoPage" />
-        <x-table class="text-xs" :headers="$t_headers" :rows="$schedules">
-            {{-- Special `row_number` scope --}}
-
-
-            {{-- Special `actions` slot --}}
-            @scope('cell_action', $news)
-                <div class="flex gap-1">
-                    <x-button icon="o-pencil" wire:click="showEditModal({{ $news->id }})" spinner class="btn-xs" />
-                    <x-button icon="o-eye" wire:click="showDetailModal({{ $news->id }})" spinner class="btn-xs" />
-                    <x-button icon="o-trash" wire:click="showDeleteModal({{ $news->id }})" spinner class="btn-xs" />
-                </div>
-            @endscope
-        </x-table>
     </x-card>
 
-    {{-- modal-create-muncul --}}
-    <x-modal wire:model="createForm" title="New Schedule" class="backdrop-blur">
-        <x-form wire:submit="save">
-            <x-input label="Name" icon="o-user" wire:model="name" />
-            <x-datetime label="Date" wire:model="schedule_at" type="datetime-local" />
-            <x-select label="Trainer" wire:model="trainer" :options="$trainer_data" placeholder="Select a Trainer" />
-            <x-select label="Class" wire:model="calases" :options="$calases_data" placeholder="Select a Class" />
-            <x-input label="Kuota" wire:model="kuota" />
-            <x-input label="Duration" wire:model="duration" />
-            {{-- Notice `omit-error` --}}
-            {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
-
-            <x-slot:actions>
-                <x-button label="Cancel" @click="$wire.createForm = false" />
-                <x-button label="Save" class="btn-primary" type="submit" spinner="save" />
-            </x-slot:actions>
-        </x-form>
-    </x-modal>
-
-
-    {{-- modal-edit-muncul --}}
     <x-modal wire:model="editForm" title="Edit Schedule" class="backdrop-blur">
         <x-form wire:submit="update">
-            <x-datetime label="Date" wire:model="schedule_at" type="datetime-local" />
-            <x-select label="Trainer" wire:model="trainer" :options="$trainer_data" placeholder="Select a Trainer" />
-            <x-select label="Class" wire:model="calases" :options="$calases_data" placeholder="Select a Class" />
-            <x-input label="Kuota" wire:model="kuota" />
-            {{-- Notice `omit-error` --}}
-            {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
-
+            <x-select label="Time" wire:model="class_level_id" :options="$class_level" placeholder="Select Level" />
+            {{-- Select Class --}}
+            <x-select label="Class Type" wire:model="class_id" :options="$calases" option-label="name" option-value="id"
+                placeholder="Select Class Type" required />
+            {{-- Select Trainer --}}
+            <x-select label="Trainer" wire:model="trainer_id" :options="$trainer_data" placeholder="Select a Trainer" />
+            <x-input label="Qouta" wire:model="quota" placeholder="Kuota" class="w-full mt-2" />
             <x-slot:actions>
                 <x-button label="Cancel" @click="$wire.editForm = false" />
                 <x-button label="Save" class="btn-primary" type="submit" spinner="save" />
             </x-slot:actions>
         </x-form>
     </x-modal>
+
+
 </div>

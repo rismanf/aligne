@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('classes', function (Blueprint $table) {
+        Schema::create('memberships', function (Blueprint $table) {
             $table->id();
-            $table->integer('group_class_id')->nullable();
-            $table->string('group_class', 100)->nullable();
             $table->string('name', 200);
-            $table->integer('level_class_id')->nullable();
-            $table->string('level_class', 50)->nullable();
-            $table->integer('mood_class_id')->nullable();
-            $table->string('mood_class', 100)->nullable();
             $table->text('description')->nullable();
-            $table->string('image_original')->nullable();
+            $table->decimal('price', 10, 2)->default(0.00);
+            $table->integer('duration_days')->nullable();
+            $table->integer('available_classes')->nullable();
             $table->boolean('is_active')->default(1);
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('classes');
+        Schema::dropIfExists('memberships');
     }
 };

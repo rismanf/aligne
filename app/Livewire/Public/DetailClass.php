@@ -4,6 +4,7 @@ namespace App\Livewire\Public;
 
 use App\Models\Menu;
 use App\Models\Schedule;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class DetailClass extends Component
@@ -15,11 +16,31 @@ class DetailClass extends Component
         $this->id = $id;
         $this->date = $date;
 
-        $start = now()->startOfDay();
-        $end = now()->endOfWeek()->endOfDay();
+        $date = Carbon::parse($date);
+        $today = Carbon::today();
 
-        $this->schedule = Schedule::where('class_id', $id)->whereBetween('schedule_at', [$start, $end])->get();
-        $this->schedule_now = Schedule::with('trainer')->where('class_id', $id)->wheredate('schedule_at', $date)->get();
+        // Batasi range tanggal
+        if ($date->lessThan($today->startOfWeek())) {
+            $date = $today; // tidak boleh ke minggu sebelum ini
+        }
+
+        if ($date->greaterThan($today->copy()->addMonth()->endOfWeek())) {
+            $date = $today->copy()->addMonth(); // tidak boleh lebih dari 1 bulan ke depan
+        }
+
+        $this->date = $date->toDateString();
+
+        $start = $date->copy()->startOfWeek();
+        $end = $date->copy()->endOfWeek();
+
+        $this->schedule = Schedule::where('class_id', $id)
+            ->whereBetween('schedule_date', [$start, $end])
+            ->get();
+
+        $this->schedule_now = Schedule::with('trainer')
+            ->where('class_id', $id)
+            ->whereDate('schedule_date', $this->date)
+            ->get();
     }
     public function render()
     {
