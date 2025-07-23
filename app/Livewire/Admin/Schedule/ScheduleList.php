@@ -93,15 +93,15 @@ class ScheduleList extends Component
             'trainer_id' => 'required',
             'quota' => 'required|integer|min:1',
         ]);
-        $quota = 8;
+        $this->quota = 8;
         if ($this->selectedgroupclass == 1) {
-            $quota = 8;
+            $this->quota = 8;
         }
         if ($this->selectedgroupclass == 2) {
-            $quota = 4;
+            $this->quota = 4;
         }
         if ($this->selectedgroupclass == 3) {
-            $quota = 8;
+            $this->quota = 8;
         }
 
         Schedule::updateOrCreate(
@@ -117,7 +117,7 @@ class ScheduleList extends Component
                 'level_class' => $this->class_level[$this->class_level_id - 1]['name'] ?? null,
                 'class_id' => $this->class_id,
                 'time' => ScheduleTime::find($this->id)?->time,
-                'quota' => $quota,
+                'quota' => $this->quota,
             ]
         );
 

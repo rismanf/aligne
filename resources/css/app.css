@@ -100,7 +100,7 @@ select:invalid {
 
 /** daisyUI */
 @plugin "daisyui" {
-    themes: fantasy --default, dark --preferslight;
+    themes: fantasy --default;
 }
 
 @plugin "daisyui/theme" {

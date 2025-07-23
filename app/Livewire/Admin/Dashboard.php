@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Participant;
 use App\Models\Questions_option;
+use App\Models\User;
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -98,7 +99,7 @@ class Dashboard extends Component
 
     public function mount()
     {
-        $data = Participant::all();
+        $data = User::where('title', 'Member')->get();
         $this->participants = $data->count();
         $this->total_sponsor = $data->where('user_type', 'Sponsor')->count();
         $this->total_participant = $data->where('user_type', 'General Admission')->count();

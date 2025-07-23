@@ -1,14 +1,14 @@
 <div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <x-stat class="" title="Total Participants" value="{{ $participants }}" icon="o-user-group"
-            tooltip-bottom="Total Participants" color="text-primary" wire:click="showDetailModal('All Participant')" />
+        <x-stat class="" title="Total Member" value="{{ $participants }}" icon="o-user-group"
+            tooltip-bottom="Total Member" color="text-primary" wire:click="showDetailModal('All Participant')" />
 
-        <x-stat class="" title="General Admission" value="{{ $total_participant }}" icon="o-user"
-            tooltip-bottom="Total General Admission" color="text-primary"
+        <x-stat class="" title="Active member" value="{{ $total_participant }}" icon="o-user"
+            tooltip-bottom="Total Active member" color="text-primary"
             wire:click="showDetailModal('Participant General Admission')" />
 
-        <x-stat class="" title="Sponsor" value="{{ $total_sponsor }}" icon="o-user"
-            tooltip-bottom="Total Sponsor" color="text-primary" wire:click="showDetailModal('Participant Sponsor')" />
+        <x-stat class="" title="Active member" value="{{ $total_sponsor }}" icon="o-user"
+            tooltip-bottom="Active member" color="text-primary" wire:click="showDetailModal('Participant Sponsor')" />
 
         <x-stat class="" title="Partner" value="{{ $total_partner }}" icon="o-users"
             tooltip-bottom="Total Partner" color="text-primary" wire:click="showDetailModal('Participant Partner')" />
@@ -24,18 +24,6 @@
         <x-stat class="" title="Rejected" value="{{ $rejected }}" icon="o-x-circle" tooltip-bottom="Rejected"
             class="text-orange-500" color="text-pink-500" wire:click="showDetailModal('Participant Rejected')" />
 
-    </div>
-    <div class="flex flex-wrap">
-        <div class="w-full md:w-1/3 p-2">
-            <x-card>
-                <x-chart wire:model="myChart" />
-            </x-card>
-        </div>
-        <div class="w-full md:w-2/3 p-2">
-             <x-card>
-                 <x-chart wire:model="myChart2" />
-            </x-card>
-        </div>
     </div>
     <!--Modal Detail -->
     <x-modal wire:model="showModal" title="{{ $type }} Details" class="backdrop-blur" box-class="!max-w-4xl">
