@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('event_name', 20);
             $table->string('status', 50);
-            $table->timestamp('event_time', 20);
+            $table->timestamp('event_time');
             $table->integer('user_id')->nullable();
             $table->string('email', 30);            
             $table->text('status_description')->nullable();
@@ -27,29 +27,27 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('log_systems', function (Blueprint $table) {
+            $table->id();
+            $table->string('user_id', 20)->nullable();
+            $table->string('ip', 20);
+            $table->string('event', 200)->nullable();
+            $table->string('extra')->nullable();
+            $table->text('additional')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('master_data', function (Blueprint $table) {
             $table->id();
             $table->string('type',75);
             $table->string('code',75);
             $table->string('name')->nullable();
+            $table->string('parent_code')->nullable();
             $table->string('description')->nullable();
             $table->boolean('is_active')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
-
-        Schema::create('organization', function (Blueprint $table) {
-            $table->id();
-            $table->string('type',75);
-            $table->string('code',75);
-            $table->integer('parent')->nullable();
-            $table->string('name')->nullable();
-            $table->string('description')->nullable();
-            $table->boolean('is_active')->default(1);
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
 
     }
 
@@ -59,7 +57,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('log_logins');
+        Schema::dropIfExists('log_systems');
         Schema::dropIfExists('master_data');
-        Schema::dropIfExists('organization');
     }
 };

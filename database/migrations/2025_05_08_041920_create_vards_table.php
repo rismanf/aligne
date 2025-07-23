@@ -19,9 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('foto')->nullable();
-            $table->string('country');            
-            $table->string('subject')->nullable();
-            $table->string('message');
+            $table->string('avatar')->nullable();
             $table->boolean('is_active')->default(1);
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();

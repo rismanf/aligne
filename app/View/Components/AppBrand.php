@@ -16,7 +16,7 @@ class AppBrand extends Component
         //
     }
 
-    
+
 
     /**
      * Get the view / contents that represent the component.
@@ -24,23 +24,39 @@ class AppBrand extends Component
     public function render(): View|Closure|string
     {
         return <<<'HTML'
-            <a href="/" wire:navigate>
+            <a href="{{ route('/') }}" target="_blank" >
                 <!-- Hidden when collapsed -->
                 <div {{ $attributes->class(["hidden-when-collapsed"]) }}>
-                    <div class="flex text-justify   gap-2">
-                        <x-icon name="o-cube" class="w-6  -mb-1.5 text-red-500" />
-                        <span class="font-bold text-3xl me-2 mt-1 bg-gradient-to-r from-red-500 to-gray-500 bg-clip-text text-transparent ">
-                            NeutraDC
-                        </span>
+                    <div class="flex text-justify gap-2">
+                        <div x-data="{ isDark: document.documentElement.getAttribute('data-theme') === 'dark' }" x-init="
+                        new MutationObserver(() => {
+                            isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+                        }).observe(document.documentElement, { attributes: true })
+                    ">
+                        <!-- Logo untuk Light Theme -->
+                        <img x-show="!isDark" src="{{ asset('image/Aligne_Black.webp') }}" alt="Logo Light" class="h-10">
+
+                        <!-- Logo untuk Dark Theme -->
+                        <img x-show="isDark" src="{{ asset('image/Aligne_White.webp') }}" alt="Logo Dark" class="h-10">
+                    </div>                        
                     </div>
                 </div>
 
                 <!-- Display when collapsed -->
-                <div class="display-when-collapsed hidden mx-5 mt-5 mb-3 h-[28px]">
-                    <x-icon name="s-cube" class="w-6 -mb-1.0 text-red-500" />
+                <div class="display-when-collapsed hidden flex items-center justify-center mb-3 h-fit mt-2 gap-2 pl-2 pr-2" x-data="{ isDark: document.documentElement.getAttribute('data-theme') === 'dark' }" x-init="
+                        new MutationObserver(() => {
+                            isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+                        }).observe(document.documentElement, { attributes: true })
+                    ">
+                    <!-- Logo untuk Light Theme -->
+                        <img x-show="!isDark" src="{{ asset('image/Aligne_Black.webp') }}" alt="mini-Logo Light" class="h-15 w-auto object-contain">
+
+                        <!-- Logo untuk Dark Theme -->
+                        <img x-show="isDark" src="{{ asset('image/Aligne_White.webp') }}" alt="mini-Logo Dark" class="h-15 w-auto object-contain">
+
+                     <!-- <img x-show="isDark"src="{{ asset('image/Aligne_Black.webp') }}" alt="mini-Logo" class="h-15 w-auto object-contain" /> -->
                 </div>
             </a>
         HTML;
     }
-    
 }

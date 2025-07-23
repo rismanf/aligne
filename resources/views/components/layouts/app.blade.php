@@ -5,9 +5,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" href="{{ asset('assets/img/logo-fav.webp') }}" media="(prefers-color-scheme: light)"
+        type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('assets/img/logo-fav.webp') }}" media="(prefers-color-scheme: dark)"
+        type="image/x-icon" />
     <title>{{ isset($title) ? $title . ' - ' . config('app.name') : config('app.name') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{--  Currency  --}}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/robsontenorio/mary@0.44.2/libs/currency/currency.js"></script>
+    {{-- Cropper.js --}}
+    <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+    <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 
 <body class="min-h-screen font-sans antialiased bg-base-200">
@@ -71,13 +84,11 @@
             <x-menu-separator />
 
             {{-- Menu --}}
-            <aside class="flex flex-col h-screen">
-                @livewire('layouts.menus', ['title' => $title])
+            @include('livewire.partials.menus', ['title' => $title])
 
-                <x-menu class="text-xs space-y-0 p-1">
-                    <x-menu-item title="Logout" link="{{ route('logout') }}" icon="o-arrow-left-start-on-rectangle" />
-                </x-menu>
-            </aside>
+            <x-menu class="text-xs space-y-0 p-1">
+                <x-menu-item title="Logout" link="{{ route('logout') }}" icon="o-arrow-left-start-on-rectangle" />
+            </x-menu>
         </x-slot:sidebar>
 
         {{-- The `$slot` goes here --}}
@@ -95,6 +106,7 @@
 
     {{-- TOAST area --}}
     <x-toast />
+
 </body>
 
 </html>

@@ -16,21 +16,19 @@ class ConfigSeeder extends Seeder
     public function run(): void
     {
         //
-        $user = User::create([
-            'name' => 'Admin',
-            'ad_name' => 'admin',
+        $admin = User::create([
+            'name' => 'Risman Firmansyah',
             'phone' => '0812345678',
-            'nik' => '2205022',
-            'title' => 'Administrator2',
-            'department' => 'Enterprise IT System & Automation',
-            'email' => 'admin@neutradc.com',
+            'title' => 'Administrator',
+            'email' => 'admin@admin.com',
             'password' => bcrypt('password')
         ]);
 
-        $role = Role::create(['name' => 'Admin']);
-
+        $role_admin = Role::create(['name' => 'Admin']);
         $permissions = Permission::pluck('id', 'id')->all();
+        $admin->assignRole('Admin');
+        $role_admin->syncPermissions($permissions);
 
-        $role->syncPermissions($permissions);
+       $role_user = Role::create(['name' => 'User']);
     }
 }

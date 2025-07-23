@@ -2,7 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Event;
+use App\Models\GroupClass;
+use App\Models\ManageMail;
 use App\Models\master_data;
+use App\Models\Product;
+use App\Models\ScheduleTime;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,114 +19,506 @@ class MasterSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        $aplications = [
-            'VDI',
-            'CRM',
-            'D-PACTA',
-            'NEUTRADC WEBSITE',
-            'CORSEC DASH',
-            'ONE DASHBOARD',
-            'MONTHLY REPORT',
-            'NEUTRASAFE',
-            'WHOLESALE',
-            'CHANNEL',
-            'OFFICE 365',
-            'ASET',
-            'BISPRO',
-            'BILCO',
-            'TREASURY',
-            'PMS',
-            'CAPACITY',
-            'FINPRO',
-            'HCIS',
-            'VENDOR MANAGEMENT',
-            'PROC',
-            'PWC',
-            'SAP HANA',
-            'Permit to Work ( PTW )',
-            'IPORTAL',
-        ];
-
-        foreach ($aplications as $i => $aplication) {
-            master_data::create([
-                            'type' => 'application',
-                            'code' => $i+1,
-                            'name' => $aplication,
-                            ]);
-        }
-
-        $devisions = [
-            'SALES',
-            'PRESALES',
-            'PRODUCT',
-            'STRATEGIC',
-            'DELIVERY',
-            'SCM PROC',
-            'SCM VENDOR',
-            'SCM GA',
-            'ITAS',
-            'OPERATION',
-            'FINANCE',
-            'HC',
-            'RISK',
-            'BISPRO',
-            'LEGAL',
-            'INTERAL AUDIT',
-            'CORCOM',
-            'CORSEC',
-            'OPERATION',
-            'HSE',
-            'ASSETS',
-        ];
-
-        foreach ($devisions as $i =>$devision) {
-            master_data::create([
-                'type' => 'devision',
-                'code' => $i+1,
-                'name' => $devision,
-                ]);
-        }
-
-        $request_status=[
-            'Draft',
-            'Submitted',
-            'Rejected',
-            'Approved',
-            'Dropped',
-            'Done',
+        //Type User
+        $request_status = [
+            'General Admission',
+            'Sponsor',
+            'Partner',
         ];
 
         foreach ($request_status as $v => $stat) {
             master_data::create([
-                'type' => 'request_status',
-                'code' => $v+1,
+                'type' => 'user_type',
+                'code' => $v + 1,
                 'name' => $stat,
-                ]);
+            ]);
         }
 
-        $pa_status=[
-            'Non Created',
-            'Draft',
-            'Section 1 input',
-            'Section 2 input',
-            'Waiting for Employee Approval',
-            'Approved',
-            'Done',
+        //Status Invoice
+        $request_status = [
+            'Unpaid',
+            'Waiting for Payment',
+            'Waiting for Payment Confirmation',
+            'Paid',
         ];
 
-        foreach ($pa_status as $v => $stat) {
+        foreach ($request_status as $v => $stat) {
             master_data::create([
-                'type' => 'pa_status',
-                'code' => $v+1,
+                'type' => 'invoice_status',
+                'code' => $v + 1,
                 'name' => $stat,
-                ]);
+            ]);
         }
 
-        master_data::create([
-            'type' => 'event_active_period',
-            'code' => '2024',
-            'name' => '2024',
+        $industries = [
+            "Information Technology / Software / Cloud",
+            "Telecommunications",
+            "Data Center / Infrastructure Services",
+            "Financial Services / Banking / Insurance",
+            "Manufacturing",
+            "Retail / E-Commerce",
+            "Transportation / Logistics / Supply Chain",
+            "Energy / Utilities / Renewable Energy",
+            "Construction / Engineering",
+            "Real Estate / Property",
+            "Healthcare / Pharmaceuticals / Life Sciences",
+            "Education / Research / Training",
+            "Media / Entertainment / Creative Industry",
+            "Government / Public Sector",
+            "Defense / Aerospace",
+            "Hospitality / Tourism / F&B",
+            "FMCG",
+            "Automotive",
+            "Agriculture / Forestry",
+            "Mining / Oil & Gas",
+            "Legal / Consulting / Professional Services",
+            "Startups / VC / Investment",
+            "Non-profit / NGO / Social Enterprise",
+            "Others"
+        ];
+
+
+        foreach ($industries as $v => $stat) {
+            master_data::create([
+                'type' => 'industries',
+                'code' => $v + 1,
+                'name' => $stat,
             ]);
+        }
+
+        Event::create([
+            'name' => 'NeutraDC Summit 2025',
+            'location' => 'Jakarta, Indonesia',
+            'description' => 'NeutraDC Summit 2025 is the premier event for data center professionals.',
+            'start_date' => '2025-06-17',
+            'end_date' => '2025-07-30',
+            'is_active' => 1,
+            'created_by_id' => 1,
+            'updated_by_id' => 1,
+        ]);
+
+        $countries = [
+            ["name" => "Afghanistan", "code" => "AF", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Aland Islands", "code" => "AX", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Albania", "code" => "AL", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Algeria", "code" => "DZ", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "American Samoa", "code" => "AS", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Andorra", "code" => "AD", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Angola", "code" => "AO", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Anguilla", "code" => "AI", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Antarctica", "code" => "AQ", "continent" => "Antarctica", "continent_code" => "AN"],
+            ["name" => "Antigua and Barbuda", "code" => "AG", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Argentina", "code" => "AR", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Armenia", "code" => "AM", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Aruba", "code" => "AW", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Australia", "code" => "AU", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Austria", "code" => "AT", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Azerbaijan", "code" => "AZ", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Bahamas", "code" => "BS", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Bahrain", "code" => "BH", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Bangladesh", "code" => "BD", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Barbados", "code" => "BB", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Belarus", "code" => "BY", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Belgium", "code" => "BE", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Belize", "code" => "BZ", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Benin", "code" => "BJ", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Bermuda", "code" => "BM", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Bhutan", "code" => "BT", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Bolivia", "code" => "BO", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Bonaire, Sint Eustatius and Saba", "code" => "BQ", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Bosnia and Herzegovina", "code" => "BA", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Botswana", "code" => "BW", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Bouvet Island", "code" => "BV", "continent" => "Antarctica", "continent_code" => "AN"],
+            ["name" => "Brazil", "code" => "BR", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "British Indian Ocean Territory", "code" => "IO", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Brunei Darussalam", "code" => "BN", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Bulgaria", "code" => "BG", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Burkina Faso", "code" => "BF", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Burundi", "code" => "BI", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Cambodia", "code" => "KH", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Cameroon", "code" => "CM", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Canada", "code" => "CA", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Cape Verde", "code" => "CV", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Cayman Islands", "code" => "KY", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Central African Republic", "code" => "CF", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Chad", "code" => "TD", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Chile", "code" => "CL", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "China", "code" => "CN", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Christmas Island", "code" => "CX", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Cocos (Keeling) Islands", "code" => "CC", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Colombia", "code" => "CO", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Comoros", "code" => "KM", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Congo", "code" => "CG", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Congo, Democratic Republic of the Congo", "code" => "CD", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Cook Islands", "code" => "CK", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Costa Rica", "code" => "CR", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Cote D'Ivoire", "code" => "CI", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Croatia", "code" => "HR", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Cuba", "code" => "CU", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Curacao", "code" => "CW", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Cyprus", "code" => "CY", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Czech Republic", "code" => "CZ", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Denmark", "code" => "DK", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Djibouti", "code" => "DJ", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Dominica", "code" => "DM", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Dominican Republic", "code" => "DO", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Ecuador", "code" => "EC", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Egypt", "code" => "EG", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "El Salvador", "code" => "SV", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Equatorial Guinea", "code" => "GQ", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Eritrea", "code" => "ER", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Estonia", "code" => "EE", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Ethiopia", "code" => "ET", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Falkland Islands (Malvinas)", "code" => "FK", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Faroe Islands", "code" => "FO", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Fiji", "code" => "FJ", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Finland", "code" => "FI", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "France", "code" => "FR", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "French Guiana", "code" => "GF", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "French Polynesia", "code" => "PF", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "French Southern Territories", "code" => "TF", "continent" => "Antarctica", "continent_code" => "AN"],
+            ["name" => "Gabon", "code" => "GA", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Gambia", "code" => "GM", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Georgia", "code" => "GE", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Germany", "code" => "DE", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Ghana", "code" => "GH", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Gibraltar", "code" => "GI", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Greece", "code" => "GR", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Greenland", "code" => "GL", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Grenada", "code" => "GD", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Guadeloupe", "code" => "GP", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Guam", "code" => "GU", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Guatemala", "code" => "GT", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Guernsey", "code" => "GG", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Guinea", "code" => "GN", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Guinea-Bissau", "code" => "GW", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Guyana", "code" => "GY", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Haiti", "code" => "HT", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Heard Island and McDonald Islands", "code" => "HM", "continent" => "Antarctica", "continent_code" => "AN"],
+            ["name" => "Holy See (Vatican City State)", "code" => "VA", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Honduras", "code" => "HN", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Hong Kong", "code" => "HK", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Hungary", "code" => "HU", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Iceland", "code" => "IS", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "India", "code" => "IN", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Indonesia", "code" => "ID", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Iran, Islamic Republic of", "code" => "IR", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Iraq", "code" => "IQ", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Ireland", "code" => "IE", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Isle of Man", "code" => "IM", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Israel", "code" => "IL", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Italy", "code" => "IT", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Jamaica", "code" => "JM", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Japan", "code" => "JP", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Jersey", "code" => "JE", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Jordan", "code" => "JO", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Kazakhstan", "code" => "KZ", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Kenya", "code" => "KE", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Kiribati", "code" => "KI", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Korea, Democratic People's Republic of", "code" => "KP", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Korea, Republic of", "code" => "KR", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Kosovo", "code" => "XK", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Kuwait", "code" => "KW", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Kyrgyzstan", "code" => "KG", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Lao People's Democratic Republic", "code" => "LA", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Latvia", "code" => "LV", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Lebanon", "code" => "LB", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Lesotho", "code" => "LS", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Liberia", "code" => "LR", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Libyan Arab Jamahiriya", "code" => "LY", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Liechtenstein", "code" => "LI", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Lithuania", "code" => "LT", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Luxembourg", "code" => "LU", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Macao", "code" => "MO", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Macedonia, the Former Yugoslav Republic of", "code" => "MK", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Madagascar", "code" => "MG", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Malawi", "code" => "MW", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Malaysia", "code" => "MY", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Maldives", "code" => "MV", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Mali", "code" => "ML", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Malta", "code" => "MT", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Marshall Islands", "code" => "MH", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Martinique", "code" => "MQ", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Mauritania", "code" => "MR", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Mauritius", "code" => "MU", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Mayotte", "code" => "YT", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Mexico", "code" => "MX", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Micronesia, Federated States of", "code" => "FM", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Moldova, Republic of", "code" => "MD", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Monaco", "code" => "MC", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Mongolia", "code" => "MN", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Montenegro", "code" => "ME", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Montserrat", "code" => "MS", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Morocco", "code" => "MA", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Mozambique", "code" => "MZ", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Myanmar", "code" => "MM", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Namibia", "code" => "NA", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Nauru", "code" => "NR", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Nepal", "code" => "NP", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Netherlands", "code" => "NL", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Netherlands Antilles", "code" => "AN", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "New Caledonia", "code" => "NC", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "New Zealand", "code" => "NZ", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Nicaragua", "code" => "NI", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Niger", "code" => "NE", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Nigeria", "code" => "NG", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Niue", "code" => "NU", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Norfolk Island", "code" => "NF", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Northern Mariana Islands", "code" => "MP", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Norway", "code" => "NO", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Oman", "code" => "OM", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Pakistan", "code" => "PK", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Palau", "code" => "PW", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Palestinian Territory, Occupied", "code" => "PS", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Panama", "code" => "PA", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Papua New Guinea", "code" => "PG", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Paraguay", "code" => "PY", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Peru", "code" => "PE", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Philippines", "code" => "PH", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Pitcairn", "code" => "PN", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Poland", "code" => "PL", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Portugal", "code" => "PT", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Puerto Rico", "code" => "PR", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Qatar", "code" => "QA", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Reunion", "code" => "RE", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Romania", "code" => "RO", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Russian Federation", "code" => "RU", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Rwanda", "code" => "RW", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Saint Barthelemy", "code" => "BL", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Saint Helena", "code" => "SH", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Saint Kitts and Nevis", "code" => "KN", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Saint Lucia", "code" => "LC", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Saint Martin", "code" => "MF", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Saint Pierre and Miquelon", "code" => "PM", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Saint Vincent and the Grenadines", "code" => "VC", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Samoa", "code" => "WS", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "San Marino", "code" => "SM", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Sao Tome and Principe", "code" => "ST", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Saudi Arabia", "code" => "SA", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Senegal", "code" => "SN", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Serbia", "code" => "RS", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Serbia and Montenegro", "code" => "CS", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Seychelles", "code" => "SC", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Sierra Leone", "code" => "SL", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Singapore", "code" => "SG", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "St Martin", "code" => "SX", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Slovakia", "code" => "SK", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Slovenia", "code" => "SI", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Solomon Islands", "code" => "SB", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Somalia", "code" => "SO", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "South Africa", "code" => "ZA", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "South Georgia and the South Sandwich Islands", "code" => "GS", "continent" => "Antarctica", "continent_code" => "AN"],
+            ["name" => "South Sudan", "code" => "SS", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Spain", "code" => "ES", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Sri Lanka", "code" => "LK", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Sudan", "code" => "SD", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Suriname", "code" => "SR", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Svalbard and Jan Mayen", "code" => "SJ", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Swaziland", "code" => "SZ", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Sweden", "code" => "SE", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Switzerland", "code" => "CH", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "Syrian Arab Republic", "code" => "SY", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Taiwan, Province of China", "code" => "TW", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Tajikistan", "code" => "TJ", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Tanzania, United Republic of", "code" => "TZ", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Thailand", "code" => "TH", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Timor-Leste", "code" => "TL", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Togo", "code" => "TG", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Tokelau", "code" => "TK", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Tonga", "code" => "TO", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Trinidad and Tobago", "code" => "TT", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Tunisia", "code" => "TN", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Turkey", "code" => "TR", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Turkmenistan", "code" => "TM", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Turks and Caicos Islands", "code" => "TC", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Tuvalu", "code" => "TV", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Uganda", "code" => "UG", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Ukraine", "code" => "UA", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "United Arab Emirates", "code" => "AE", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "United Kingdom", "code" => "GB", "continent" => "Europe", "continent_code" => "EU"],
+            ["name" => "United States", "code" => "US", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "United States Minor Outlying Islands", "code" => "UM", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Uruguay", "code" => "UY", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Uzbekistan", "code" => "UZ", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Vanuatu", "code" => "VU", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Venezuela", "code" => "VE", "continent" => "South America", "continent_code" => "SA"],
+            ["name" => "Viet Nam", "code" => "VN", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Virgin Islands, British", "code" => "VG", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Virgin Islands, U.s.", "code" => "VI", "continent" => "North America", "continent_code" => "NA"],
+            ["name" => "Wallis and Futuna", "code" => "WF", "continent" => "Oceania", "continent_code" => "OC"],
+            ["name" => "Western Sahara", "code" => "EH", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Yemen", "code" => "YE", "continent" => "Asia", "continent_code" => "AS"],
+            ["name" => "Zambia", "code" => "ZM", "continent" => "Africa", "continent_code" => "AF"],
+            ["name" => "Zimbabwe", "code" => "ZW", "continent" => "Africa", "continent_code" => "AF"]
+        ];
+
+        // Country::insert($countries);
+
+        foreach ($countries as $v => $stat) {
+            master_data::create([
+                'type' => 'country',
+                'code' => $v + 1,
+                'name' => $stat['name'],
+                'parent_code' => $stat['continent']
+            ]);
+        }
+
+        $positions = [
+            ["name" => "President Director / CEO", "parent" => "Executive Level"],
+            ["name" => "Vice President (VP)", "parent" => "Executive Level"],
+            ["name" => "Chief Operating Officer (COO)", "parent" => "Executive Level"],
+            ["name" => "Chief Technology Officer (CTO)", "parent" => "Executive Level"],
+            ["name" => "Chief Financial Officer (CFO)", "parent" => "Executive Level"],
+            ["name" => "Chief Marketing Officer (CMO)", "parent" => "Executive Level"],
+            ["name" => "Chief Commercial Officer (CCO)", "parent" => "Executive Level"],
+            ["name" => "Chief Information Officer (CIO)", "parent" => "Executive Level"],
+
+            ["name" => "Managing Director", "parent" => "Director Level"],
+            ["name" => "Director of Sales", "parent" => "Director Level"],
+            ["name" => "Director of Marketing", "parent" => "Director Level"],
+            ["name" => "Director of Operations", "parent" => "Director Level"],
+            ["name" => "IT Director", "parent" => "Director Level"],
+            ["name" => "Finance Director", "parent" => "Director Level"],
+            ["name" => "Business Development Director", "parent" => "Director Level"],
+
+            ["name" => "General Manager (GM)", "parent" => "Managerial Level"],
+            ["name" => "Senior Manager", "parent" => "Managerial Level"],
+            ["name" => "Marketing Manager", "parent" => "Managerial Level"],
+            ["name" => "Sales Manager", "parent" => "Managerial Level"],
+            ["name" => "Product Manager", "parent" => "Managerial Level"],
+            ["name" => "IT Manager", "parent" => "Managerial Level"],
+            ["name" => "Operations Manager", "parent" => "Managerial Level"],
+            ["name" => "Project Manager", "parent" => "Managerial Level"],
+
+            ["name" => "Business Analyst", "parent" => "Specialist / Staff Level"],
+            ["name" => "Software Engineer", "parent" => "Specialist / Staff Level"],
+            ["name" => "Network Engineer", "parent" => "Specialist / Staff Level"],
+            ["name" => "System Administrator", "parent" => "Specialist / Staff Level"],
+            ["name" => "Product Specialist", "parent" => "Specialist / Staff Level"],
+            ["name" => "Marketing Executive", "parent" => "Specialist / Staff Level"],
+            ["name" => "Sales Executive", "parent" => "Specialist / Staff Level"],
+            ["name" => "Finance Staff", "parent" => "Specialist / Staff Level"],
+            ["name" => "Admin Staff", "parent" => "Specialist / Staff Level"],
+
+            ["name" => "Consultant", "parent" => "Others"],
+            ["name" => "Investor", "parent" => "Others"],
+            ["name" => "Media / Journalist", "parent" => "Others"],
+            ["name" => "Government Official", "parent" => "Others"],
+            ["name" => "Academic / Lecturer", "parent" => "Others"],
+            ["name" => "Student", "parent" => "Others"],
+            ["name" => "Freelancer", "parent" => "Others"],
+            ["name" => "Others", "parent" => "Others"]
+        ];
+
+        foreach ($positions as $v => $stat) {
+            master_data::create([
+                'type' => 'job',
+                'code' => $v + 1,
+                'name' => $stat['name'],
+                'parent_code' => $stat['parent']
+            ]);
+        }
+
+        //Type User
+        $send_mail = [
+            'Contact-Us',
+            'New Member',
+            'New Transaction',
+            'New Payment',
+        ];
+
+        foreach ($send_mail as $v => $stat) {
+            master_data::create([
+                'type' => 'mail_type',
+                'code' => $v + 1,
+                'name' => $stat,
+            ]);
+        }
+
+        foreach ($send_mail as $v => $stat) {
+            ManageMail::create([
+                'type' => $stat,
+                'name' => 'Risman Firmansyah',
+                'email' => 'risman.firmansyah45@gmail.com',
+            ]);
+        }
+
+        Product::create([
+            'name' => 'Free',
+            'kuota' => 1,
+            'price' => 350000,
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        ]);
+
+        $class_list = [[
+            'name' => 'REFORMER CLASS',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'image_original' => 'class/89i7zR0lfSDGaf0sBhqSTqVvCr7NKXGV4X5xNyUh.png',
+            'created_by_id' => 1,
+        ], [
+            'name' => 'CHAIR CLASS',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'image_original' => 'class/89i7zR0lfSDGaf0sBhqSTqVvCr7NKXGV4X5xNyUh.png',
+            'created_by_id' => 1,
+        ], [
+            'name' => 'FUNCTIONAL CLASS',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'image_original' => 'class/89i7zR0lfSDGaf0sBhqSTqVvCr7NKXGV4X5xNyUh.png',
+            'created_by_id' => 1,
+        ]];
+
+        $schedule_time_reformer = [
+            '6:30 AM',
+            '7:30 AM',
+            '8:30 AM',
+            '9:30 AM',
+            '11:00 AM',
+            '12:00 PM',
+            '1:00 PM',
+            '2:00 PM',
+            '3:00 PM',
+            '4:00 PM',
+            '5:00 PM',
+            '6:30 PM',
+            '7:30 PM',
+        ];
+
+        $schedule_time_functional = [
+            '6:30 AM',
+            '8:00 AM',
+            '9:30 AM',
+            '12:00 PM',
+            '1:00 PM',
+            '2:00 PM',
+            '3:00 PM',
+            '4:30 PM',
+            '6:30 PM',
+            '7:30 PM',
+        ];
+
+        foreach ($class_list as $v => $stat) {
+            $groupclass = GroupClass::create($stat);
+            if ($stat['name'] == 'FUNCTIONAL CLASS') {
+                foreach ($schedule_time_functional as $time) {
+                    ScheduleTime::create([
+                        'group_class_id' => $groupclass->id,
+                        'group_class_name' => $groupclass->name,
+                        'name' => $time,
+                        'time' => Carbon::createFromFormat('g:i A', $time)->format('H:i:s'),
+                        'created_by_id' => 1,
+                    ]);
+                }
+            } else {
+                foreach ($schedule_time_reformer as $time) {
+                    ScheduleTime::create([
+                        'group_class_id' => $groupclass->id,
+                        'group_class_name' => $groupclass->name,
+                        'name' => $time,
+                        'time' => Carbon::createFromFormat('g:i A', $time)->format('H:i:s'),
+                        'created_by_id' => 1,
+                    ]);
+                }
+            }
+        }
     }
 }

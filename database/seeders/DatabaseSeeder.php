@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
             PermissionTableSeeder::class,
             ConfigSeeder::class,
             MasterSeeder::class,
+            MenuSeeder::class,
+            // QuestionSeeder::class,
         ]);
     }
 }
