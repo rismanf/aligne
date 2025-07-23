@@ -5,13 +5,16 @@ namespace App\Livewire\User;
 use App\Models\Menu;
 use App\Models\UserProduk;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Order extends Component
 {
+    use WithFileUploads;
     public $orders;
     // public $showModal = false;
     public $selectedOrder;
-    public $bank, $payment_proof;
+    public $bank;
+    public $payment_proof;
     public $order_id;
     public $invoice_number;
 
@@ -45,20 +48,21 @@ class Order extends Component
     {
         $this->validate([
             'bank' => 'required',
-            // 'payment_proof' => 'required',
+            'payment_proof' => 'required|file|max:5120',
             // 'order_id' => 'required',
         ]);
-
         try {
+
+            $url = $this->payment_proof->store('payment_proof', 'public');
             UserProduk::where('id', $this->order_id)->update([
                 'payment_method' => $this->bank,
-                // 'payment_proof' => $this->payment_proof,
+                'payment_proof' => $url,
                 'payment_status' => 'waiting payment confirmation',
                 'paid_at' => now(),
                 'updated_by_id' => auth()->id(),
             ]);
             session()->flash('success', 'Payment successfully confirmed!');
-             $this->dispatch('reload-page');
+            $this->dispatch('reload-page');
         } catch (\Exception $e) {
             dd($e->getMessage());
             session()->flash('error', 'Failed to create participant: ' . $e->getMessage());

@@ -26,12 +26,14 @@ use App\Livewire\Admin\User\ListUser;
 use App\Livewire\Admin\Vcard\AddVcard;
 use App\Livewire\Admin\Vcard\EditVcard;
 use App\Livewire\Admin\Vcard\ListVcard;
+use App\Livewire\Admin\Visit;
 use App\Livewire\Layouts\AppLayout;
 use Illuminate\Support\Facades\Route;
 
 use App\Livewire\Auth\Login;
 use App\Livewire\Public\AboutUs;
 use App\Livewire\Public\Checkout;
+use App\Livewire\Public\CheckoutClass;
 use App\Livewire\Public\Classes;
 use App\Livewire\Public\ContactUs;
 use App\Livewire\Public\DetailClass;
@@ -66,6 +68,7 @@ Route::get('/', Home::class)->name('/');
 Route::get('/about-us', AboutUs::class)->name('about-us');
 Route::get('/classes', Classes::class)->name('classes');
 Route::get('/classes-detail/{id}/{date}', DetailClass::class)->name('detail-class');
+Route::get('/checkout_class/{id}', CheckoutClass::class)->name('checkout_class');
 Route::get('/membership', Membership::class)->name('membership');
 Route::get('/checkout/{id}', Checkout::class)->name('checkout');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
@@ -88,6 +91,7 @@ Route::get('/vcard', Vcard::class)->name('vcard');
 Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
     Route::get('/profile', App\Livewire\User\Profile::class)->name('profile');
     Route::get('/order', App\Livewire\User\Order::class)->name('order');
+    Route::get('/booking', App\Livewire\User\Booking::class)->name('booking');
     Route::get('/dashboard', App\Livewire\User\Home::class)->name('dashboard');
 
     Route::get('/participant', App\Livewire\User\Participant\AddParticipant::class)->name('participant.index');
@@ -132,4 +136,5 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::get('/role', ListRole::class)->name('role.index');
     Route::get('/role/{id}', RoleShow::class)->name('role.show');
+    Route::get('/visit', Visit::class)->name('visit.index');
 });

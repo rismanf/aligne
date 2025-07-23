@@ -26,6 +26,7 @@ return new class extends Migration
             $table->timestamp('paid_at')->nullable(); // timestamp when payment was made
             $table->integer('confirmed_by')->nullable();
             $table->timestamp('confirmed_at')->nullable(); // timestamp when payment was made
+            $table->boolean('is_active')->default(0);
             $table->integer('created_by_id')->nullable();
             $table->integer('updated_by_id')->nullable();
             $table->timestamps();

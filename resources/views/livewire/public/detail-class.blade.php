@@ -177,7 +177,8 @@
 
                                     <!-- Right Section -->
                                     <div class="text-end">
-                                        <button class="btn btn-secondary rounded-pill px-4">Choose</button>
+                                        <a href="{{ route('checkout_class', $val->id) }}"
+                                            class="btn btn-primary rounded-pill px-4">Checkout</a>
                                     </div>
                                 </div>
                             </div>

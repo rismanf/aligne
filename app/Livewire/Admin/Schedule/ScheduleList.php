@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Schedule;
 
 use App\Models\Classes;
+use App\Models\GroupClass;
 use App\Models\Schedule;
 use App\Models\ScheduleTime;
 use App\Models\Trainer;
@@ -16,8 +17,10 @@ class ScheduleList extends Component
     use Toast, WithPagination;
 
     public bool $editForm = false;
+    public bool $deleteForm = false;
 
     public $schedule_data;
+    public $selectedgroupclass;
     public $selectedDate;
     public $availableDates = [];
 
@@ -29,14 +32,24 @@ class ScheduleList extends Component
         ['id' => '2', 'name' => 'INTERMEDIATE'],
         ['id' => '3', 'name' => 'ADVANCED'],
         ['id' => '4', 'name' => 'ALL LEVEL'],
+        ['id' => '5', 'name' => 'YOGA'],
+        ['id' => '6', 'name' => 'STRETCH YOGA'],
+        ['id' => '7', 'name' => 'MAT PILATES'],
+        ['id' => '8', 'name' => 'BARRE'],
+        ['id' => '9', 'name' => 'AERIAL'],
+        ['id' => '10', 'name' => 'DANCE / FUSION'],
     ];
 
+    public $calases_group;
     public $calases;
     public $trainer_data;
 
     public function mount()
     {
-        $this->calases = Classes::select('id', 'name')->get()->toArray();
+        $this->calases_group = GroupClass::select('id', 'name')->get()->toArray();
+
+        $this->selectedgroupclass = $this->calases_group[0]['id'];
+
         $this->trainer_data = Trainer::select('id', 'name')->get()->toArray();
 
         for ($i = 0; $i < 14; $i++) {
@@ -56,6 +69,7 @@ class ScheduleList extends Component
         $this->id = $timeId;
 
         $schedule = Schedule::where('schedule_date', $this->selectedDate)
+            ->where('group_class_id', $this->selectedgroupclass)
             ->where('time_id', $timeId)
             ->first();
 
@@ -79,12 +93,22 @@ class ScheduleList extends Component
             'trainer_id' => 'required',
             'quota' => 'required|integer|min:1',
         ]);
+        $quota = 8;
+        if ($this->selectedgroupclass == 1) {
+            $quota = 8;
+        }
+        if ($this->selectedgroupclass == 2) {
+            $quota = 4;
+        }
+        if ($this->selectedgroupclass == 3) {
+            $quota = 8;
+        }
 
         Schedule::updateOrCreate(
             [
                 'schedule_date' => $this->selectedDate,
-                'group_class_id' => 1,
-                'group_class_name' => 'REFORMER CLASS',
+                'group_class_id' => $this->selectedgroupclass,
+                'group_class_name' => $this->calases_group[$this->selectedgroupclass - 1]['name'] ?? null,
                 'time_id' => $this->id,
             ],
             [
@@ -93,7 +117,7 @@ class ScheduleList extends Component
                 'level_class' => $this->class_level[$this->class_level_id - 1]['name'] ?? null,
                 'class_id' => $this->class_id,
                 'time' => ScheduleTime::find($this->id)?->time,
-                'quota' => $this->quota,
+                'quota' => $quota,
             ]
         );
 
@@ -101,16 +125,35 @@ class ScheduleList extends Component
         $this->toast('success', 'Schedule Updated');
     }
 
+    public function showDeleteModal($timeId)
+    {
+        $this->id = $timeId;
+
+        $this->deleteForm = true;
+    }
+
+    public function delete()
+    {
+        Schedule::where('time_id', $this->id)->delete();
+        $this->reset(['deleteForm', 'id']);
+        $this->toast('success', 'Schedule Deleted');
+    }
+
     public function render()
     {
-        $this->all_schedule_times = ScheduleTime::all();
+        $this->all_schedule_times = ScheduleTime::where('group_class_id', $this->selectedgroupclass)->get();
+
         $this->schedule_data = Schedule::with('trainer', 'classes')
+            ->where('group_class_id', $this->selectedgroupclass)
             ->where('schedule_date', $this->selectedDate)
             ->get();
-
+        // echo $this->schedule_data;
+        // dd($this->schedule_data);
+        $this->calases = Classes::select('id', 'name')->where('group_class_id', $this->selectedgroupclass)->get()->toArray();
         return view('livewire.admin.schedule.schedule-list', [
             'schedule_data' => $this->schedule_data,
             'all_schedule_times' => $this->all_schedule_times,
+            'calases' => $this->calases,
             't_headers' => [], // kosongkan jika tak dipakai
             'schedules' => [],
         ])->layout('components.layouts.app', [

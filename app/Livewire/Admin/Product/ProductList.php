@@ -10,7 +10,7 @@ class ProductList extends Component
 {
     use Toast;
 
-    public $id, $name, $description, $kuota, $price;
+    public $id, $name, $description, $kuota, $price, $valid_until;
 
     public bool $createForm = false;
     public bool $editForm = false;
@@ -72,6 +72,7 @@ class ProductList extends Component
             'description' => 'required|string|max:255|min:10',
             'kuota' => 'required|numeric',
             'price' => 'required|numeric',
+            'valid_until' => 'required|numeric',
         ]);
 
         Product::create([
@@ -79,6 +80,7 @@ class ProductList extends Component
             'description' => $this->description,
             'kuota' => $this->kuota,
             'price' => $this->price,
+            'valid_until' => $this->valid_until
         ]);
 
         $this->reset();

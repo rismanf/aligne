@@ -18,16 +18,17 @@
             @endcan
             @can('email-list')
                 <x-menu-item title="Email" icon="o-envelope" link="{{ route('admin.email.index') }}" />
-                <x-menu-item title="Transaction" icon="o-envelope" link="{{ route('admin.transaction.index') }}" />
+                <x-menu-item title="Transaction" icon="o-ticket" link="{{ route('admin.transaction.index') }}" />
 
                 <x-menu-sub title="Class Management" icon="o-rectangle-group" link="#">
                     <x-menu-item title="Class" icon="o-stop" link="{{ route('admin.class.index') }}" />
                     <x-menu-item title="Class Group" icon="o-stop" link="{{ route('admin.groupclass.index') }}" />
                 </x-menu-sub>
 
-                <x-menu-item title="Trainer" icon="o-envelope" link="{{ route('admin.trainer.index') }}" />
-                <x-menu-item title="Membership" icon="o-envelope" link="{{ route('admin.product.index') }}" />
-                <x-menu-item title="Schedule" icon="o-envelope" link="{{ route('admin.schedule.index') }}" />
+                <x-menu-item title="Trainer" icon="o-identification" link="{{ route('admin.trainer.index') }}" />
+                <x-menu-item title="Membership" icon="o-users" link="{{ route('admin.product.index') }}" />
+                <x-menu-item title="Schedule" icon="o-calendar-days" link="{{ route('admin.schedule.index') }}" />
+                <x-menu-item title="Visit" icon="o-qr-code" link="{{ route('admin.visit.index') }}" />
             @endcan
             {{-- @can('participant-list')
                 <x-menu-item title="Participants" icon="o-user-group" link="{{ route('admin.participant.index') }}" />

@@ -9,8 +9,8 @@
                 <div class="col-lg-3">
                     <div class="services-list">
                         <a href="{{ route('user.profile') }}">Profile</a>
-                        <a href="{{ route('user.booking') }}">My Booking</a>
-                        <a href="{{ route('user.order') }}" class="active">My Order</a>
+                        <a href="{{ route('user.booking') }}" class="active">My Booking</a>
+                        <a href="{{ route('user.order') }}">My Order</a>
                         <a href="{{ route('logout') }}">Logout</a>
                     </div>
 
@@ -30,35 +30,28 @@
                             </ul>
                         </div>
                     @endif
-                    <h3>My Order Details</h3>
+                    <h3>My Booking Details</h3>
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Invoice ID</th>
-                                <th>Product Name</th>
-                                <th>Price</th>
-                                <th>Status</th>
                                 <th>Date</th>
-                                <th>Actions</th>
+                                <th>Time</th>
+                                <th>Class</th>
+                                <th>Level</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($orders as $order)
+                            @foreach ($userschedule as $order)
                                 <tr>
-                                    <td>{{ $order->invoice_number }}</td>
-                                    <td>{{ $order->product->name }}</td>
-                                    <td>IDR {{ number_format($order->total_price, 0, ',', '.') }}</td>
-                                    <td>{{ $order->payment_status }}</td>
-                                    <td>{{ $order->created_at->format('d-m-Y') }}</td>
-                                    <td>
-                                        @if ($order->payment_status == 'unpaid')
-                                            <button
-                                                wire:click="showModal({{ $order->id }}, '{{ $order->invoice_number }}')"
-                                                class="btn btn-primary">
-                                                Pay Now
-                                            </button>
-                                        @endif
-                                    </td>
+                                    <td>{{ $order->schedule->schedule_date }}</td>
+                                    <td>{{ $order->schedule->time }}</td>
+                                    <td>{{ $order->schedule->classes->name }}</td>
+                                    <td>{{ $order->schedule->level_class }}</td>
+                                    <td><img src="{{  $order->url_code }}" alt="" width="100px" height="100px"></td>
+                                    {{-- <td>
+                                        <a  wire:click="showModal({{ $order->id }})" class="btn btn-primary">Cencel</a>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -70,6 +63,7 @@
         </div>
 
     </section><!-- /Service Details Section -->
+
 
     <div x-data="{ showModal: false }" x-on:open-payment-modal.window="showModal = true">
 
@@ -89,22 +83,7 @@
                 <div class="modal-content">
                     <form wire:submit="save">
                         <input type="hidden" wire:model="order_id">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Payment for {{ $invoice_number }}</h5>
-                            <button type="button" class="btn-close" @click="showModal = false"></button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- Isi form -->
-                            <div class="mb-3">
-                                <label class="form-label">Transfer with bank</label>
-                                <input type="text" class="form-control" wire:model="bank" name="bank">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Payment Proof</label>
-                                <input type="file" class="form-control" wire:model="payment_proof"
-                                    name="payment_proof">
-                            </div>
-                        </div>
+                        
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Confirm</button>
                         </div>
@@ -120,4 +99,5 @@
             });
         </script>
     @endpush
+
 </div>

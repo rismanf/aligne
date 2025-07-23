@@ -42,6 +42,7 @@
             <x-input label="Name" wire:model="name" />
             <x-input label="Price" wire:model="price" money />
             <x-input label="Kouta" wire:model="kuota" />
+            <x-input label="valid_until" wire:model="valid_until" suffix="day" hint="fill in the number of days" />
             <x-markdown label="Description" wire:model="description" :config="$config" />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
@@ -59,6 +60,7 @@
             <x-input label="Name" wire:model="name" />
             <x-input label="Price" wire:model="price" money />
             <x-input label="Kouta" wire:model="kuota" />
+            <x-input label="valid_until" wire:model="valid_until" suffix="day" hint="fill in the number of days" />
             <x-markdown label="Description" wire:model="description" :config="$config" />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
