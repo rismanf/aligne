@@ -91,7 +91,7 @@ class ScheduleList extends Component
             'class_level_id' => 'required',
             'class_id' => 'required',
             'trainer_id' => 'required',
-            'quota' => 'required|integer|min:1',
+            // 'quota' => 'required|integer|min:1',
         ]);
         $this->quota = 8;
         if ($this->selectedgroupclass == 1) {
