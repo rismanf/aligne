@@ -16,7 +16,7 @@ class Profile extends Component
     {
         $this->user = auth()->user();
         $this->member = UserKuota::with('product')->where('user_id', $this->user->id)->where('is_active', 1)->get();
-        dd($this->member);
+        // dd($this->member);
     }
     public function render()
     {
