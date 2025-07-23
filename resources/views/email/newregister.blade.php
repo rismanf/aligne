@@ -14,8 +14,6 @@
                     style="background-color: #ffffff; border: 2px solid #5c5329; text-align: center;">
                     <tr>
                         <td>
-                            <img src="{{ asset('images/Aligne_White.webp') }}" alt="Forte Pilates" width="120"
-                                style="margin-bottom: 20px;">
                             <h1 style="color: #2e2e2e; font-size: 24px; margin: 0 0 20px;">{{ $name }}</h1>
                             <h1 style="color: #2e2e2e; font-size: 24px; margin: 0 0 20px;">Welcome to Forte Pilates</h1>
                             <p style="font-size: 16px; color: #333333; margin-bottom: 30px;">
