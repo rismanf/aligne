@@ -3,17 +3,40 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Registration Confirmation</title>
+    <title>Welcome to Aligne</title>
 </head>
 
-<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 40px;">
-    <h2 style="color: #333;">Hello {{ $name }},</h2>
-    <p>Thank you for registering! Your form has been received. Please allow <strong>3–5 working days</strong> for our
-        team to review your submission and send your official QR access pass. Stay tuned!.</p>
-
-
-
-    <p style="margin-top: 40px;">Best regards,<br>Aligne Team</p>
+<body style="margin: 0; padding: 0; background-color: #f6f4ee; font-family: Arial, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f6f4ee; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="40" cellspacing="0" border="0"
+                    style="background-color: #ffffff; border: 2px solid #5c5329; text-align: center;">
+                    <tr>
+                        <td>
+                            <img src="{{ asset('images/Aligne_White.webp') }}" alt="Forte Pilates" width="120"
+                                style="margin-bottom: 20px;">
+                            <h1 style="color: #2e2e2e; font-size: 24px; margin: 0 0 20px;">Welcome to Forte Pilates</h1>
+                            <p style="font-size: 16px; color: #333333; margin-bottom: 30px;">
+                                You're almost there! Don't forget to fill out your Health Information Form for a safer
+                                and more personalized Pilates experience. It takes just a few minutes.
+                            </p>
+                            <a href="{{ env('APP_URL') }}"
+                                style="background-color: #4a4521; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; font-size: 16px; display: inline-block; margin-bottom: 30px;">Go
+                                to Aligne</a>
+                            <p style="font-size: 13px; color: #444444;">
+                                If you have already filled up the Health Information Form, you can ignore this
+                                email.<br>
+                                Thank you for providing us with the necessary details to enhance your Pilates
+                                experience.
+                            </p>
+                            <br>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>
