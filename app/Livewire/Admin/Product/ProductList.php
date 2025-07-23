@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Admin\Product;
 
+use App\Models\ClassMembership;
+use App\Models\GroupClass;
 use App\Models\Product;
 use Livewire\Component;
 use Mary\Traits\Toast;
@@ -10,13 +12,33 @@ class ProductList extends Component
 {
     use Toast;
 
-    public $id, $name, $description, $kuota, $price, $valid_until;
+    public $id, $name, $description, $kuota, $price, $valid_until, $class_id;
 
     public bool $createForm = false;
     public bool $editForm = false;
     public bool $detailForm = false;
     public bool $deleteForm = false;
 
+    public $class_list = [];
+    public $class_kuotas = [
+        ['class_id' => '', 'kuota' => '']
+    ];
+
+    public function mount()
+    {
+        $this->class_list = GroupClass::all();
+    }
+
+    public function addClassKuota()
+    {
+        $this->class_kuotas[] = ['class_id' => '', 'kuota' => ''];
+    }
+
+    public function removeClassKuota($index)
+    {
+        unset($this->class_kuotas[$index]);
+        $this->class_kuotas = array_values($this->class_kuotas); // reset index
+    }
     public function render()
     {
         $title = 'Membership Management';
@@ -69,19 +91,27 @@ class ProductList extends Component
 
         $this->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255|min:10',
-            'kuota' => 'required|numeric',
             'price' => 'required|numeric',
             'valid_until' => 'required|numeric',
+            'description' => 'required|string|max:255|min:10',
+            'class_kuotas.*.class_id' => 'required|exists:classes,id',
+            'class_kuotas.*.kuota' => 'required|integer|min:1',
         ]);
 
-        Product::create([
+        $data_product = Product::create([
             'name' => $this->name,
             'description' => $this->description,
-            'kuota' => $this->kuota,
             'price' => $this->price,
             'valid_until' => $this->valid_until
         ]);
+
+        foreach ($this->class_kuotas as $item) {
+            ClassMembership::create([
+                'membership_id' => $data_product->id,
+                'class_id' => $item['class_id'],
+                'quota' => $item['kuota'],
+            ]);
+        }
 
         $this->reset();
         $this->createForm = false;
@@ -101,28 +131,46 @@ class ProductList extends Component
     {
         $this->editForm = true;
         $product = Product::find($id);
+        $classDetails = ClassMembership::where('membership_id', $id)->get();
         $this->name = $product->name;
         $this->description = $product->description;
-        $this->kuota = $product->kuota;
+        $this->valid_until = $product->valid_until;
         $this->price = $product->price;
         $this->id = $id;
+        $this->class_kuotas = $classDetails->map(function ($item) {
+            return [
+                'class_id' => $item->class_id,
+                'kuota' => $item->quota
+            ];
+        })->toArray();
     }
 
     public function update()
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255|min:10',
-            'kuota' => 'required|numeric',
             'price' => 'required|numeric',
+            'valid_until' => 'required|numeric',
+            'description' => 'required|string|max:255|min:10',
+            'class_kuotas.*.class_id' => 'required|exists:classes,id',
+            'class_kuotas.*.kuota' => 'required|integer|min:1',
         ]);
 
         $product = Product::find($this->id);
         $product->name = $this->name;
         $product->description = $this->description;
-        $product->kuota = $this->kuota;
+        $product->valid_until = $this->valid_until;
         $product->price = $this->price;
         $product->save();
+
+        ClassMembership::where('membership_id', $this->id)->delete();
+        foreach ($this->class_kuotas as $item) {
+            ClassMembership::create([
+                'membership_id' => $this->id,
+                'class_id' => $item['class_id'],
+                'quota' => $item['kuota'],
+            ]);
+        }
 
         $this->reset();
         $this->editForm = false;

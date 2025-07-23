@@ -14,8 +14,8 @@ class ClassList extends Component
 {
     use Toast, WithFileUploads, WithPagination;
 
-    public $id, $name, $image, $image_edit, $description;
-    public $class_type = [];
+    public $id, $name, $class_type;
+    public $class_type_list = [];
     public $class_level_id;
 
     public $class_level = [
@@ -68,7 +68,7 @@ class ClassList extends Component
             ['key' => 'updated_at', 'label' => 'Updated At'],
             ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
         ];
-        $this->class_type = GroupClass::all()->map(function ($item) {
+        $this->class_type_list = GroupClass::all()->map(function ($item) {
             return [
                 'id' => $item->id,
                 'name' => $item->name,
@@ -77,7 +77,7 @@ class ClassList extends Component
         return view('livewire.admin.class.class-list', [
             't_headers' => $t_headers,
             'class' => $news,
-            'class_type' => $this->class_type,
+            'class_type' => $this->class_type_list,
         ])->layout('components.layouts.app', [
             'breadcrumbs' => $breadcrumbs,
             'title' => $title,
@@ -95,7 +95,7 @@ class ClassList extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'class_type' => 'required|integer',
-            'class_level_id' => 'required|integer',
+            // 'class_level_id' => 'required|integer',
         ]);
 
         if ($this->image) {
@@ -106,8 +106,8 @@ class ClassList extends Component
             'name' => $this->name,
             'group_class_id' => $this->class_type,
             'group_class' => GroupClass::find($this->class_type)->name,
-            'level_class_id' => $this->class_level_id,
-            'level_class' => $this->class_level[$this->class_level_id - 1]['name'],
+            // 'level_class_id' => $this->class_level_id,
+            // 'level_class' => $this->class_level[$this->class_level_id - 1]['name'],
             'created_by_id' => auth()->user()->id,
         ]);
 
@@ -133,27 +133,24 @@ class ClassList extends Component
         $class = Classes::find($id);
         $this->id = $id;
         $this->name = $class->name;
-        $this->description = $class->description;
-        $this->image = $class->image_original;
+        $this->class_type = $class->group_class_id;
         $this->editForm = true;
     }
 
     public function update()
     {
-        $this->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+       $this->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:255|min:10',
+            'class_type' => 'required|integer',
+            // 'class_level_id' => 'required|integer',
         ]);
 
         $class = Classes::find($this->id);
-        $url = $class->image_original;
-        if ($this->image_edit) {
-            $url = $this->image->store('class', 'public');
-        }
+       
         $class->name = $this->name;
-        $class->description = $this->description;
-        $class->image_original = $url;
+        $class->group_class_id = $this->class_type;
+        $class->group_class = GroupClass::find($this->class_type)->name;
+        $class->updated_by_id = auth()->user()->id;
         $class->save();
 
         $this->reset();

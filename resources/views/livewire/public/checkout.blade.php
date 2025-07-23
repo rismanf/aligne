@@ -7,14 +7,6 @@
             <div class="row gy-4 justify-content-center text-center ">
                 @if (session()->has('success'))
                     <div class="alert alert-success mb-4">{{ session('success') }}</div>
-
-                    <script>
-                        window.addEventListener('redirect-after-success', function() {
-                            setTimeout(function() {
-                                window.location.href = "{{ route('user.order') }}"; // ganti dengan route tujuan Anda
-                            }, 3000); // 3 detik delay
-                        });
-                    </script>
                 @endif
                 <div class="col-lg-6">
                     <div class="pricing-item">

@@ -4,6 +4,7 @@ namespace App\Livewire\Public;
 
 use App\Models\Menu;
 use App\Models\Schedule;
+use App\Models\UserKuota;
 use App\Models\UserSchedule;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
@@ -16,14 +17,23 @@ class CheckoutClass extends Component
 
     public $id, $schedule, $uniqueCode;
     public $data_schedule;
+    public $cek_quota;
     public function mount($id)
     {
         $this->id = $id;
         $this->schedule = Schedule::with('classes', 'trainer')->find($id);
         $this->data_schedule = UserSchedule::where('schedule_id', $id)->where('user_id', Auth::id())->count();
-
-        // dd($this->schedule);
-
+        $quota = UserKuota::where('user_id', Auth::id())->where('product_id', $this->id)->where('is_active', 1)->get();
+        $this->cek_quota = 0;
+        if (!$quota->isEmpty()) {
+            $c = 0;
+            foreach ($quota as $item) {
+                if ($item->end_date > now()) {
+                    $this->cek_quota = $c + $item->kuota;
+                    $c = $item->kuota;
+                }
+            }
+        }
     }
     public function render()
     {

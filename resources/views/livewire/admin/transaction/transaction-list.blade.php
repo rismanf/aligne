@@ -6,7 +6,7 @@
         </div>
 
         <x-hr target="gotoPage" />
-        <x-table class="text-xs" :headers="$t_headers" :rows="$userproduct">
+        <x-table class="text-xs" :headers="$t_headers" :rows="$userproduct" with-pagination>
             {{-- Special `row_number` scope --}}
 
             @scope('cell_avatar', $userproduct)

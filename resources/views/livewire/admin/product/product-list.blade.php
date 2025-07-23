@@ -37,12 +37,26 @@
     </x-card>
 
     {{-- modal-create-muncul --}}
-    <x-modal wire:model="createForm" title="New Product" class="backdrop-blur">
+    <x-modal wire:model="createForm" title="New Membership Paket" class="backdrop-blur">
         <x-form wire:submit="save">
             <x-input label="Name" wire:model="name" />
-            <x-input label="Price" wire:model="price" money />
-            <x-input label="Kouta" wire:model="kuota" />
-            <x-input label="valid_until" wire:model="valid_until" suffix="day" hint="fill in the number of days" />
+            <x-input label="Price" wire:model="price" />
+            <x-input label="Valid Until" wire:model="valid_until" suffix="day" hint="fill in the number of days" />
+            @foreach ($class_kuotas as $index => $ck)
+                <div class="grid grid-cols-2 gap-4 mb-2 items-end">
+                    <x-select label="Class" wire:model="class_kuotas.{{ $index }}.class_id" :options="$class_list"
+                        placeholder="Select Class" />
+                    <x-input label="Kuota visit" wire:model="class_kuotas.{{ $index }}.kuota" />
+                    <div class="col-span-2">
+                        @if ($index > 0)
+                            <x-button label="Remove" color="red" wire:click="removeClassKuota({{ $index }})"
+                                sm />
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+
+            <x-button label="Add Class" wire:click="addClassKuota" sm />
             <x-markdown label="Description" wire:model="description" :config="$config" />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
@@ -55,12 +69,24 @@
     </x-modal>
 
     {{-- modal-edit-muncul --}}
-    <x-modal wire:model="editForm" title="New Class" class="backdrop-blur">
+    <x-modal wire:model="editForm" title="Edit Membership Paket" class="backdrop-blur">
         <x-form wire:submit="update">
             <x-input label="Name" wire:model="name" />
-            <x-input label="Price" wire:model="price" money />
-            <x-input label="Kouta" wire:model="kuota" />
-            <x-input label="valid_until" wire:model="valid_until" suffix="day" hint="fill in the number of days" />
+            <x-input label="Price" wire:model="price" />
+            <x-input label="Valid Until" wire:model="valid_until" suffix="day" hint="fill in the number of days" />
+            @foreach ($class_kuotas as $index => $ck)
+                <div class="grid grid-cols-2 gap-4 mb-2 items-end">
+                    <x-select label="Class" wire:model="class_kuotas.{{ $index }}.class_id" :options="$class_list"
+                        placeholder="Select Class" />
+                    <x-input label="Kuota visit" wire:model="class_kuotas.{{ $index }}.kuota" />
+                    <div class="col-span-2">
+                        @if ($index > 0)
+                            <x-button label="Remove" color="red" wire:click="removeClassKuota({{ $index }})"
+                                sm />
+                        @endif
+                    </div>
+                </div>
+            @endforeach
             <x-markdown label="Description" wire:model="description" :config="$config" />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}

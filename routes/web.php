@@ -38,6 +38,7 @@ use App\Livewire\Public\Classes;
 use App\Livewire\Public\ContactUs;
 use App\Livewire\Public\DetailClass;
 use App\Livewire\Public\Home;
+use App\Livewire\Public\Invoice;
 use App\Livewire\Public\Membership;
 use App\Livewire\Public\NeutradcSummit;
 use App\Livewire\Public\News;
@@ -71,6 +72,7 @@ Route::get('/classes-detail/{id}/{date}', DetailClass::class)->name('detail-clas
 Route::get('/checkout_class/{id}', CheckoutClass::class)->name('checkout_class');
 Route::get('/membership', Membership::class)->name('membership');
 Route::get('/checkout/{id}', Checkout::class)->name('checkout');
+Route::get('/invoice/{id}', Invoice::class)->name('invoice');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/news', News::class)->name('news');
 Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');

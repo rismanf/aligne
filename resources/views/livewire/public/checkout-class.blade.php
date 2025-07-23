@@ -53,13 +53,20 @@
                                 <a href="{{ route('register') }}" class="cta-btn">Sign Up</a>
                             @else
                                 @if ($data_schedule == 0)
-                                
-                                    <form wire:submit="save">
-                                        <button type="submit" class="cta-btn">Confrim</button>
-                                    </form>
+                                    @if ($cek_quota == 0)
+                                        <p>You not have quota for this class</p>
+                                        <p>Please select another class or buy membership first</p>
+                                        <a href="{{ route('membership') }}" type="submit" class="cta-btn">Membership</a>                                    
+                                        <a href="{{ url()->previous() }}" type="submit" class="cta-btn">Back to class</a>
+                                    @else
+                                        <p>You have {{ $cek_quota }} quota left for this class</p>
+                                        <form wire:submit="save">
+                                            <button type="submit" class="cta-btn">Confrim</button>
+                                        </form>
+                                    @endif
                                 @else
                                     <p>You have already signed up for this class</p>
-                                     <a href="{{ url()->previous() }}" type="submit" class="cta-btn">Back</a >
+                                    <a href="{{ url()->previous() }}" type="submit" class="cta-btn">Back</a>
                                 @endif
                             @endguest
                         </div>

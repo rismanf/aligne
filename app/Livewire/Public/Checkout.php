@@ -14,7 +14,6 @@ class Checkout extends Component
     use Toast;
 
     public $id, $product, $uniqueCode;
-
     public function save()
     {
         $this->validate([
@@ -46,12 +45,11 @@ class Checkout extends Component
         $this->uniqueCode = rand(100, 999);
         session(['unique_code' => $this->uniqueCode]);
         session()->flash('success', 'Order placed successfully! Please complete your payment.');
-
-        $this->js(<<<'JS'
-        setTimeout(function () {
-            window.location.href = "/user/order"; // Redirect to user order page after 3 seconds
-        }, 3000);
-    JS);
+        $this->js(<<<JS
+                setTimeout(function () {
+                    window.location.href = "/invoice/{$invoiceNumber}"; // Redirect to user order page after 3 seconds
+                }, 3000);
+            JS);
     }
 
     public function mount($id)

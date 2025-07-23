@@ -21,7 +21,7 @@ class Order extends Component
     public function mount()
     {
         $this->orders = UserProduk::with('product')->where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'desc')->limit(30)
             ->get();
     }
     public function render()

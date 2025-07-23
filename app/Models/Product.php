@@ -10,4 +10,6 @@ class Product extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
+
+    
 }

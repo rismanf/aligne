@@ -89,11 +89,11 @@ class TransactionList extends Component
             'end_date' => $valid,
         ]);
         // dd($tes);
-        // $data->update([
-        //     'payment_status' => 'Paid',
-        //     'confirmed_at' => now(),
-        //     'confirmed_by' => auth()->id(),
-        // ]);
+        $data->update([
+            'payment_status' => 'Paid',
+            'confirmed_at' => now(),
+            'confirmed_by' => auth()->id(),
+        ]);
 
         $this->reset();
         $this->editForm = false;

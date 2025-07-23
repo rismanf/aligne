@@ -98,6 +98,7 @@
     <!-- Blog Posts Section -->
 
     <div class="wrapper">
+        <h1 class="text-center">{{ $class_name }}</h1>
         @php
 
             $currentDate = \Carbon\Carbon::parse($date);
@@ -135,7 +136,7 @@
                         return \Carbon\Carbon::parse($s->schedule_date)->toDateString() === $day->toDateString();
                     });
                 @endphp
-                <a href="{{ route('detail-class', ['id' => 1, 'date' => $day->toDateString()]) }}" class="day">
+                <a href="{{ route('detail-class', ['id' => $id, 'date' => $day->toDateString()]) }}" class="day">
                     <div class="day-name">{{ $day->format('D') }}</div>
                     <div class="date {{ $day->format('Y-m-d') === $date ? 'today' : '' }}">
                         {{ $day->format('j') }}
