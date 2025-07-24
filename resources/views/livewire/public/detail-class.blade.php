@@ -151,7 +151,7 @@
     </div>
     @if ($schedule_now->count() > 0)
         <!-- Testimonials Section -->
-        <section id="testimonials" class="testimonials section">
+        <section id="testimonials" class="pricing section">
 
             <div class="container">
                 @foreach ($schedule_now as $val)
@@ -177,10 +177,40 @@
                                     </div>
 
                                     <!-- Right Section -->
-                                    <div class="text-end">
-                                        <a href="{{ route('checkout_class', $val->id) }}"
-                                            class="btn btn-primary rounded-pill px-4">Checkout</a>
-                                    </div>
+
+                                    @if ($val->quota == 0)
+                                        <div class="text-end">
+                                            <a href="#" class="btn btn-danger rounded-pill px-4">Full</a>
+                                        </div>
+                                    @else
+                                        @php
+                                            $scheduleDateTime = \Carbon\Carbon::parse($date . ' ' . $val->time);
+                                            $now = \Carbon\Carbon::now();
+
+                                            $diffInHours = $now->diffInHours($scheduleDateTime, false); // false untuk bisa hasil negatif
+
+                                        @endphp
+
+                                        @if ($date < now()->toDateString())
+                                            <div class="text-end">
+                                                    <a href="#"
+                                                        class="btn btn-danger rounded-pill px-4">Expired</a>
+                                                </div>
+                                        @else
+                                            @if ($diffInHours < 0)
+                                                <div class="text-end">
+                                                    <a href="#"
+                                                        class="btn btn-danger rounded-pill px-4">Expired</a>
+                                                </div>
+                                            @else
+                                                <div class="text-end">
+                                                    <a href="{{ route('checkout_class', $val->id) }}"
+                                                        class="btn btn-primary rounded-pill px-4">Checkout</a>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endif
+
                                 </div>
                             </div>
                         </div><!-- End testimonial item -->

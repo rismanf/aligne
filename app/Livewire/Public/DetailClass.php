@@ -42,6 +42,7 @@ public $class_name;
         $this->schedule_now = Schedule::with('trainer')
             ->where('class_id', $id)
             ->whereDate('schedule_date', $this->date)
+            ->orderby('time', 'asc')
             ->get();
     }
     public function render()

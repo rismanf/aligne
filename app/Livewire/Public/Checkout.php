@@ -2,10 +2,14 @@
 
 namespace App\Livewire\Public;
 
+use App\Mail\CheckoutMembership;
+use App\Mail\CheckoutMembershipMail;
 use App\Models\Menu;
 use App\Models\Product;
 use App\Models\UserProduk;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -28,7 +32,7 @@ class Checkout extends Component
         }
 
         $invoiceNumber = 'INV-' . strtoupper(substr(uniqid(), 0, 5));
-        UserProduk::create(
+        $data =UserProduk::create(
             [
                 'invoice_number' => $invoiceNumber,
                 'unique_code' => $this->uniqueCode,
@@ -42,6 +46,16 @@ class Checkout extends Component
                 'created_by_id' => Auth::id(),
             ]
         );
+
+      
+        try {
+            Mail::to($this->email)->send(new CheckoutMembershipMail($data->id));
+
+            Log::info('send mail ' . $this->email);
+        } catch (\Exception $e) {
+            Log::error('Gagal kirim email: ' . $e->getMessage());
+        }
+
         $this->uniqueCode = rand(100, 999);
         session(['unique_code' => $this->uniqueCode]);
         session()->flash('success', 'Order placed successfully! Please complete your payment.');
@@ -55,7 +69,7 @@ class Checkout extends Component
     public function mount($id)
     {
         $this->id = $id;
-        $this->product = Product::find($id);
+        $this->product = Product::with('classes')->find($id);
 
         if (!session()->has('unique_code')) {
             $this->uniqueCode = rand(100, 999);

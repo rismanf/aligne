@@ -70,90 +70,161 @@
             </div>
             <div class="row gy-4">
 
-                <div class="col-lg-4">
-                    <article class="position-relative h-100">
+                @foreach ($classes as $class)
+                    <div class="col-lg-4">
+                        <article class="position-relative h-100">
 
-                        <div class="post-img position-relative overflow-hidden">
-                            <img src="assets/img/class/image1.jpeg" class="img-fluid" alt="">
-                        </div>
+                            <div class="post-img position-relative overflow-hidden">
+                                <img src="{{ asset('storage/' . $class->image_original) }}" class="img-fluid"
+                                    alt="">
+                            </div>
 
-                        <div class="post-content d-flex flex-column">
+                            <div class="post-content d-flex flex-column">
 
-                            <h3 class="post-title">Dolorum optio tempore voluptas dignissimos cumque fuga qui quibusdam
-                                quia</h3>
+                                <h3 class="post-title">{{ $class->name }}</h3>
 
-                            <p>
-                                Similique neque nam consequuntur ad non maxime aliquam quas. Quibusdam animi
-                                praesentium. Aliquam et laboriosam eius aut nostrum quidem aliquid dicta.
-                            </p>
+                                <p>
+                                    {!! $class->description !!}
+                                </p>
 
-                            <hr>
+                                <hr>
 
-                            <a href="blog-details.html" class="readmore stretched-link"><span>Select</span><i
-                                    class="bi bi-arrow-right"></i></a>
+                                <a href="{{ route('detail-class', ['id' => $class->id, 'date' => date('Y-m-d')]) }}"
+                                    class="readmore stretched-link"><span>Select</span><i
+                                        class="bi bi-arrow-right"></i></a>
 
-                        </div>
+                            </div>
 
-                    </article>
-                </div><!-- End post list item -->
-
-                <div class="col-lg-4">
-                    <article class="position-relative h-100">
-
-                        <div class="post-img position-relative overflow-hidden">
-                            <img src="assets/img/class/image2.jpg" class="img-fluid" alt="">
-                        </div>
-
-                        <div class="post-content d-flex flex-column">
-
-                            <h3 class="post-title">Nisi magni odit consequatur autem nulla dolorem</h3>
-
-
-
-                            <p>
-                                Incidunt voluptate sit temporibus aperiam. Quia vitae aut sint ullam quis illum
-                                voluptatum et. Quo libero rerum voluptatem pariatur nam.
-                            </p>
-
-                            <hr>
-
-                            <a href="blog-details.html" class="readmore stretched-link"><span>Select</span><i
-                                    class="bi bi-arrow-right"></i></a>
-
-                        </div>
-
-                    </article>
-                </div><!-- End post list item -->
-
-                <div class="col-lg-4">
-                    <article class="position-relative h-100">
-
-                        <div class="post-img position-relative overflow-hidden">
-                            <img src="assets/img/class/image3.webp" class="img-fluid" alt="">
-                        </div>
-
-                        <div class="post-content d-flex flex-column">
-
-                            <h3 class="post-title">Possimus soluta ut id suscipit ea ut. In quo quia et soluta libero
-                                sit sint.</h3>
-
-                            <p>
-                                Aut iste neque ut illum qui perspiciatis similique recusandae non. Fugit autem dolorem
-                                labore omnis et. Eum temporibus fugiat voluptate enim tenetur sunt omnis.
-                            </p>
-
-                            <hr>
-
-                            <a href="blog-details.html" class="readmore stretched-link"><span>Select</span><i
-                                    class="bi bi-arrow-right"></i></a>
-
-                        </div>
-
-                    </article>
-                </div><!-- End post list item -->
-
+                        </article>
+                    </div><!-- End post list item -->
+                @endforeach
             </div>
         </div>
 
     </section><!-- /Blog Posts Section -->
+
+    <!-- Clients Section -->
+    <section id="clients" class="clients section light-background">
+
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Galery</h2>
+            <p>A Space Where Beauty Meets Purpose.</p>
+            <p>Explore our serene studio, state-of-the-art equipment, and powerful community through photos that reflect
+                our soul.</p>
+        </div><!-- End Section Title -->
+
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+            <div class="row g-0 clients-wrap">
+
+                {{-- <div class="col-xl-3 col-md-4 client-logo">
+            <img src="assets/img/clients/client-1.png" class="img-fluid" alt="">
+          </div><!-- End Client Item --> --}}
+
+
+
+            </div>
+
+        </div>
+
+    </section><!-- /Clients Section -->
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials section">
+
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Testimonials</h2>
+            <p>Real Story. Real Results.</p>
+            <p>Hear from our members who've found balance, strength, and confidence through Aligné. Every journey is
+                unique - and we celebrate each one</p>
+        </div><!-- End Section Title -->
+
+        <div class="container">
+
+            <div class="row gy-4">
+
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="testimonial-item">
+                        <h3>Saul Goodman</h3>
+                        <h4>Ceo &amp; Founder</h4>
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i>
+                        </div>
+                        <p>
+                            <i class="bi bi-quote quote-icon-left"></i>
+                            <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit
+                                rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam,
+                                risus at semper.</span>
+                            <i class="bi bi-quote quote-icon-right"></i>
+                        </p>
+                    </div>
+                </div><!-- End testimonial item -->
+
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="testimonial-item">
+                        <h3>Sara Wilsson</h3>
+                        <h4>Designer</h4>
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i>
+                        </div>
+                        <p>
+                            <i class="bi bi-quote quote-icon-left"></i>
+                            <span>Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid
+                                cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet
+                                legam anim culpa.</span>
+                            <i class="bi bi-quote quote-icon-right"></i>
+                        </p>
+                    </div>
+                </div><!-- End testimonial item -->
+
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="testimonial-item">
+                        <h3>Jena Karlis</h3>
+                        <h4>Store Owner</h4>
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i>
+                        </div>
+                        <p>
+                            <i class="bi bi-quote quote-icon-left"></i>
+                            <span>Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam
+                                duis minim tempor labore quem eram duis noster aute amet eram fore quis sint
+                                minim.</span>
+                            <i class="bi bi-quote quote-icon-right"></i>
+                        </p>
+                    </div>
+                </div><!-- End testimonial item -->
+
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="testimonial-item">
+                        <h3>Matt Brandon</h3>
+                        <h4>Freelancer</h4>
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                class="bi bi-star-fill"></i>
+                        </div>
+                        <p>
+                            <i class="bi bi-quote quote-icon-left"></i>
+                            <span>Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat
+                                minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore
+                                labore illum veniam.</span>
+                            <i class="bi bi-quote quote-icon-right"></i>
+                        </p>
+                    </div>
+                </div><!-- End testimonial item -->
+
+
+            </div>
+
+        </div>
+
+    </section><!-- /Testimonials Section -->
 </div>

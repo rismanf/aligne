@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to Aligné</title>
+    <title>Aligné | Invoice</title>
 </head>
 
 <body style="margin: 0; padding: 0; background-color: #f6f4ee; font-family: Arial, sans-serif;">
@@ -11,11 +11,11 @@
         <tr>
             <td align="center">
                 <table width="600" cellpadding="40" cellspacing="0" border="0"
-                    style="background-color: #ffffff; border: 2px solid #5c5329; text-align: center;">
+                    style="background-color: #ffffff; border: 2px solid #5c5329; ">
                     <tr>
                         <td>
-                            <h1 style="color: #2e2e2e; font-size: 24px; margin: 0 0 20px;">{{ $name }}</h1>
-                            <h1 style="color: #2e2e2e; font-size: 24px; margin: 0 0 20px;">Welcome to Aligné</h1>
+                            <h1 style="color: #2e2e2e; font-size: 24px; margin: 0 0 20px;">Hi {{ $name }}</h1>
+                            <h1 style="color: #2e2e2e; font-size: 24px; margin: 0 0 20px;">Invoice Number {{ $data->invoice_number }}</h1>
                             <p style="font-size: 16px; color: #333333; margin-bottom: 30px;">
                                 You're almost there! Don't forget to fill out your Health Information Form for a safer
                                 and more personalized Pilates experience. It takes just a few minutes.

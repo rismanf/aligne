@@ -53,12 +53,14 @@
                                     <td>{{ $order->payment_status }}</td>
                                     <td>{{ $order->created_at->format('d-m-Y') }}</td>
                                     <td>
-                                        @if ($order->payment_status == 'unpaid')
-                                            <button
-                                                wire:click="showModal({{ $order->id }}, '{{ $order->invoice_number }}')"
-                                                class="btn btn-primary">
-                                                Pay Now
-                                            </button>
+                                        @if ($order->product->deleted_at == null)
+                                            @if ($order->payment_status == 'unpaid')
+                                                <button
+                                                    wire:click="showModal({{ $order->id }}, '{{ $order->invoice_number }}')"
+                                                    class="btn btn-primary">
+                                                    Pay Now
+                                                </button>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>
@@ -85,7 +87,8 @@
                         modal.hide();
                     }
                 });
-            }" style="display: none;" wire:ignore.self>
+            }" style="display: none;"
+            wire:ignore.self>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form wire:submit="save">

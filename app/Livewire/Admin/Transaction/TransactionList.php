@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Transaction;
 
+use App\Models\ClassMembership;
 use App\Models\UserKuota;
 use App\Models\UserProduk;
 use Livewire\Component;
@@ -15,9 +16,15 @@ class TransactionList extends Component
     public $editForm = false;
 
     public $id, $invoice_number, $name, $product, $total_price, $payment_method, $payment_proof, $paid_at;
+    public $select_status;
+    public $status_list = [
+        ['id' => 'Paid', 'name' => 'Paid'],
+        ['id' => 'waiting payment confirmation', 'name' => 'waiting payment confirmation'],
+        ['id' => 'Unpaid', 'name' => 'Unpaid']
+    ];
     public function render()
     {
-        $title = 'Trainer Management';
+        $title = 'Transaction Management';
         $breadcrumbs = [
             [
                 'link' => route("admin.home"), // route('home') = nama route yang ada di web.php
@@ -26,14 +33,19 @@ class TransactionList extends Component
             ],
             [
                 // 'link' => route("admin.role.index"), // route('home') = nama route yang ada di web.php
-                'label' => 'Trainer',
+                'label' => 'Transaction',
             ],
         ];
 
-        $news = UserProduk::orderBy('created_at', 'desc')->paginate(5);
+        $query = UserProduk::orderBy('created_at', 'desc');
 
-        $news->getCollection()->transform(function ($val, $index) use ($news) {
-            $val->row_number = ($news->currentPage() - 1) * $news->perPage() + $index + 1;
+        if ($this->select_status) {
+            $query->where('payment_status', $this->select_status);
+        }
+        $transaction = $query->paginate(5);
+
+        $transaction->getCollection()->transform(function ($val, $index) use ($transaction) {
+            $val->row_number = ($transaction->currentPage() - 1) * $transaction->perPage() + $index + 1;
             return $val;
         });
 
@@ -49,7 +61,7 @@ class TransactionList extends Component
 
         return view('livewire.admin.transaction.transaction-list', [
             't_headers' => $t_headers,
-            'userproduct' => $news,
+            'userproduct' => $transaction,
         ])->layout('components.layouts.app', [
             'breadcrumbs' => $breadcrumbs,
             'title' => $title,
@@ -73,21 +85,25 @@ class TransactionList extends Component
     public function update()
     {
         $data = UserProduk::with('product', 'user')->find($this->id);
-
+        $data_kuota = ClassMembership::where('membership_id', $data->product_id)->get();
 
         if ($data->product->valid_until == null) {
             $valid = '9999-01-01';
         } else {
             $valid = now()->addDays($data->product->valid_until)->format('Y-m-d');
         }
-        $tes = UserKuota::create([
-            'user_id' => $data->user_id,
-            'product_id' => $data->product_id,
-            'kuota' => $data->product->kuota,
-            'invoice_number' => $data->invoice_number,
-            'start_date' => now(),
-            'end_date' => $valid,
-        ]);
+        foreach ($data_kuota as $item) {
+            $tes = UserKuota::create([
+                'user_id' => $data->user_id,
+                'product_id' => $data->product_id,
+                'class_id' => $item->class_id,
+                'kuota' => $item->quota,
+                'invoice_number' => $data->invoice_number,
+                'start_date' => now(),
+                'end_date' => $valid,
+            ]);
+        }
+
         // dd($tes);
         $data->update([
             'payment_status' => 'Paid',

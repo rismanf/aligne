@@ -98,9 +98,9 @@ class ClassList extends Component
             // 'class_level_id' => 'required|integer',
         ]);
 
-        if ($this->image) {
-            $url = $this->image->store('class', 'public');
-        }
+        // if ($this->image) {
+        //     $url = $this->image->store('class', 'public');
+        // }
 
         Classes::create([
             'name' => $this->name,

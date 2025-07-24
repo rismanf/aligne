@@ -1,5 +1,13 @@
 <div>
     <x-card>
+        <div class="flex justify-between items-center gap-2">
+            {{-- Filter kiri --}}
+            <div class="flex gap-1">
+                <x-select wire:model="select_status" :options="$status_list" placeholder="Filter by Status"
+                    wire:change="gotoPage(1)" />
+              
+            </div>
+        </div>
         <div class="flex justify-end mb-4">
             {{-- <x-input label="Search" placeholder="Search" wire:model="search" class="w-1/2" /> --}}
             <x-button label="Add" icon="o-plus" wire:click="showAddModal()" class="btn-primary btn-xs p-2" />

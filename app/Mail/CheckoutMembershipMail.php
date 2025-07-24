@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\UserProduk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,16 +10,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactUsEmail extends Mailable
+class CheckoutMembershipMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $id;
+    public $data;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($id)
     {
-        //
+        $this->data = UserProduk::with('product', 'user')->find('id', $id);
     }
 
     /**
@@ -27,7 +30,7 @@ class ContactUsEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Aligné | Thanks for getting in touch!',
+            subject: 'Invoice payment',
         );
     }
 
@@ -37,7 +40,7 @@ class ContactUsEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.contactus',
+            view: 'email.invoice',
         );
     }
 

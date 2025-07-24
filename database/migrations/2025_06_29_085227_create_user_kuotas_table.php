@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('product_id');
+            $table->integer('class_id');
             $table->string('invoice_number')->nullable();
             $table->integer('kuota');
             $table->date('start_date')->nullable();

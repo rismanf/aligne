@@ -13,18 +13,27 @@
                         <div class="border p-3 mb-3">
                             <h5>Order summary</h5>
                             <div class="d-flex justify-content-between mt-3">
-                                <span>{{ $product->name }}</span>
+                                <strong>{{ $product->name }}</strong>
                                 <strong>IDR {{ number_format($product->price, 0, ',', '.') }}</strong>
+
+                            </div>
+                            {{-- <div class=" text-muted small mt-2">
+                                <p class="mb-1">Class: Until canceled</p>
+                                <p class="mb-0">Sessions: {{ $product->kuota }}</p>
+                            </div> --}}
+                            <div class=" text-muted small mt-2  ml-2">
+                                <ul>
+                                    @foreach ($product->classes as $class)
+                                        <li>{{ $class->name }} - Quota: {{ $class->pivot->quota }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                             <div class="d-flex justify-content-between mt-3">
-                                <span>Code unique</span>
+                                <strong>Code unique</strong>
 
                                 <strong>IDR {{ $uniqueCode }}</strong>
                             </div>
-                            <div class="text-muted small mt-2">
-                                <p class="mb-1">Duration: Until canceled</p>
-                                <p class="mb-0">Sessions: {{ $product->kuota }}</p>
-                            </div>
+
                             <hr>
                             <div class="d-flex justify-content-between">
                                 <strong>Total</strong>
@@ -37,7 +46,8 @@
                         <div class="p-3">
                             @guest
                                 <h3>Sign Up</h3>
-                                <p>To purchase this plan and use its benefits in the future, log in to your account or sign
+                                <p>To purchase this plan and use its benefits in the future, log in to your account or
+                                    sign
                                     up.
                                 </p>
                                 <a href="{{ route('login') }}" class="cta-btn">Log In</a>

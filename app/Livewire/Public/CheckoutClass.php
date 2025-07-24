@@ -22,8 +22,10 @@ class CheckoutClass extends Component
     {
         $this->id = $id;
         $this->schedule = Schedule::with('classes', 'trainer')->find($id);
+ 
         $this->data_schedule = UserSchedule::where('schedule_id', $id)->where('user_id', Auth::id())->count();
-        $quota = UserKuota::where('user_id', Auth::id())->where('product_id', $this->id)->where('is_active', 1)->get();
+        $quota = UserKuota::where('user_id', Auth::id())->where('class_id', $this->schedule->group_class_id)->where('end_date', '>', now())->where('is_active', 1)->get();
+
         $this->cek_quota = 0;
         if (!$quota->isEmpty()) {
             $c = 0;
@@ -85,7 +87,13 @@ class CheckoutClass extends Component
                 'url_code' => $url_code
             ]
         );
-
+        $user_quota = UserKuota::where('user_id', Auth::id())
+            ->where('class_id', $this->schedule->group_class_id)
+            ->where('end_date', '>', now())
+            ->where('is_active', 1)->first();
+        $user_quota->update([
+            'kuota' => $user_quota->kuota - 1
+        ]);
         $data_schedule->update([
             'quota' => $data_schedule->quota - 1,
             'quora_book' => $data_schedule->quora_book + 1
