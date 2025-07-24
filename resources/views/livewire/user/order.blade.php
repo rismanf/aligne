@@ -34,6 +34,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Invoice ID</th>
                                 <th>Product Name</th>
                                 <th>Price</th>
@@ -45,18 +46,21 @@
                         <tbody>
                             @foreach ($orders as $order)
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $order->invoice_number }}</td>
                                     <td>{{ $order->product->name }}</td>
                                     <td>IDR {{ number_format($order->total_price, 0, ',', '.') }}</td>
                                     <td>{{ $order->payment_status }}</td>
                                     <td>{{ $order->created_at->format('d-m-Y') }}</td>
                                     <td>
-                                        @if ($order->payment_status == 'unpaid')
-                                            <button
-                                                wire:click="showModal({{ $order->id }}, '{{ $order->invoice_number }}')"
-                                                class="btn btn-primary">
-                                                Pay Now
-                                            </button>
+                                        @if ($order->product->deleted_at == null)
+                                            @if ($order->payment_status == 'unpaid')
+                                                <button
+                                                    wire:click="showModal({{ $order->id }}, '{{ $order->invoice_number }}')"
+                                                    class="btn btn-primary">
+                                                    Pay Now
+                                                </button>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>
@@ -72,7 +76,6 @@
     </section><!-- /Service Details Section -->
 
     <div x-data="{ showModal: false }" x-on:open-payment-modal.window="showModal = true">
-
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true" x-show="showModal"
             x-on:keydown.escape.window="showModal = false" x-init="() => {
@@ -84,7 +87,8 @@
                         modal.hide();
                     }
                 });
-            }" style="display: none;">
+            }" style="display: none;"
+            wire:ignore.self>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form wire:submit="save">
@@ -101,8 +105,8 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Payment Proof</label>
-                                <input type="file" class="form-control" wire:model="payment_proof"
-                                    name="payment_proof">
+                                <input type="file" class="form-control" wire:model.lazy="payment_proof"
+                                    name="payment_proof" accept="image/*">
                             </div>
                         </div>
                         <div class="modal-footer">

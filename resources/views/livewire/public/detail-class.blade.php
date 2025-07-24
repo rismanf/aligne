@@ -98,6 +98,7 @@
     <!-- Blog Posts Section -->
 
     <div class="wrapper">
+        <h1 class="text-center">{{ $class_name }}</h1>
         @php
 
             $currentDate = \Carbon\Carbon::parse($date);
@@ -135,7 +136,7 @@
                         return \Carbon\Carbon::parse($s->schedule_date)->toDateString() === $day->toDateString();
                     });
                 @endphp
-                <a href="{{ route('detail-class', ['id' => 1, 'date' => $day->toDateString()]) }}" class="day">
+                <a href="{{ route('detail-class', ['id' => $id, 'date' => $day->toDateString()]) }}" class="day">
                     <div class="day-name">{{ $day->format('D') }}</div>
                     <div class="date {{ $day->format('Y-m-d') === $date ? 'today' : '' }}">
                         {{ $day->format('j') }}
@@ -150,7 +151,7 @@
     </div>
     @if ($schedule_now->count() > 0)
         <!-- Testimonials Section -->
-        <section id="testimonials" class="testimonials section">
+        <section id="testimonials" class="pricing section">
 
             <div class="container">
                 @foreach ($schedule_now as $val)
@@ -176,10 +177,40 @@
                                     </div>
 
                                     <!-- Right Section -->
-                                    <div class="text-end">
-                                        <a href="{{ route('checkout_class', $val->id) }}"
-                                            class="btn btn-primary rounded-pill px-4">Checkout</a>
-                                    </div>
+
+                                    @if ($val->quota == 0)
+                                        <div class="text-end">
+                                            <a href="#" class="btn btn-danger rounded-pill px-4">Full</a>
+                                        </div>
+                                    @else
+                                        @php
+                                            $scheduleDateTime = \Carbon\Carbon::parse($date . ' ' . $val->time);
+                                            $now = \Carbon\Carbon::now();
+
+                                            $diffInHours = $now->diffInHours($scheduleDateTime, false); // false untuk bisa hasil negatif
+
+                                        @endphp
+
+                                        @if ($date < now()->toDateString())
+                                            <div class="text-end">
+                                                    <a href="#"
+                                                        class="btn btn-danger rounded-pill px-4">Expired</a>
+                                                </div>
+                                        @else
+                                            @if ($diffInHours < 0)
+                                                <div class="text-end">
+                                                    <a href="#"
+                                                        class="btn btn-danger rounded-pill px-4">Expired</a>
+                                                </div>
+                                            @else
+                                                <div class="text-end">
+                                                    <a href="{{ route('checkout_class', $val->id) }}"
+                                                        class="btn btn-primary rounded-pill px-4">Checkout</a>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endif
+
                                 </div>
                             </div>
                         </div><!-- End testimonial item -->

@@ -37,10 +37,8 @@
     {{-- modal-create-muncul --}}
     <x-modal wire:model="createForm" title="New Class" class="backdrop-blur">
         <x-form wire:submit="save">
-            <x-select label="Class Type" wire:model="class_type" :options="$class_type" option-label="name" option-value="id"
+            <x-select label="Class Type" wire:model="class_type" :options="$class_type_list" option-label="name" option-value="id"
                 placeholder="Select Class Type" required />
-            <x-select label="Class Level" wire:model="class_level_id" :options="$class_level" option-label="name"
-                placeholder="Select Class Level" option-value="id" required />
             <x-input label="Name" wire:model="name" required />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
@@ -55,15 +53,9 @@
     {{-- modal-edit-muncul --}}
     <x-modal wire:model="editForm" title="New Class" class="backdrop-blur">
         <x-form wire:submit="update">
-            <x-file label="Cover Image" wire:model="image_edit" accept="image/*"
-                hint="if you don't want to change the image, just leave it blank" />
-            @if ($image)
-                <div class="mb-4">
-                    <img src="{{ asset('storage/' . $image) }}"class="w-32 h-auto rounded shadow" />
-                </div>
-            @endif
+            <x-select label="Class Type" wire:model="class_type" :options="$class_type_list" option-label="name" option-value="id"
+                placeholder="Select Class Type" required />
             <x-input label="Name" wire:model="name" required />
-            <x-markdown label="Description" wire:model="description" :config="$config" />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
 
@@ -77,11 +69,10 @@
     {{-- modal-detail-muncul --}}
     <x-modal wire:model="detailForm" title="Detail Class" class="backdrop-blur">
 
-        <label for="name">Name</label>
-        <img src="{{ asset('storage/' . $image) }}" alt="" width="100px">
+        <label for="name">Class Type</label>
+        <p>{{ $class_type }}</p>
+        <label for="description">Name</label>
         <p>{{ $name }}</p>
-        <label for="description">Description</label>
-        <p>{{ $description }}</p>
         {{-- Notice `omit-error` --}}
         {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}
 

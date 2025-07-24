@@ -9,16 +9,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactUsEmail extends Mailable
+class PaymentNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+     public $data;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -27,7 +28,7 @@ class ContactUsEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Aligné | Thanks for getting in touch!',
+            subject: 'New Payment Confirmation',
         );
     }
 
@@ -37,7 +38,7 @@ class ContactUsEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.contactus',
+            view: 'email.newpayment',
         );
     }
 

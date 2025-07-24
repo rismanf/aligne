@@ -12,8 +12,9 @@ class Membership extends Component
     public $products;
     public function mount()
     {
-        $this->products = Product::all();
-       
+        $this->products = Product::with('classes')->get();
+   
+   
     }
     public function render()
     {

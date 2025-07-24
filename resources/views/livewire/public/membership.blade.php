@@ -11,7 +11,11 @@
                             <h3>{{ $product->name }}</h3>
                             <p class="description">{{ $product->description }}</p>
                             <h4><sup>IDR</sup>{{ number_format($product->price, 0, ',', '.') }}</h4>
-                            <span> / {{ $product->kuota==0 ? 'One Time' : $product->kuota.' Sections'  }}</span>
+                          
+                            @foreach ($product->classes as $val )
+                                      <span> / {{$val->name .' : '. $val->pivot->quota }}</span><br>
+                            @endforeach
+                      
                             <a href="{{ route('checkout', $product->id) }}" class="cta-btn">Select</a>                            
                         </div>
                     </div><!-- End Pricing Item -->

@@ -4,14 +4,13 @@
         <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
 
             <div class="carousel-item active">
-                <img src="{{ asset('assets/img/hero.jpg') }}" alt="">
-                <div class="container col-4">
+                <img src="assets/img/home/image1.jpg" alt="">
+                <div class="container">
                     <h2>Discover Your Strongest Self</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                         labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
                         laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <a href="{{ route('classes') }}" class="btn-get-started rounded-pill">Class</a>
-                    <a href="{{ route('membership') }}" class="btn-get-started rounded-pill">Membership</a>
+                    <a href="#" class="btn-get-started">Read More</a>
                 </div>
             </div><!-- End Carousel Item -->
 
@@ -28,9 +27,8 @@
 
             <div class="row position-relative">
 
-                <div class="col-lg-7 about-img" data-aos="zoom-out" data-aos-delay="200">
-                    <img src="assets/img/home/image2.webp" alt="">
-                </div>
+                <div class="col-lg-7 about-img" data-aos="zoom-out" data-aos-delay="200"><img
+                        src="assets/img/home/image2.webp" alt=""></div>
 
                 <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
                     <h2 class="inner-title">More Than Movement — It’s a Way of Living.</h2>
@@ -105,7 +103,32 @@
 
     </section><!-- /Blog Posts Section -->
 
+    <!-- Clients Section -->
+    <section id="clients" class="clients section light-background">
 
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Galery</h2>
+            <p>A Space Where Beauty Meets Purpose.</p>
+            <p>Explore our serene studio, state-of-the-art equipment, and powerful community through photos that reflect
+                our soul.</p>
+        </div><!-- End Section Title -->
+
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+            <div class="row g-0 clients-wrap">
+
+                {{-- <div class="col-xl-3 col-md-4 client-logo">
+            <img src="assets/img/clients/client-1.png" class="img-fluid" alt="">
+          </div><!-- End Client Item --> --}}
+
+
+
+            </div>
+
+        </div>
+
+    </section><!-- /Clients Section -->
 
     <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials section">
@@ -123,7 +146,7 @@
             <div class="row gy-4">
 
                 <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="testimonial-item rounded-5">
+                    <div class="testimonial-item">
                         <h3>Saul Goodman</h3>
                         <h4>Ceo &amp; Founder</h4>
                         <div class="stars">
@@ -142,7 +165,7 @@
                 </div><!-- End testimonial item -->
 
                 <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="testimonial-item rounded-5">
+                    <div class="testimonial-item">
                         <h3>Sara Wilsson</h3>
                         <h4>Designer</h4>
                         <div class="stars">
@@ -161,7 +184,7 @@
                 </div><!-- End testimonial item -->
 
                 <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="testimonial-item rounded-5">
+                    <div class="testimonial-item">
                         <h3>Jena Karlis</h3>
                         <h4>Store Owner</h4>
                         <div class="stars">
@@ -180,7 +203,7 @@
                 </div><!-- End testimonial item -->
 
                 <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
-                    <div class="testimonial-item rounded-5">
+                    <div class="testimonial-item">
                         <h3>Matt Brandon</h3>
                         <h4>Freelancer</h4>
                         <div class="stars">
@@ -197,6 +220,8 @@
                         </p>
                     </div>
                 </div><!-- End testimonial item -->
+
+
             </div>
 
         </div>

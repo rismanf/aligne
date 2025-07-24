@@ -38,6 +38,7 @@ use App\Livewire\Public\Classes;
 use App\Livewire\Public\ContactUs;
 use App\Livewire\Public\DetailClass;
 use App\Livewire\Public\Home;
+use App\Livewire\Public\Invoice;
 use App\Livewire\Public\Membership;
 use App\Livewire\Public\NeutradcSummit;
 use App\Livewire\Public\News;
@@ -71,11 +72,12 @@ Route::get('/classes-detail/{id}/{date}', DetailClass::class)->name('detail-clas
 Route::get('/checkout_class/{id}', CheckoutClass::class)->name('checkout_class');
 Route::get('/membership', Membership::class)->name('membership');
 Route::get('/checkout/{id}', Checkout::class)->name('checkout');
+Route::get('/invoice/{id}', Invoice::class)->name('invoice');
 Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/news', News::class)->name('news');
 Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');
 Route::get('/register', Register::class)->name('register');
-Route::get('/vcard', Vcard::class)->name('vcard');
+// Route::get('/vcard', Vcard::class)->name('vcard');
 
 // });
 
@@ -95,7 +97,7 @@ Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', App\Livewire\User\Home::class)->name('dashboard');
 
     Route::get('/participant', App\Livewire\User\Participant\AddParticipant::class)->name('participant.index');
-    Route::get('/participant/create', AddParticipant::class)->name('participant.create');
+    // Route::get('/participant/create', AddParticipant::class)->name('participant.create');
 });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
@@ -114,24 +116,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/schedule', ScheduleList::class)->name('schedule.index');
 
 
-    Route::get('/vcard', ListVcard::class)->name('vcard.index');
-    Route::get('/vcard/create', AddVcard::class)->name('vcard.create');
-    Route::get('/vcard/{id}/edit', EditVcard::class)->name('vcard.edit');
+    // Route::get('/vcard', ListVcard::class)->name('vcard.index');
+    // Route::get('/vcard/create', AddVcard::class)->name('vcard.create');
+    // Route::get('/vcard/{id}/edit', EditVcard::class)->name('vcard.edit');
 
     Route::get('/menu', ListMenu::class)->name('menu.index');
 
-    Route::get('/sponsor', ListSponsor::class)->name('sponsor.index');
 
     Route::get('/email', ListPicMail::class)->name('email.index');
 
-    Route::get('/participant', ListParticipant::class)->name('participant.index');
-    Route::get('/participant/create', AddParticipant::class)->name('participant.create');
-    Route::get('/participant/{id}/edit', App\Livewire\Admin\Participant\EditParticipant::class)->name('participant.edit');
-    Route::get('/participant/payment', PaymentParticipant::class)->name('participant.payment');
 
     Route::get('/contact', ListContact::class)->name('contact.index');
-    Route::get('/invoice', ListInvoice::class)->name('invoice.index');
-    Route::get('/question', ListQuestion::class)->name('question.index');
     Route::get('/user', ListUser::class)->name('user.index');
 
     Route::get('/role', ListRole::class)->name('role.index');

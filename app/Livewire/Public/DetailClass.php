@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Public;
 
+use App\Models\GroupClass;
 use App\Models\Menu;
 use App\Models\Schedule;
 use Carbon\Carbon;
@@ -10,12 +11,13 @@ use Livewire\Component;
 class DetailClass extends Component
 {
     public $id, $date, $schedule, $schedule_now;
-
+public $class_name;
     public function mount($id, $date)
     {
         $this->id = $id;
         $this->date = $date;
 
+        $this->class_name = GroupClass::find($id)->name;
         $date = Carbon::parse($date);
         $today = Carbon::today();
 
@@ -40,6 +42,7 @@ class DetailClass extends Component
         $this->schedule_now = Schedule::with('trainer')
             ->where('class_id', $id)
             ->whereDate('schedule_date', $this->date)
+            ->orderby('time', 'asc')
             ->get();
     }
     public function render()

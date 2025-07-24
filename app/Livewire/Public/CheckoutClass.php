@@ -4,6 +4,7 @@ namespace App\Livewire\Public;
 
 use App\Models\Menu;
 use App\Models\Schedule;
+use App\Models\UserKuota;
 use App\Models\UserSchedule;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
@@ -16,14 +17,25 @@ class CheckoutClass extends Component
 
     public $id, $schedule, $uniqueCode;
     public $data_schedule;
+    public $cek_quota;
     public function mount($id)
     {
         $this->id = $id;
         $this->schedule = Schedule::with('classes', 'trainer')->find($id);
+ 
         $this->data_schedule = UserSchedule::where('schedule_id', $id)->where('user_id', Auth::id())->count();
+        $quota = UserKuota::where('user_id', Auth::id())->where('class_id', $this->schedule->group_class_id)->where('end_date', '>', now())->where('is_active', 1)->get();
 
-        // dd($this->schedule);
-
+        $this->cek_quota = 0;
+        if (!$quota->isEmpty()) {
+            $c = 0;
+            foreach ($quota as $item) {
+                if ($item->end_date > now()) {
+                    $this->cek_quota = $c + $item->kuota;
+                    $c = $item->kuota;
+                }
+            }
+        }
     }
     public function render()
     {
@@ -75,7 +87,13 @@ class CheckoutClass extends Component
                 'url_code' => $url_code
             ]
         );
-
+        $user_quota = UserKuota::where('user_id', Auth::id())
+            ->where('class_id', $this->schedule->group_class_id)
+            ->where('end_date', '>', now())
+            ->where('is_active', 1)->first();
+        $user_quota->update([
+            'kuota' => $user_quota->kuota - 1
+        ]);
         $data_schedule->update([
             'quota' => $data_schedule->quota - 1,
             'quora_book' => $data_schedule->quora_book + 1

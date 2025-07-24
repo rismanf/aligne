@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Public;
 
+use App\Models\GroupClass;
 use App\Models\Menu;
 use App\Models\News;
 use Livewire\Component;
@@ -9,6 +10,11 @@ use Livewire\Component;
 class Home extends Component
 {
     public $news = null;
+    public $classes;
+    public function mount()
+    {
+        $this->classes = GroupClass::all();
+    }
     public function render()
     {
         $this->news = News::where('is_active', true)

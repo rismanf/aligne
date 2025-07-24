@@ -2,8 +2,13 @@
 
 namespace App\Livewire\User;
 
+use App\Mail\PaymentNotificationMail;
+use App\Models\ManageMail;
 use App\Models\Menu;
+use App\Models\User;
 use App\Models\UserProduk;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -21,7 +26,7 @@ class Order extends Component
     public function mount()
     {
         $this->orders = UserProduk::with('product')->where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'desc')->limit(30)
             ->get();
     }
     public function render()
@@ -54,13 +59,36 @@ class Order extends Component
         try {
 
             $url = $this->payment_proof->store('payment_proof', 'public');
-            UserProduk::where('id', $this->order_id)->update([
+            $user_produk = UserProduk::find($this->order_id);
+            $user_produk->update([
                 'payment_method' => $this->bank,
                 'payment_proof' => $url,
                 'payment_status' => 'waiting payment confirmation',
                 'paid_at' => now(),
                 'updated_by_id' => auth()->id(),
             ]);
+
+            try {
+                $data_user = User::find(auth()->id());
+                $data_send_mail = [
+                    'name' => $data_user->name,
+                    'phone' => $data_user->phone,
+                    'email' => $data_user->email,
+                    'invoice' => $user_produk->invoice_number,
+                    'payment_method' => $user_produk->payment_method,
+                    'total_price' => $user_produk->total_price,
+                    'paid_at' => $user_produk->paid_at,
+                ];
+
+                $listMailPIC = ManageMail::where('type', 'New Payment')->pluck('email')->toArray();
+                Log::info("START Sending email to PIC for type: New Payment");
+                Mail::to($listMailPIC)->send(new PaymentNotificationMail($data_send_mail));
+
+                Log::info('send mail PIC' . json_encode($data_send_mail));
+            } catch (\Exception $e) {
+                Log::error('Gagal kirim email: ' . $e->getMessage());
+            }
+
             session()->flash('success', 'Payment successfully confirmed!');
             $this->dispatch('reload-page');
         } catch (\Exception $e) {

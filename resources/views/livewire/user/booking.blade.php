@@ -34,6 +34,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Class</th>
@@ -44,14 +45,26 @@
                         <tbody>
                             @foreach ($userschedule as $order)
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $order->schedule->schedule_date }}</td>
                                     <td>{{ $order->schedule->time }}</td>
                                     <td>{{ $order->schedule->classes->name }}</td>
                                     <td>{{ $order->schedule->level_class }}</td>
-                                    <td><img src="{{  $order->url_code }}" alt="" width="100px" height="100px"></td>
-                                    {{-- <td>
-                                        <a  wire:click="showModal({{ $order->id }})" class="btn btn-primary">Cencel</a>
-                                    </td> --}}
+                                    <td>
+                                        <img src="{{ $order->url_code }}" alt="" width="100px" height="100px">
+                                        @php
+                                            $scheduleDateTime = \Carbon\Carbon::parse(
+                                                $order->schedule->schedule_date . ' ' . $order->schedule->time,
+                                            );
+                                            $now = \Carbon\Carbon::now();
+                                            $diffInHours = $now->diffInHours($scheduleDateTime, false); // false untuk bisa hasil negatif
+                                        @endphp
+
+                                        @if ($diffInHours > 0 && $diffInHours <= 12)
+                                            <a wire:click="showModal({{ $order->id }})"
+                                                class="btn btn-primary ml-2">Cancel</a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -83,7 +96,7 @@
                 <div class="modal-content">
                     <form wire:submit="save">
                         <input type="hidden" wire:model="order_id">
-                        
+
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Confirm</button>
                         </div>

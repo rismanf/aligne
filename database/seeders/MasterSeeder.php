@@ -19,20 +19,7 @@ class MasterSeeder extends Seeder
      */
     public function run(): void
     {
-        //Type User
-        $request_status = [
-            'General Admission',
-            'Sponsor',
-            'Partner',
-        ];
-
-        foreach ($request_status as $v => $stat) {
-            master_data::create([
-                'type' => 'user_type',
-                'code' => $v + 1,
-                'name' => $stat,
-            ]);
-        }
+     
 
         //Status Invoice
         $request_status = [
@@ -50,52 +37,6 @@ class MasterSeeder extends Seeder
             ]);
         }
 
-        $industries = [
-            "Information Technology / Software / Cloud",
-            "Telecommunications",
-            "Data Center / Infrastructure Services",
-            "Financial Services / Banking / Insurance",
-            "Manufacturing",
-            "Retail / E-Commerce",
-            "Transportation / Logistics / Supply Chain",
-            "Energy / Utilities / Renewable Energy",
-            "Construction / Engineering",
-            "Real Estate / Property",
-            "Healthcare / Pharmaceuticals / Life Sciences",
-            "Education / Research / Training",
-            "Media / Entertainment / Creative Industry",
-            "Government / Public Sector",
-            "Defense / Aerospace",
-            "Hospitality / Tourism / F&B",
-            "FMCG",
-            "Automotive",
-            "Agriculture / Forestry",
-            "Mining / Oil & Gas",
-            "Legal / Consulting / Professional Services",
-            "Startups / VC / Investment",
-            "Non-profit / NGO / Social Enterprise",
-            "Others"
-        ];
-
-
-        foreach ($industries as $v => $stat) {
-            master_data::create([
-                'type' => 'industries',
-                'code' => $v + 1,
-                'name' => $stat,
-            ]);
-        }
-
-        Event::create([
-            'name' => 'NeutraDC Summit 2025',
-            'location' => 'Jakarta, Indonesia',
-            'description' => 'NeutraDC Summit 2025 is the premier event for data center professionals.',
-            'start_date' => '2025-06-17',
-            'end_date' => '2025-07-30',
-            'is_active' => 1,
-            'created_by_id' => 1,
-            'updated_by_id' => 1,
-        ]);
 
         $countries = [
             ["name" => "Afghanistan", "code" => "AF", "continent" => "Asia", "continent_code" => "AS"],
@@ -363,61 +304,6 @@ class MasterSeeder extends Seeder
             ]);
         }
 
-        $positions = [
-            ["name" => "President Director / CEO", "parent" => "Executive Level"],
-            ["name" => "Vice President (VP)", "parent" => "Executive Level"],
-            ["name" => "Chief Operating Officer (COO)", "parent" => "Executive Level"],
-            ["name" => "Chief Technology Officer (CTO)", "parent" => "Executive Level"],
-            ["name" => "Chief Financial Officer (CFO)", "parent" => "Executive Level"],
-            ["name" => "Chief Marketing Officer (CMO)", "parent" => "Executive Level"],
-            ["name" => "Chief Commercial Officer (CCO)", "parent" => "Executive Level"],
-            ["name" => "Chief Information Officer (CIO)", "parent" => "Executive Level"],
-
-            ["name" => "Managing Director", "parent" => "Director Level"],
-            ["name" => "Director of Sales", "parent" => "Director Level"],
-            ["name" => "Director of Marketing", "parent" => "Director Level"],
-            ["name" => "Director of Operations", "parent" => "Director Level"],
-            ["name" => "IT Director", "parent" => "Director Level"],
-            ["name" => "Finance Director", "parent" => "Director Level"],
-            ["name" => "Business Development Director", "parent" => "Director Level"],
-
-            ["name" => "General Manager (GM)", "parent" => "Managerial Level"],
-            ["name" => "Senior Manager", "parent" => "Managerial Level"],
-            ["name" => "Marketing Manager", "parent" => "Managerial Level"],
-            ["name" => "Sales Manager", "parent" => "Managerial Level"],
-            ["name" => "Product Manager", "parent" => "Managerial Level"],
-            ["name" => "IT Manager", "parent" => "Managerial Level"],
-            ["name" => "Operations Manager", "parent" => "Managerial Level"],
-            ["name" => "Project Manager", "parent" => "Managerial Level"],
-
-            ["name" => "Business Analyst", "parent" => "Specialist / Staff Level"],
-            ["name" => "Software Engineer", "parent" => "Specialist / Staff Level"],
-            ["name" => "Network Engineer", "parent" => "Specialist / Staff Level"],
-            ["name" => "System Administrator", "parent" => "Specialist / Staff Level"],
-            ["name" => "Product Specialist", "parent" => "Specialist / Staff Level"],
-            ["name" => "Marketing Executive", "parent" => "Specialist / Staff Level"],
-            ["name" => "Sales Executive", "parent" => "Specialist / Staff Level"],
-            ["name" => "Finance Staff", "parent" => "Specialist / Staff Level"],
-            ["name" => "Admin Staff", "parent" => "Specialist / Staff Level"],
-
-            ["name" => "Consultant", "parent" => "Others"],
-            ["name" => "Investor", "parent" => "Others"],
-            ["name" => "Media / Journalist", "parent" => "Others"],
-            ["name" => "Government Official", "parent" => "Others"],
-            ["name" => "Academic / Lecturer", "parent" => "Others"],
-            ["name" => "Student", "parent" => "Others"],
-            ["name" => "Freelancer", "parent" => "Others"],
-            ["name" => "Others", "parent" => "Others"]
-        ];
-
-        foreach ($positions as $v => $stat) {
-            master_data::create([
-                'type' => 'job',
-                'code' => $v + 1,
-                'name' => $stat['name'],
-                'parent_code' => $stat['parent']
-            ]);
-        }
 
         //Type User
         $send_mail = [

@@ -1,12 +1,20 @@
 <div>
     <x-card>
+        <div class="flex justify-between items-center gap-2">
+            {{-- Filter kiri --}}
+            <div class="flex gap-1">
+                <x-select wire:model="select_status" :options="$status_list" placeholder="Filter by Status"
+                    wire:change="gotoPage(1)" />
+              
+            </div>
+        </div>
         <div class="flex justify-end mb-4">
             {{-- <x-input label="Search" placeholder="Search" wire:model="search" class="w-1/2" /> --}}
             <x-button label="Add" icon="o-plus" wire:click="showAddModal()" class="btn-primary btn-xs p-2" />
         </div>
 
         <x-hr target="gotoPage" />
-        <x-table class="text-xs" :headers="$t_headers" :rows="$userproduct">
+        <x-table class="text-xs" :headers="$t_headers" :rows="$userproduct" with-pagination>
             {{-- Special `row_number` scope --}}
 
             @scope('cell_avatar', $userproduct)

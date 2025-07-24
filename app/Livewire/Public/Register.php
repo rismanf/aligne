@@ -93,6 +93,11 @@ class Register extends Component
             Auth::login($user);
             session()->flash('success', 'Registration successful!');
             $this->reset();
+            $this->js(<<<JS
+                setTimeout(function () {
+                    window.location.href = "/user/profile"; // Redirect to user order page after 3 seconds
+                }, 3000);
+            JS);
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'Failed to create participant: ' . $e->getMessage());
