@@ -14,6 +14,7 @@ class Membership extends Component
     {
         $this->products = Product::with('classes')->get();
    
+   
     }
     public function render()
     {

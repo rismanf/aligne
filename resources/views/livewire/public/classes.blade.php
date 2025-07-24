@@ -4,17 +4,19 @@
 
         <div class="container">
 
-            <div class="section-title" data-aos="fade-up">
+            <div class="section-header" data-aos="fade-up">
                 <h2>Class</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
             </div>
-            <div class="row gy-4  justify-content-center">
+            <div class="row gy-4">
+
                 @foreach ($classes as $class)
                     <div class="col-lg-4">
-                        <article class="position-relative h-100">
+                        <article class="position-relative h-100 rounded-5">
 
-                            <div class="post-img position-relative overflow-hidden">
-                                <img src="{{ asset('storage/' . $class->image_original) }}" class="img-fluid" alt="">
+                            <div class="post-img position-relative overflow-hidden rounded-top-5">
+                                <img src="{{ asset('storage/' . $class->image_original) }}" class="img-fluid"
+                                    alt="">
                             </div>
 
                             <div class="post-content d-flex flex-column">

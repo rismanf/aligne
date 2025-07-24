@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Public;
 
+use App\Mail\CheckoutMembershipMail;
 use App\Models\Menu;
 use App\Models\UserProduk;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class Invoice extends Component
@@ -12,11 +14,13 @@ class Invoice extends Component
 
     public function mount($id)
     {
+        
        $this->invoice = UserProduk::with('product')->where('invoice_number', $id)->where('user_id', auth()->id())->first();
     //    dd($this->invoice);
     }
     public function render()
     {
+        
         $menu = Menu::where('name', 'About Us')->first();
 
         return view('livewire.public.invoice')->layout('components.layouts.website', [

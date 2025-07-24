@@ -2,8 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Product;
-use App\Models\UserProduk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,22 +9,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class CheckoutMembershipMail extends Mailable
+class PaymentNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $id;
-    public $data;
-    public $product;
+     public $data;
     /**
      * Create a new message instance.
      */
-    public function __construct($id)
+    public function __construct($data)
     {
-     
-        $this->data = UserProduk::with('user')->find( $id);
-        $this->product = Product::with('classes')->find($this->data->product_id);
-      
+        $this->data = $data;
     }
 
     /**
@@ -35,7 +28,7 @@ class CheckoutMembershipMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invoice payment',
+            subject: 'New Payment Confirmation',
         );
     }
 
@@ -45,7 +38,7 @@ class CheckoutMembershipMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.invoice',
+            view: 'email.newpayment',
         );
     }
 

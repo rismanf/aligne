@@ -87,6 +87,7 @@
                     </div>
                 </div>
             @endforeach
+            <x-button label="Add Class" wire:click="addClassKuota" sm />
             <x-markdown label="Description" wire:model="description" :config="$config" />
             {{-- Notice `omit-error` --}}
             {{-- <x-input label="Number" wire:model="number" omit-error hint="This is required, but we suppress the error message" /> --}}

@@ -94,7 +94,7 @@ class ProductList extends Component
             'price' => 'required|numeric',
             'valid_until' => 'required|numeric',
             'description' => 'required|string|max:255|min:10',
-            'class_kuotas.*.class_id' => 'required|exists:classes,id',
+            'class_kuotas.*.class_id' => 'required',
             'class_kuotas.*.kuota' => 'required|integer|min:1',
         ]);
 
@@ -152,7 +152,7 @@ class ProductList extends Component
             'price' => 'required|numeric',
             'valid_until' => 'required|numeric',
             'description' => 'required|string|max:255|min:10',
-            'class_kuotas.*.class_id' => 'required|exists:classes,id',
+            'class_kuotas.*.class_id' => 'required',
             'class_kuotas.*.kuota' => 'required|integer|min:1',
         ]);
 

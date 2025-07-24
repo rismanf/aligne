@@ -32,7 +32,7 @@ class Checkout extends Component
         }
 
         $invoiceNumber = 'INV-' . strtoupper(substr(uniqid(), 0, 5));
-        $data =UserProduk::create(
+        $data = UserProduk::create(
             [
                 'invoice_number' => $invoiceNumber,
                 'unique_code' => $this->uniqueCode,
@@ -47,10 +47,9 @@ class Checkout extends Component
             ]
         );
 
-      
+
         try {
             Mail::to($this->email)->send(new CheckoutMembershipMail($data->id));
-
             Log::info('send mail ' . $this->email);
         } catch (\Exception $e) {
             Log::error('Gagal kirim email: ' . $e->getMessage());
