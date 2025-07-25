@@ -93,6 +93,7 @@ class GroupClassList extends Component
         ]);
 
         if ($this->image) {
+            
             $url = $this->image->store('class', 'public');
         }
 
@@ -132,15 +133,17 @@ class GroupClassList extends Component
     public function update()
     {
         $this->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_edit' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255|min:10',
         ]);
 
         $class = GroupClass::find($this->id);
         $url = $class->image_original;
+        // dd($this->image_edit);
         if ($this->image_edit) {
-            $url = $this->image->store('class', 'public');
+            
+            $url = $this->image_edit->store('class', 'public');
         }
         $class->name = $this->name;
         $class->description = $this->description;

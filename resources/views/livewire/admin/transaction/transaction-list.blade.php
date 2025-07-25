@@ -5,7 +5,7 @@
             <div class="flex gap-1">
                 <x-select wire:model="select_status" :options="$status_list" placeholder="Filter by Status"
                     wire:change="gotoPage(1)" />
-              
+
             </div>
         </div>
         <div class="flex justify-end mb-4">
@@ -37,7 +37,7 @@
             <p>Membership : {{ $product }}</p>
             <p>Bank : {{ $payment_method }}</p>
             <p>Price : IDR {{ number_format($total_price, 0, ',', '.') }}</p>
-            <img src="{{ '/storage/' . $payment_proof }}" alt="payment_proof" class="w-1/2" />
+            <img src="{{ asset('storage/' . $payment_proof) }}" alt="payment_proof" class="w-1/2" />
             <p>Payed At :{{ $paid_at }}</p>
 
             {{-- Notice `omit-error` --}}
