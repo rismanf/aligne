@@ -80,6 +80,11 @@ Route::get('/register', Register::class)->name('register');
 // Route::get('/vcard', Vcard::class)->name('vcard');
 
 // });
+Route::get('/storage-link', function () {
+    $targetForder = storage_path('app/public');
+    $linkPublic = $_SERVER['DOCUMENT_ROOT'] . '/storage';
+    symlink($targetForder, $linkPublic);
+});
 
 
 // Route::get('/', function () {
