@@ -5,7 +5,7 @@
 
             <div class="carousel-item active">
                 <img src="{{ asset('assets/img/hero.jpg') }}" alt="">
-                <div class="container col-4">
+                <div class="container col-lg-4 col-auto ">
                     <h2>Discover Your Strongest Self</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                         labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco

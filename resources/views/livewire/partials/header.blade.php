@@ -15,23 +15,26 @@
                   <li><a href="{{ route('membership') }}">Membership</a></li>
                   <li><a href="{{ route('contact-us') }}">Contact</a></li>
                   <li>
-                      @guest
-                          <form action="{{ route('login') }}" method="GET">
-                              <button type="submit" class="cta-btn">Login</button>
-                          </form>
-                      @else
-                          @hasrole('Admin')
-                              <form action="{{ route('admin.home') }}" method="GET">
-                                  @csrf
-                                  <button type="submit" class="cta-btn">{{ Auth::user()->name }}dd</button>
+                      <div style="padding-left: 20px">
+                          @guest
+                              <form action="{{ route('login') }}" method="GET">
+                                  <button type="submit" class="cta-btn">Login</button>
                               </form>
                           @else
-                              <form action="{{ route('user.profile') }}" method="GET">
-                                  @csrf
-                                  <button type="submit" class="cta-btn">{{ Auth::user()->name . Auth::user()->role }}</button>
-                              </form>
-                          @endhasrole
-                      @endguest
+                              @hasrole('Admin')
+                                  <form action="{{ route('admin.home') }}" method="GET">
+                                      @csrf
+                                      <button type="submit" class="cta-btn">{{ Auth::user()->name }}</button>
+                                  </form>
+                              @else
+                                  <form action="{{ route('user.profile') }}" method="GET">
+                                      @csrf
+                                      <button type="submit"
+                                          class="cta-btn">{{ Auth::user()->name . Auth::user()->role }}</button>
+                                  </form>
+                              @endhasrole
+                          @endguest
+                      </div>
                   </li>
 
               </ul>

@@ -31,42 +31,44 @@
                         </div>
                     @endif
                     <h3>My Order Details</h3>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Invoice ID</th>
-                                <th>Product Name</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($orders as $order)
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $order->invoice_number }}</td>
-                                    <td>{{ $order->product->name }}</td>
-                                    <td>IDR {{ number_format($order->total_price, 0, ',', '.') }}</td>
-                                    <td>{{ $order->payment_status }}</td>
-                                    <td>{{ $order->created_at->format('d-m-Y') }}</td>
-                                    <td>
-                                        @if ($order->product->deleted_at == null)
-                                            @if ($order->payment_status == 'unpaid')
-                                                <button
-                                                    wire:click="showModal({{ $order->id }}, '{{ $order->invoice_number }}')"
-                                                    class="btn btn-primary">
-                                                    Pay Now
-                                                </button>
-                                            @endif
-                                        @endif
-                                    </td>
+                                    <th>#</th>
+                                    <th>Invoice ID</th>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($orders as $order)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $order->invoice_number }}</td>
+                                        <td>{{ $order->product->name }}</td>
+                                        <td>IDR {{ number_format($order->total_price, 0, ',', '.') }}</td>
+                                        <td>{{ $order->payment_status }}</td>
+                                        <td>{{ $order->created_at->format('d-m-Y') }}</td>
+                                        <td>
+                                            @if ($order->product->deleted_at == null)
+                                                @if ($order->payment_status == 'unpaid')
+                                                    <button
+                                                        wire:click="showModal({{ $order->id }}, '{{ $order->invoice_number }}')"
+                                                        class="btn btn-primary">
+                                                        Pay Now
+                                                    </button>
+                                                @endif
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
             </div>
