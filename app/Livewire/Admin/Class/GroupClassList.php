@@ -94,7 +94,7 @@ class GroupClassList extends Component
 
         if ($this->image) {
             
-            $url = $this->image->store('class', 'public');
+            $url = $this->image->store('groupclass', 'public');
         }
 
         GroupClass::create([
@@ -143,7 +143,7 @@ class GroupClassList extends Component
         // dd($this->image_edit);
         if ($this->image_edit) {
             
-            $url = $this->image_edit->store('class', 'public');
+            $url = $this->image_edit->store('groupclass', 'public');
         }
         $class->name = $this->name;
         $class->description = $this->description;
