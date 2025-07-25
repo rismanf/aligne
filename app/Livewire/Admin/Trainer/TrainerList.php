@@ -18,7 +18,7 @@ class TrainerList extends Component
     public bool $editForm = false;
     public bool $detailForm = false;
     public bool $deleteForm = false;
-    public $photo,$avatar_edit;
+    public $photo, $avatar_edit;
     public function render()
     {
         $title = 'Trainer Management';
@@ -73,7 +73,7 @@ class TrainerList extends Component
             'title' => 'nullable|string|max:255',
             'avatar' => 'nullable|image|max:1024',
         ]);
-$url = null;
+        $url = null;
         if ($this->avatar) {
             $url = $this->avatar->store('trainer', 'public');
         }

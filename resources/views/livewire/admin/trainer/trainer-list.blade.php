@@ -9,7 +9,7 @@
         <x-table class="text-xs" :headers="$t_headers" :rows="$trainers">
             {{-- Special `row_number` scope --}}
             @scope('cell_avatar', $trainers)
-                <x-avatar image="{{ $trainers->avatar ? '/storage/' . $trainers->avatar : asset('/image/empty-user.webp') }}"
+                <x-avatar image="{{ $trainers->avatar ? asset('storage/' . $trainers->avatar) : asset('/image/empty-user.webp') }}"
                     class="!w-10" />
             @endscope
 

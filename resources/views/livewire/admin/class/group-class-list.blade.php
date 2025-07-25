@@ -18,8 +18,7 @@
         <x-table class="text-xs" :headers="$t_headers" :rows="$class">
             {{-- Special `row_number` scope --}}
             @scope('cell_image_original', $class)
-                <img src="{{ asset('storage/' . $class->image_original) }}" alt="Image"
-                    class="w-50 h-20 rounded shadow" />
+                <img src="{{ asset('storage/' . $class->image_original) }}" alt="Image" class="w-50 h-20 rounded shadow" />
             @endscope
             {{-- Special `actions` slot --}}
             @scope('cell_action', $class)
