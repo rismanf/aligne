@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Class;
 
 use App\Models\GroupClass;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -142,7 +143,10 @@ class GroupClassList extends Component
         $url = $class->image_original;
         // dd($this->image_edit);
         if ($this->image_edit) {
-            
+             if ($class->image_original && Storage::disk('public')->exists($class->image_original)) {
+                Storage::disk('public')->delete($class->image_original);
+            }
+
             $url = $this->image_edit->store('groupclass', 'public');
         }
         $class->name = $this->name;
