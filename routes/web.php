@@ -127,6 +127,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/categoriesproduct', ProductCategory::class)->name('categoriesproduct.index');
     Route::get('/schedule', ScheduleList::class)->name('schedule.index');
     Route::get('/qr-scanner', App\Livewire\Admin\QRScanner::class)->name('qr-scanner');
+    Route::get('/member', App\Livewire\Admin\Member\MemberList::class)->name('member.index');
 
 
     // Route::get('/vcard', ListVcard::class)->name('vcard.index');
