@@ -15,7 +15,7 @@
         </div>
 
         <x-hr target="gotoPage" />
-        <x-table class="text-xs" :headers="$t_headers" :rows="$class">
+        <x-table class="text-xs" :headers="$t_headers" :rows="$class" with-pagination>
             {{-- Special `row_number` scope --}}
 
 

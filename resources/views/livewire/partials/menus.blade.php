@@ -26,7 +26,11 @@
                 </x-menu-sub>
 
                 <x-menu-item title="Trainer" icon="o-identification" link="{{ route('admin.trainer.index') }}" />
-                <x-menu-item title="Membership" icon="o-users" link="{{ route('admin.product.index') }}" />
+                 <x-menu-sub title="Membership Management" icon="o-users" link="#">
+                    <x-menu-item title="Paket" icon="o-stop" link="{{ route('admin.product.index') }}" />
+                    <x-menu-item title="Paket Group" icon="o-stop" link="{{ route('admin.categoriesproduct.index') }}" />
+                </x-menu-sub>
+
                 <x-menu-item title="Schedule" icon="o-calendar-days" link="{{ route('admin.schedule.index') }}" />
                 <x-menu-item title="Visit" icon="o-qr-code" link="{{ route('admin.visit.index') }}" />
             @endcan

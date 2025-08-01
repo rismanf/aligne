@@ -4,8 +4,7 @@ namespace App\Livewire\Admin\Schedule;
 
 use App\Models\Classes;
 use App\Models\GroupClass;
-use App\Models\Schedule;
-use App\Models\ScheduleTime;
+use App\Models\ClassSchedules;
 use App\Models\Trainer;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -24,20 +23,11 @@ class ScheduleList extends Component
     public $selectedDate;
     public $availableDates = [];
 
-    public $all_schedule_times;
-
-    public $class_level_id, $trainer_id, $class_id, $quota, $id;
+    public $name, $start_time, $end_time, $trainer_id, $class_id, $capacity, $duration, $id;
     public $class_level = [
-        ['id' => '1', 'name' => 'BEGINNER'],
-        ['id' => '2', 'name' => 'INTERMEDIATE'],
-        ['id' => '3', 'name' => 'ADVANCED'],
-        ['id' => '4', 'name' => 'ALL LEVEL'],
-        ['id' => '5', 'name' => 'YOGA'],
-        ['id' => '6', 'name' => 'STRETCH YOGA'],
-        ['id' => '7', 'name' => 'MAT PILATES'],
-        ['id' => '8', 'name' => 'BARRE'],
-        ['id' => '9', 'name' => 'AERIAL'],
-        ['id' => '10', 'name' => 'DANCE / FUSION'],
+        'beginner' => 'Beginner',
+        'intermediate' => 'Intermediate', 
+        'advanced' => 'Advanced',
     ];
 
     public $calases_group;
@@ -48,7 +38,7 @@ class ScheduleList extends Component
     {
         $this->calases_group = GroupClass::select('id', 'name')->get()->toArray();
 
-        $this->selectedgroupclass = $this->calases_group[0]['id'];
+        $this->selectedgroupclass = $this->calases_group[0]['id'] ?? 1;
 
         $this->trainer_data = Trainer::select('id', 'name')->get()->toArray();
 
@@ -61,25 +51,26 @@ class ScheduleList extends Component
 
     public function classChanged()
     {
-        $this->reset(['editForm', 'class_level_id', 'trainer_id', 'class_id', 'quota', 'id']);
+        $this->reset(['editForm', 'start_time', 'end_time', 'trainer_id', 'class_id', 'capacity', 'id']);
     }
 
-    public function showEditModal($timeId)
+    public function showEditModal($scheduleId = null)
     {
-        $this->id = $timeId;
+        $this->id = $scheduleId;
 
-        $schedule = Schedule::where('schedule_date', $this->selectedDate)
-            ->where('group_class_id', $this->selectedgroupclass)
-            ->where('time_id', $timeId)
-            ->first();
-
-        if ($schedule) {
-            $this->class_level_id = $schedule->level_class_id;
-            $this->class_id = $schedule->class_id;
-            $this->trainer_id = $schedule->trainer_id;
-            $this->quota = $schedule->quota;
+        if ($scheduleId) {
+            $schedule = ClassSchedules::find($scheduleId);
+            
+            if ($schedule) {
+                $this->name = $schedule->name;
+                $this->start_time = $schedule->start_time->format('H:i');
+                $this->end_time = $schedule->end_time->format('H:i');
+                $this->class_id = $schedule->class_id;
+                $this->trainer_id = $schedule->trainer_id;
+                $this->capacity = $schedule->capacity;
+            }
         } else {
-            $this->reset(['class_level_id', 'trainer_id', 'class_id', 'quota']);
+            $this->reset(['name', 'start_time', 'end_time', 'trainer_id', 'class_id', 'capacity']);
         }
 
         $this->editForm = true;
@@ -88,80 +79,145 @@ class ScheduleList extends Component
     public function update()
     {
         $this->validate([
-            'class_level_id' => 'required',
+            'name' => 'required|string|max:200',
+            'start_time' => 'required',
+            'end_time' => 'required',
             'class_id' => 'required',
             'trainer_id' => 'required',
-            // 'quota' => 'required|integer|min:1',
+            'capacity' => 'required|integer|min:1',
         ]);
-        $this->quota = 8;
-        if ($this->selectedgroupclass == 1) {
-            $this->quota = 8;
-        }
-        if ($this->selectedgroupclass == 2) {
-            $this->quota = 4;
-        }
-        if ($this->selectedgroupclass == 3) {
-            $this->quota = 8;
+
+        // Set default capacity based on group class if not provided
+        if (!$this->capacity) {
+            if ($this->selectedgroupclass == 1) { // REFORMER
+                $this->capacity = 8;
+            } elseif ($this->selectedgroupclass == 2) { // CHAIR
+                $this->capacity = 4;
+            } else { // FUNCTIONAL
+                $this->capacity = 8;
+            }
         }
 
-        Schedule::updateOrCreate(
-            [
-                'schedule_date' => $this->selectedDate,
-                'group_class_id' => $this->selectedgroupclass,
-                'group_class_name' => $this->calases_group[$this->selectedgroupclass - 1]['name'] ?? null,
-                'time_id' => $this->id,
-            ],
-            [
-                'trainer_id' => $this->trainer_id,
-                'level_class_id' => $this->class_level_id,
-                'level_class' => $this->class_level[$this->class_level_id - 1]['name'] ?? null,
+        $startDateTime = Carbon::parse($this->selectedDate . ' ' . $this->start_time);
+        $endDateTime = Carbon::parse($this->selectedDate . ' ' . $this->end_time);
+        $duration = $startDateTime->diffInMinutes($endDateTime);
+
+        // Generate name if not provided
+        if (!$this->name) {
+            $class = Classes::find($this->class_id);
+            $this->name = $class->name . ' - ' . $startDateTime->format('H:i');
+        }
+
+        if ($this->id) {
+            // Update existing schedule
+            $schedule = ClassSchedules::find($this->id);
+            $schedule->update([
+                'name' => $this->name,
                 'class_id' => $this->class_id,
-                'time' => ScheduleTime::find($this->id)?->time,
-                'quota' => $this->quota,
-            ]
-        );
+                'trainer_id' => $this->trainer_id,
+                'start_time' => $startDateTime,
+                'end_time' => $endDateTime,
+                'duration' => $duration,
+                'capacity' => $this->capacity,
+                'is_active' => true,
+            ]);
+        } else {
+            // Create new schedule
+            ClassSchedules::create([
+                'name' => $this->name,
+                'class_id' => $this->class_id,
+                'trainer_id' => $this->trainer_id,
+                'start_time' => $startDateTime,
+                'end_time' => $endDateTime,
+                'duration' => $duration,
+                'capacity' => $this->capacity,
+                'capacity_book' => 0,
+                'is_active' => true,
+            ]);
+        }
 
-        $this->reset(['editForm', 'class_level_id', 'trainer_id', 'class_id', 'quota', 'id']);
+        $this->reset(['editForm', 'name', 'start_time', 'end_time', 'trainer_id', 'class_id', 'capacity', 'id']);
         $this->toast('success', 'Schedule Updated');
     }
 
-    public function showDeleteModal($timeId)
+    public function showDeleteModal($scheduleId)
     {
-        $this->id = $timeId;
-
+        $this->id = $scheduleId;
         $this->deleteForm = true;
     }
 
     public function delete()
     {
-        Schedule::where('time_id', $this->id)->delete();
+        ClassSchedules::find($this->id)->delete();
         $this->reset(['deleteForm', 'id']);
         $this->toast('success', 'Schedule Deleted');
     }
 
+    public function addScheduleAtTime($startTime, $endTime)
+    {
+        $this->reset(['name', 'trainer_id', 'class_id', 'capacity', 'id']);
+        $this->start_time = $startTime;
+        $this->end_time = $endTime;
+        $this->editForm = true;
+    }
+
     public function render()
     {
-        $this->all_schedule_times = ScheduleTime::where('group_class_id', $this->selectedgroupclass)->get();
+        $title = 'Schedule Management';
+        $breadcrumbs = [
+            [
+                'link' => route("admin.home"),
+                'label' => 'Home',
+                'icon' => 's-home',
+            ],
+            [
+                'label' => 'Schedule',
+            ],
+        ];
 
-        $this->schedule_data = Schedule::with('trainer', 'classes')
-            ->where('group_class_id', $this->selectedgroupclass)
-            ->where('schedule_date', $this->selectedDate)
+        // Get schedules for selected group class and date
+        $this->schedule_data = ClassSchedules::with('trainer', 'classes')
+            ->whereHas('classes', function($query) {
+                $query->where('group_class_id', $this->selectedgroupclass);
+            })
+            ->whereDate('start_time', $this->selectedDate)
+            ->orderBy('start_time')
             ->get();
-        // echo $this->schedule_data;
-        // dd($this->schedule_data);
-        $this->calases = Classes::select('id', 'name')->where('group_class_id', $this->selectedgroupclass)->get()->toArray();
+
+        // Get classes for selected group
+        $this->calases = Classes::select('id', 'name')
+            ->where('group_class_id', $this->selectedgroupclass)
+            ->get()
+            ->toArray();
+
+        // Generate time slots (8:00 - 20:00, every hour)
+        $timeSlots = [];
+        for ($hour = 8; $hour <= 19; $hour++) {
+            $startTime = sprintf('%02d:00', $hour);
+            $endTime = sprintf('%02d:00', $hour + 1);
+            
+            // Check if this time slot has a schedule
+            $existingSchedule = $this->schedule_data->first(function($schedule) use ($startTime) {
+                return $schedule->start_time->format('H:i') === $startTime;
+            });
+            
+            $timeSlots[] = [
+                'start_time' => $startTime,
+                'end_time' => $endTime,
+                'schedule' => $existingSchedule,
+                'is_available' => !$existingSchedule
+            ];
+        }
+
         return view('livewire.admin.schedule.schedule-list', [
             'schedule_data' => $this->schedule_data,
-            'all_schedule_times' => $this->all_schedule_times,
             'calases' => $this->calases,
-            't_headers' => [], // kosongkan jika tak dipakai
+            'timeSlots' => $timeSlots,
+            't_headers' => [],
             'schedules' => [],
         ])->layout('components.layouts.app', [
-            'breadcrumbs' => [
-                ['link' => route("admin.home"), 'label' => 'Home', 'icon' => 's-home'],
-                ['label' => 'Schedule'],
-            ],
-            'title' => 'Schedule Management',
+            'breadcrumbs' => $breadcrumbs,
+            'title' => $title,
         ]);
     }
 }

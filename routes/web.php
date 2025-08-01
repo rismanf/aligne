@@ -15,6 +15,8 @@ use App\Livewire\Admin\Participant\AddParticipant;
 use App\Livewire\Admin\Participant\ListParticipant;
 use App\Livewire\Admin\Participant\PaymentParticipant;
 use App\Livewire\Admin\Product\ProductList;
+use App\Livewire\Admin\Product\ProductCategory;
+use App\Livewire\Admin\Product\CategoryManager;
 use App\Livewire\Admin\Question\ListQuestion;
 use App\Livewire\Admin\Role\ListRole;
 use App\Livewire\Admin\Role\RoleShow;
@@ -69,7 +71,9 @@ Route::get('/', Home::class)->name('/');
 Route::get('/about-us', AboutUs::class)->name('about-us');
 Route::get('/classes', Classes::class)->name('classes');
 Route::get('/classes-detail/{id}/{date}', DetailClass::class)->name('detail-class');
+Route::get('/class-schedules', App\Livewire\Public\ClassSchedules::class)->name('class-schedules');
 Route::get('/checkout_class/{id}', CheckoutClass::class)->name('checkout_class');
+Route::get('/book-class/{id}', App\Livewire\Public\CheckoutClassEnhanced::class)->name('book-class');
 Route::get('/membership', Membership::class)->name('membership');
 Route::get('/checkout/{id}', Checkout::class)->name('checkout');
 Route::get('/invoice/{id}', Invoice::class)->name('invoice');
@@ -99,7 +103,8 @@ Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
     Route::get('/profile', App\Livewire\User\Profile::class)->name('profile');
     Route::get('/order', App\Livewire\User\Order::class)->name('order');
     Route::get('/booking', App\Livewire\User\Booking::class)->name('booking');
-    Route::get('/dashboard', App\Livewire\User\Home::class)->name('dashboard');
+    Route::get('/my-bookings/{bookingId?}', App\Livewire\User\BookingInvoice::class)->name('my-bookings');
+    Route::get('/dashboard', App\Livewire\User\Dashboard::class)->name('dashboard');
 
     Route::get('/participant', App\Livewire\User\Participant\AddParticipant::class)->name('participant.index');
     // Route::get('/participant/create', AddParticipant::class)->name('participant.create');
@@ -118,7 +123,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/trainer', TrainerList::class)->name('trainer.index');
     Route::get('/transaction', TransactionList::class)->name('transaction.index');
     Route::get('/product', ProductList::class)->name('product.index');
+    Route::get('/categoriesproduct', ProductCategory::class)->name('categoriesproduct.index');
     Route::get('/schedule', ScheduleList::class)->name('schedule.index');
+    Route::get('/qr-scanner', App\Livewire\Admin\QRScanner::class)->name('qr-scanner');
 
 
     // Route::get('/vcard', ListVcard::class)->name('vcard.index');

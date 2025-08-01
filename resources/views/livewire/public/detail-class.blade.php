@@ -133,7 +133,7 @@
             @foreach ($days as $day)
                 @php
                     $hasSchedule = $schedule->contains(function ($s) use ($day) {
-                        return \Carbon\Carbon::parse($s->schedule_date)->toDateString() === $day->toDateString();
+                        return \Carbon\Carbon::parse($s->start_time)->toDateString() === $day->toDateString();
                     });
                 @endphp
                 <a href="{{ route('detail-class', ['id' => $id, 'date' => $day->toDateString()]) }}" class="day">
@@ -161,55 +161,48 @@
                                 <div
                                     class="border rounded p-3 bg-light d-flex justify-content-between align-items-center">
                                     <!-- Left Section -->
-                                    <div class="d-flex align-items-center" style="gap: 1rem;">
-                                        <div class="fw-bold fs-5">{{ Carbon::parse($val->time)->format('h:i A') }}
-                                        </div>
-                                        <div>
-                                            <div class="fw-semibold">{{ $val->classes->name }}</div>
-                                            <div class="fw-muted">{{ $val->level_class }}</div>
-                                        </div>
-                                    </div>
+                    <div class="d-flex align-items-center" style="gap: 1rem;">
+                        <div class="fw-bold fs-5">{{ Carbon::parse($val->start_time)->format('h:i A') }}
+                        </div>
+                        <div>
+                            <div class="fw-semibold">{{ $val->classes->name }}</div>
+                            <div class="fw-muted">{{ $val->classes->level_class }}</div>
+                        </div>
+                    </div>
 
-                                    <!-- Middle Section -->
-                                    <div class="text-center">
-                                        <div class="fw-muted ">Trainer : {{ $val->trainer->name }}</div>
-                                        <div class="text-muted mb-1">Quota Available : {{ $val->quota }}</div>
-                                    </div>
+                    <!-- Middle Section -->
+                    <div class="text-center">
+                        <div class="fw-muted ">Trainer : {{ $val->trainer->name }}</div>
+                        <div class="text-muted mb-1">Available : {{ $val->capacity - $val->capacity_book }}/{{ $val->capacity }}</div>
+                    </div>
 
                                     <!-- Right Section -->
 
-                                    @if ($val->quota == 0)
-                                        <div class="text-end">
-                                            <a href="#" class="btn btn-danger rounded-pill px-4">Full</a>
-                                        </div>
-                                    @else
-                                        @php
-                                            $scheduleDateTime = \Carbon\Carbon::parse($date . ' ' . $val->time);
-                                            $now = \Carbon\Carbon::now();
+                    @php
+                        $availableSlots = $val->capacity - $val->capacity_book;
+                        $scheduleDateTime = \Carbon\Carbon::parse($val->start_time);
+                        $now = \Carbon\Carbon::now();
+                        $diffInHours = $now->diffInHours($scheduleDateTime, false);
+                    @endphp
 
-                                            $diffInHours = $now->diffInHours($scheduleDateTime, false); // false untuk bisa hasil negatif
-
-                                        @endphp
-
-                                        @if ($date < now()->toDateString())
-                                            <div class="text-end">
-                                                    <a href="#"
-                                                        class="btn btn-danger rounded-pill px-4">Expired</a>
-                                                </div>
-                                        @else
-                                            @if ($diffInHours < 0)
-                                                <div class="text-end">
-                                                    <a href="#"
-                                                        class="btn btn-danger rounded-pill px-4">Expired</a>
-                                                </div>
-                                            @else
-                                                <div class="text-end">
-                                                    <a href="{{ route('checkout_class', $val->id) }}"
-                                                        class="btn btn-primary rounded-pill px-4">Checkout</a>
-                                                </div>
-                                            @endif
-                                        @endif
-                                    @endif
+                    @if ($availableSlots == 0)
+                        <div class="text-end">
+                            <a href="#" class="btn btn-danger rounded-pill px-4">Full</a>
+                        </div>
+                    @elseif ($scheduleDateTime->isPast())
+                        <div class="text-end">
+                            <a href="#" class="btn btn-danger rounded-pill px-4">Expired</a>
+                        </div>
+                    @elseif ($diffInHours < 1)
+                        <div class="text-end">
+                            <a href="#" class="btn btn-warning rounded-pill px-4">Too Late</a>
+                        </div>
+                    @else
+                        <div class="text-end">
+                            <a href="{{ route('checkout_class', $val->id) }}"
+                                class="btn btn-primary rounded-pill px-4">Book Now</a>
+                        </div>
+                    @endif
 
                                 </div>
                             </div>

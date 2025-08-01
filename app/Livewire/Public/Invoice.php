@@ -4,7 +4,7 @@ namespace App\Livewire\Public;
 
 use App\Mail\CheckoutMembershipMail;
 use App\Models\Menu;
-use App\Models\UserProduk;
+use App\Models\UserMembership;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
@@ -14,19 +14,24 @@ class Invoice extends Component
 
     public function mount($id)
     {
-        
-       $this->invoice = UserProduk::with('product')->where('invoice_number', $id)->where('user_id', auth()->id())->first();
-    //    dd($this->invoice);
+        $this->invoice = UserMembership::with(['membership', 'user'])
+            ->where('invoice_number', $id)
+            ->where('user_id', auth()->id())
+            ->first();
+            
+        if (!$this->invoice) {
+            abort(404, 'Invoice not found');
+        }
     }
+    
     public function render()
     {
-        
         $menu = Menu::where('name', 'About Us')->first();
 
         return view('livewire.public.invoice')->layout('components.layouts.website', [
-            'title' => $menu->title,
-            'description' => $menu->description,
-            'keywords' => $menu->keywords,
+            'title' => $menu->title ?? 'Invoice',
+            'description' => $menu->description ?? 'Your membership invoice',
+            'keywords' => $menu->keywords ?? 'invoice, membership, payment',
             'image' => asset('images/logo.png'),
             'url' => url()->current(),
         ]);
