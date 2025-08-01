@@ -17,11 +17,14 @@ class ScheduleList extends Component
 
     public bool $editForm = false;
     public bool $deleteForm = false;
+    public bool $copyScheduleModal = false;
 
     public $schedule_data;
     public $selectedgroupclass;
     public $selectedDate;
     public $availableDates = [];
+    public $copyFromDate;
+    public $copyToDate;
 
     public $name, $start_time, $end_time, $trainer_id, $class_id, $capacity, $duration, $id;
     public $class_level = [
@@ -160,6 +163,80 @@ class ScheduleList extends Component
         $this->start_time = $startTime;
         $this->end_time = $endTime;
         $this->editForm = true;
+    }
+
+    public function showCopyScheduleModal()
+    {
+        $this->copyFromDate = $this->selectedDate;
+        $this->copyToDate = '';
+        $this->copyScheduleModal = true;
+    }
+
+    public function copySchedule()
+    {
+        $this->validate([
+            'copyFromDate' => 'required|date',
+            'copyToDate' => 'required|date|after_or_equal:today',
+        ]);
+
+        // Get schedules from the source date
+        $sourceSchedules = ClassSchedules::with('trainer', 'classes')
+            ->whereHas('classes', function($query) {
+                $query->where('group_class_id', $this->selectedgroupclass);
+            })
+            ->whereDate('start_time', $this->copyFromDate)
+            ->get();
+
+        if ($sourceSchedules->isEmpty()) {
+            $this->toast('warning', 'No schedules found on the selected date');
+            return;
+        }
+
+        // Check if target date already has schedules
+        $existingSchedules = ClassSchedules::whereHas('classes', function($query) {
+            $query->where('group_class_id', $this->selectedgroupclass);
+        })
+        ->whereDate('start_time', $this->copyToDate)
+        ->count();
+
+        if ($existingSchedules > 0) {
+            $this->toast('warning', 'Target date already has schedules. Please choose a different date.');
+            return;
+        }
+
+        $copiedCount = 0;
+        foreach ($sourceSchedules as $schedule) {
+            // Calculate new datetime for target date
+            $originalDateTime = Carbon::parse($schedule->start_time);
+            $newStartTime = Carbon::parse($this->copyToDate)
+                ->setTime($originalDateTime->hour, $originalDateTime->minute, $originalDateTime->second);
+            
+            $originalEndDateTime = Carbon::parse($schedule->end_time);
+            $newEndTime = Carbon::parse($this->copyToDate)
+                ->setTime($originalEndDateTime->hour, $originalEndDateTime->minute, $originalEndDateTime->second);
+
+            // Create new schedule
+            ClassSchedules::create([
+                'name' => $schedule->name,
+                'class_id' => $schedule->class_id,
+                'trainer_id' => $schedule->trainer_id,
+                'date' => $this->copyToDate,
+                'start_time' => $newStartTime,
+                'end_time' => $newEndTime,
+                'duration' => $schedule->duration,
+                'capacity' => $schedule->capacity,
+                'capacity_book' => 0,
+                'is_active' => true,
+            ]);
+
+            $copiedCount++;
+        }
+
+        $this->copyScheduleModal = false;
+        $this->toast('success', "Successfully copied {$copiedCount} schedules to " . Carbon::parse($this->copyToDate)->format('d M Y'));
+        
+        // Update selected date to show the copied schedules
+        $this->selectedDate = $this->copyToDate;
     }
 
     public function render()
