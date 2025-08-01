@@ -16,6 +16,7 @@ class ClassBooking extends Model
         'user_membership_id',
         'class_schedule_id',
         'booking_status',
+        'reformer_position',
         'booking_code',
         'qr_token',
         'visit_status',
