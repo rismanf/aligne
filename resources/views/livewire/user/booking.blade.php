@@ -149,10 +149,18 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('user.my-bookings', $booking['id']) }}" 
-                                                       class="btn btn-outline-primary btn-sm">
-                                                        <i class="bi bi-eye"></i> View
-                                                    </a>
+                                                    <div class="btn-group-vertical btn-group-sm">
+                                                        <a href="{{ route('user.my-bookings', $booking['id']) }}" 
+                                                           class="btn btn-outline-primary btn-sm mb-1">
+                                                            <i class="bi bi-eye"></i> View
+                                                        </a>
+                                                        @if($booking['visit_status'] == 'visited')
+                                                            <a href="{{ route('user.feedback', $booking['id']) }}" 
+                                                               class="btn btn-outline-warning btn-sm">
+                                                                <i class="bi bi-star"></i> Feedback
+                                                            </a>
+                                                        @endif
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach

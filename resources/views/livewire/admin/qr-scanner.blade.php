@@ -1,5 +1,4 @@
 <div>
-    <x-mary-header title="QR Code Scanner" subtitle="Scan member booking QR codes for check-in" />
 
     <div class="max-w-4xl mx-auto">
         <!-- Scanner Interface -->
@@ -75,6 +74,9 @@
                             <div>
                                 <span class="font-medium text-gray-600">Booking Code:</span>
                                 <div class="font-mono text-gray-900">{{ $scanResult['booking_code'] }}</div>
+                                @if($scanResult['qr_verified'])
+                                    <small class="text-green-600"><i class="fas fa-check-circle"></i> QR Verified</small>
+                                @endif
                             </div>
                             <div>
                                 <span class="font-medium text-gray-600">Class:</span>

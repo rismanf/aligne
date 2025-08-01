@@ -32,7 +32,7 @@
                 </x-menu-sub>
 
                 <x-menu-item title="Schedule" icon="o-calendar-days" link="{{ route('admin.schedule.index') }}" />
-                <x-menu-item title="Visit" icon="o-qr-code" link="{{ route('admin.visit.index') }}" />
+                <x-menu-item title="QR Scanner" icon="o-qr-code" link="{{ route('admin.qr-scanner') }}" />
             @endcan
             {{-- @can('participant-list')
                 <x-menu-item title="Participants" icon="o-user-group" link="{{ route('admin.participant.index') }}" />

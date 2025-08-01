@@ -114,7 +114,7 @@ class ScheduleList extends Component
             $schedule->update([
                 'name' => $this->name,
                 'class_id' => $this->class_id,
-                'trainer_id' => $this->trainer_id,
+                'trainer_id' => $this->trainer_id,               
                 'start_time' => $startDateTime,
                 'end_time' => $endDateTime,
                 'duration' => $duration,
@@ -127,6 +127,7 @@ class ScheduleList extends Component
                 'name' => $this->name,
                 'class_id' => $this->class_id,
                 'trainer_id' => $this->trainer_id,
+                 'date'=> $this->selectedDate,
                 'start_time' => $startDateTime,
                 'end_time' => $endDateTime,
                 'duration' => $duration,

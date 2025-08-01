@@ -78,7 +78,12 @@
 
                         <!-- Action Buttons -->
                         <div class="d-grid gap-2">
-                            @if($booking['can_cancel'])
+                            @if($booking['visit_status'] == 'visited')
+                                <!-- Show feedback button for attended classes -->
+                                <a href="{{ route('user.feedback', $booking['id']) }}" class="btn btn-warning">
+                                    <i class="fas fa-star"></i> Share Your Experience
+                                </a>
+                            @elseif($booking['can_cancel'])
                                 <button wire:click="cancelBooking"
                                         onclick="return confirm('Are you sure you want to cancel this booking?')"
                                         class="btn btn-outline-danger">
