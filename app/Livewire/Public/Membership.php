@@ -4,6 +4,7 @@ namespace App\Livewire\Public;
 
 use App\Models\Menu;
 use App\Models\Product;
+use App\Models\PackageCategory;
 use App\Models\GroupClass;
 use Livewire\Component;
 
@@ -16,14 +17,31 @@ class Membership extends Component
 
     public function mount()
     {
-        // Updated categories to match the new system
-        $this->categories = [
-            'all' => 'All Packages',
-            'signature' => 'SIGNATURE CLASS PACK',
-            'functional' => 'FUNCTIONAL CLASS PACK'
-        ];
-
+        // Load categories from PackageCategory model
+        $this->loadCategories();
         $this->loadProducts();
+    }
+
+    private function loadCategories()
+    {
+        try {
+            $dbCategories = PackageCategory::active()->ordered()->get();
+            
+            $this->categories = ['all' => 'All Packages'];
+            
+            foreach ($dbCategories as $category) {
+                $this->categories[$category->name] = $category->display_name;
+            }
+        } catch (\Exception $e) {
+            // Fallback categories if database query fails
+            $this->categories = [
+                'all' => 'All Packages',
+                'signature' => 'SIGNATURE CLASS PACK',
+                'functional' => 'FUNCTIONAL CLASS PACK',
+                'vip' => 'VIP MEMBERSHIP',
+                'special' => 'SPECIAL PACKAGES'
+            ];
+        }
     }
 
     public function filterByCategory($category)
@@ -38,12 +56,9 @@ class Membership extends Component
             $q->where('is_active', true);
         }])->where('is_active', true);
 
-        if ($this->selectedCategory === 'signature') {
-            // Only show packages that include Reformer/Chair classes and no Functional classes
-            $query->signatureClassPack();
-        } elseif ($this->selectedCategory === 'functional') {
-            // Only show packages that include Functional classes
-            $query->functionalClassPack();
+        if ($this->selectedCategory !== 'all') {
+            // Filter by the actual category from database
+            $query->where('category', $this->selectedCategory);
         }
 
         $this->products = $query->get();
@@ -53,26 +68,58 @@ class Membership extends Component
     {
         $menu = Menu::where('name', 'About Us')->first();
 
-        // Group products by their actual category and specific types
-        $groupedProducts = [
-            'signature' => $this->products->filter(function($product) {
-                return $product->isSignatureClassPack();
-            })->sortBy(function($product) {
-                // Sort signature packages: Core Series, Elevate Pack, Aligné Flow
-                $order = [
-                    'The Core Series' => 1,
-                    'Elevate Pack' => 2,
-                    'Aligné Flow' => 3
+        // Group products by their actual database categories
+        $groupedProducts = [];
+        
+        try {
+            $dbCategories = PackageCategory::active()->ordered()->get();
+            
+            foreach ($dbCategories as $category) {
+                $categoryProducts = $this->products->filter(function($product) use ($category) {
+                    return $product->category === $category->name;
+                });
+                
+                if ($categoryProducts->count() > 0) {
+                    $groupedProducts[$category->name] = [
+                        'display_name' => $category->display_name,
+                        'description' => $category->description,
+                        'products' => $categoryProducts->sortBy('name')
+                    ];
+                }
+            }
+            
+            // Add products without category to 'other'
+            $uncategorizedProducts = $this->products->filter(function($product) use ($dbCategories) {
+                return !$dbCategories->pluck('name')->contains($product->category);
+            });
+            
+            if ($uncategorizedProducts->count() > 0) {
+                $groupedProducts['other'] = [
+                    'display_name' => 'Other Packages',
+                    'description' => 'Additional membership packages',
+                    'products' => $uncategorizedProducts->sortBy('name')
                 ];
-                return $order[$product->name] ?? 999;
-            }),
-            'functional' => $this->products->filter(function($product) {
-                return $product->includesFunctionalClasses();
-            }),
-            'other' => $this->products->filter(function($product) {
-                return !$product->isSignatureClassPack() && !$product->includesFunctionalClasses();
-            })
-        ];
+            }
+            
+        } catch (\Exception $e) {
+            // Fallback grouping if database query fails
+            $groupedProducts = [
+                'signature' => [
+                    'display_name' => 'SIGNATURE CLASS PACK',
+                    'description' => 'For Reformer / Chair Classes',
+                    'products' => $this->products->filter(function($product) {
+                        return $product->category === 'signature';
+                    })
+                ],
+                'functional' => [
+                    'display_name' => 'FUNCTIONAL CLASS PACK',
+                    'description' => 'For Functional Movement Classes',
+                    'products' => $this->products->filter(function($product) {
+                        return $product->category === 'functional';
+                    })
+                ]
+            ];
+        }
 
         return view('livewire.public.membership', [
             'groupedProducts' => $groupedProducts,

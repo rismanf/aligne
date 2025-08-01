@@ -104,6 +104,7 @@ Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
     Route::get('/order', App\Livewire\User\Order::class)->name('order');
     Route::get('/booking', App\Livewire\User\Booking::class)->name('booking');
     Route::get('/my-bookings/{bookingId?}', App\Livewire\User\BookingInvoice::class)->name('my-bookings');
+    Route::get('/feedback/{bookingId}', App\Livewire\User\ClassFeedback::class)->name('feedback');
     Route::get('/dashboard', App\Livewire\User\Dashboard::class)->name('dashboard');
 
     Route::get('/participant', App\Livewire\User\Participant\AddParticipant::class)->name('participant.index');
@@ -126,6 +127,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/categoriesproduct', ProductCategory::class)->name('categoriesproduct.index');
     Route::get('/schedule', ScheduleList::class)->name('schedule.index');
     Route::get('/qr-scanner', App\Livewire\Admin\QRScanner::class)->name('qr-scanner');
+    Route::get('/member', App\Livewire\Admin\Member\MemberList::class)->name('member.index');
 
 
     // Route::get('/vcard', ListVcard::class)->name('vcard.index');
@@ -143,5 +145,5 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::get('/role', ListRole::class)->name('role.index');
     Route::get('/role/{id}', RoleShow::class)->name('role.show');
-    Route::get('/visit', Visit::class)->name('visit.index');
+    
 });

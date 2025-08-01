@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 
 class ClassBooking extends Model
 {
@@ -14,7 +16,9 @@ class ClassBooking extends Model
         'user_membership_id',
         'class_schedule_id',
         'booking_status',
+        'reformer_position',
         'booking_code',
+        'qr_token',
         'visit_status',
         'visited_at',
         'booked_at',
@@ -51,6 +55,14 @@ class ClassBooking extends Model
     public function classSchedule()
     {
         return $this->belongsTo(ClassSchedules::class);
+    }
+
+    /**
+     * Get the feedback for this booking
+     */
+    public function feedback()
+    {
+        return $this->hasOne(ClassFeedback::class);
     }
 
     /**
@@ -170,7 +182,159 @@ class ClassBooking extends Model
     }
 
     /**
-     * Boot method to auto-generate booking code
+     * Generate unique QR token
+     */
+    public static function generateQrToken()
+    {
+        do {
+            $token = bin2hex(random_bytes(16));
+        } while (self::where('qr_token', $token)->exists());
+
+        return $token;
+    }
+
+    /**
+     * Generate QR code for this booking
+     */
+    public function generateQrCode()
+    {
+        if (empty($this->qr_token)) {
+            $this->update(['qr_token' => self::generateQrToken()]);
+        }
+
+        // Create QR code data - just use booking code for simplicity
+        $qrData = $this->booking_code;
+
+        try {
+            $qrCode = new QrCode($qrData);
+            $writer = new PngWriter();
+            $result = $writer->write($qrCode);
+            return $result->getDataUri();
+        } catch (\Exception $e) {
+            // Fallback: return a simple data URL with booking code
+            return 'data:text/plain;base64,' . base64_encode($this->booking_code);
+        }
+    }
+
+    /**
+     * Get QR code data for scanning
+     */
+    public function getQrData()
+    {
+        return [
+            'booking_code' => $this->booking_code,
+            'token' => $this->qr_token,
+            'user_id' => $this->user_id,
+            'class_schedule_id' => $this->class_schedule_id,
+            'timestamp' => now()->timestamp
+        ];
+    }
+
+    /**
+     * Verify QR token
+     */
+    public function verifyQrToken($token)
+    {
+        return $this->qr_token === $token;
+    }
+
+    /**
+     * Check if booking can be checked in
+     */
+    public function canCheckIn()
+    {
+        if ($this->booking_status !== 'confirmed') {
+            return false;
+        }
+
+        if ($this->visit_status === 'visited') {
+            return false;
+        }
+
+        // Check if class is today
+        $classDate = $this->classSchedule->start_time->toDateString();
+        $today = now()->toDateString();
+
+        if ($classDate !== $today) {
+            return false;
+        }
+
+        // Check if within check-in window (2 hours before to 15 minutes after)
+        $classStartTime = $this->classSchedule->start_time;
+        $now = now();
+        $checkInStart = $classStartTime->copy()->subMinutes(120); // 2 hours before
+        $checkInEnd = $classStartTime->copy()->addMinutes(15);
+
+        return $now->between($checkInStart, $checkInEnd);
+    }
+
+    /**
+     * Get check-in window info for debugging
+     */
+    public function getCheckInWindowInfo()
+    {
+        $classStartTime = $this->classSchedule->start_time;
+        $now = now();
+        $checkInStart = $classStartTime->copy()->subMinutes(120);
+        $checkInEnd = $classStartTime->copy()->addMinutes(15);
+
+        return [
+            'now' => $now->format('Y-m-d H:i:s'),
+            'class_start' => $classStartTime->format('Y-m-d H:i:s'),
+            'check_in_start' => $checkInStart->format('Y-m-d H:i:s'),
+            'check_in_end' => $checkInEnd->format('Y-m-d H:i:s'),
+            'can_check_in' => $now->between($checkInStart, $checkInEnd),
+            'booking_status' => $this->booking_status,
+            'visit_status' => $this->visit_status,
+            'class_date' => $this->classSchedule->start_time->toDateString(),
+            'today' => now()->toDateString(),
+        ];
+    }
+
+    /**
+     * Check if this booking can receive feedback
+     */
+    public function canGiveFeedback()
+    {
+        // Must be visited and class must be completed
+        if ($this->visit_status !== 'visited') {
+            return false;
+        }
+
+        // Class must be completed (ended)
+        $classEndTime = $this->classSchedule->end_time;
+        if (now()->lt($classEndTime)) {
+            return false;
+        }
+
+        // Check if feedback already exists
+        if ($this->feedback()->exists()) {
+            return false;
+        }
+
+        // Allow feedback up to 7 days after class
+        $feedbackDeadline = $classEndTime->copy()->addDays(7);
+        return now()->lte($feedbackDeadline);
+    }
+
+    /**
+     * Check if feedback already submitted
+     */
+    public function hasFeedback()
+    {
+        return $this->feedback()->exists();
+    }
+
+    /**
+     * Get feedback deadline
+     */
+    public function getFeedbackDeadline()
+    {
+        return $this->classSchedule->end_time->copy()->addDays(7);
+    }
+
+    /**
+     * Boot method to auto-generate booking code and QR token
      */
     protected static function boot()
     {
@@ -179,6 +343,9 @@ class ClassBooking extends Model
         static::creating(function ($booking) {
             if (empty($booking->booking_code)) {
                 $booking->booking_code = self::generateBookingCode();
+            }
+            if (empty($booking->qr_token)) {
+                $booking->qr_token = self::generateQrToken();
             }
         });
     }

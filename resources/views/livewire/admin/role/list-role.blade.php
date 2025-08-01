@@ -3,10 +3,7 @@
     {{-- Knowing others is intelligence; knowing yourself is true wisdom. --}}
 
     <x-card >
-        <div class="flex justify-end mb-4">
-            {{-- <x-input label="Search" placeholder="Search" wire:model="search" class="w-1/2" /> --}}
-            <x-button label="Add" icon="o-plus" @click="$wire.createForm = true" class="btn-primary btn-xs p-2" />
-        </div>
+   
         
         <x-hr target="gotoPage" />
         <x-table
@@ -18,12 +15,7 @@
             {{-- :per-page-values="[1]"  --}}
         >
              {{-- Special `actions` slot --}}
-            @scope('cell_action', $role)
-                <div class="flex gap-1">
-                    {{-- <x-button icon="o-eye" onclick="window.location.href='{{ route('admin.role.show', $role->id) }}'" spinner class="btn-xs" /> --}}
-                    <x-button icon="o-trash" wire:click="showDeleteModal({{ $role->id }})" spinner class="btn-xs" />
-                </div>
-            @endscope
+          
         </x-table>
     </x-card>
 

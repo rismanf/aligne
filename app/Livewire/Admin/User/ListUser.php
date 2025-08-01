@@ -119,7 +119,7 @@ class ListUser extends Component
         ];
 
         $users = User::with('roles')
-            ->paginate(3);
+            ->paginate(5);
 
         $users->getCollection()->transform(function ($user, $index) use ($users) {
             $user->row_number = ($users->currentPage() - 1) * $users->perPage() + $index + 1;

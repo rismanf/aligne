@@ -17,6 +17,9 @@ class CheckoutClass extends Component
 {
     public $id, $schedule, $cek_quota;
     public $existing_booking;
+    public $selected_position = null;
+    public $available_positions = [];
+    public $is_reformer_class = false;
 
     public function mount($id)
     {
@@ -27,6 +30,14 @@ class CheckoutClass extends Component
         
         if (!$this->schedule) {
             abort(404, 'Schedule not found');
+        }
+
+        // Check if this is a Reformer class
+        $this->is_reformer_class = $this->schedule->classes->groupClass->name === 'REFORMER CLASS';
+  
+        // Initialize available positions for Reformer class
+        if ($this->is_reformer_class) {
+            $this->initializeReformerPositions();
         }
 
         // Initialize quota to 0
@@ -41,6 +52,39 @@ class CheckoutClass extends Component
 
             // Check user quota for this class type
             $this->checkUserQuota();
+        }
+    }
+
+    private function initializeReformerPositions()
+    {
+        // Initialize all 8 positions as available
+        $this->available_positions = collect(range(1, 8))->map(function($position) {
+            return [
+                'position' => $position,
+                'is_available' => true,
+                'booked_by' => null
+            ];
+        })->toArray();
+
+        // Get existing bookings for this schedule to mark occupied positions
+        $existingBookings = ClassBooking::where('class_schedule_id', $this->id)
+            ->where('booking_status', 'confirmed')
+            ->whereNotNull('reformer_position')
+            ->get();
+
+        foreach ($existingBookings as $booking) {
+            $position = $booking->reformer_position;
+            if ($position >= 1 && $position <= 8) {
+                $this->available_positions[$position - 1]['is_available'] = false;
+                $this->available_positions[$position - 1]['booked_by'] = $booking->user->name ?? 'Unknown';
+            }
+        }
+    }
+
+    public function selectPosition($position)
+    {
+        if ($this->is_reformer_class && $this->available_positions[$position - 1]['is_available']) {
+            $this->selected_position = $position;
         }
     }
 
@@ -79,6 +123,12 @@ class CheckoutClass extends Component
             'id' => 'required',
         ]);
 
+        // For Reformer class, validate position selection
+        if ($this->is_reformer_class && !$this->selected_position) {
+            session()->flash('error', 'Please select a Reformer position before booking.');
+            return;
+        }
+
         // Check if schedule exists and is bookable
         if (!$this->schedule->canBeBooked()) {
             session()->flash('error', 'This class cannot be booked. Booking closes 1 hour before class starts.');
@@ -103,6 +153,20 @@ class CheckoutClass extends Component
             return;
         }
 
+        // For Reformer class, check if selected position is still available
+        if ($this->is_reformer_class) {
+            $positionTaken = ClassBooking::where('class_schedule_id', $this->id)
+                ->where('reformer_position', $this->selected_position)
+                ->where('booking_status', 'confirmed')
+                ->exists();
+                
+            if ($positionTaken) {
+                session()->flash('error', 'Selected position is no longer available. Please choose another position.');
+                $this->initializeReformerPositions(); // Refresh positions
+                return;
+            }
+        }
+
         DB::beginTransaction();
         try {
             // Get user membership for this class type
@@ -113,15 +177,23 @@ class CheckoutClass extends Component
                 return;
             }
 
-            // Create booking
-            $booking = ClassBooking::create([
+            // Create booking data
+            $bookingData = [
                 'user_id' => Auth::id(),
                 'user_membership_id' => $userMembership->id,
                 'class_schedule_id' => $this->id,
                 'booking_status' => 'confirmed',
                 'booked_at' => now(),
                 'created_by_id' => Auth::id(),
-            ]);
+            ];
+
+            // Add Reformer position if applicable
+            if ($this->is_reformer_class && $this->selected_position) {
+                $bookingData['reformer_position'] = $this->selected_position;
+            }
+
+            // Create booking
+            $booking = ClassBooking::create($bookingData);
 
             // Update class schedule capacity
             $this->schedule->increment('capacity_book');

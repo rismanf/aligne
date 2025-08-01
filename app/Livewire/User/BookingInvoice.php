@@ -53,7 +53,7 @@ class BookingInvoice extends Component
                 'start_time' => $booking->classSchedule->start_time->format('H:i'),
                 'end_time' => $booking->classSchedule->end_time->format('H:i'),
                 'booking_code' => $booking->booking_code,
-                'qr_code' => $this->generateQRCode($booking->booking_code),
+                'qr_code' => $booking->generateQrCode(),
                 'can_cancel' => $booking->canBeCancelled(),
                 'visit_status' => $booking->visit_status,
                 'visited_at' => $booking->visited_at,

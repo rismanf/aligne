@@ -60,6 +60,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get user's memberships (alias for better readability)
+     */
+    public function userMemberships()
+    {
+        return $this->hasMany(UserMembership::class);
+    }
+
+    /**
      * Get user's active memberships
      */
     public function activeMemberships()

@@ -1,27 +1,48 @@
 <div>
     <x-card>
         <div>
-            <div class="mb-4">
-                <label class="font-semibold">Pilih Class Group:</label>
-                <select wire:model="selectedgroupclass" class="border rounded p-2 w-full max-w-xs"
-                    wire:change="classChanged()">
-                    @foreach ($calases_group as $group)
-                        <option value="{{ $group['id'] }}">
-                            {{ $group['name'] }}
-                        </option>
-                    @endforeach
-                </select>
+            <!-- Header with Controls -->
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">📅 Schedule Management</h2>
+                    <p class="text-sm text-gray-600">Manage class schedules and copy schedules between dates</p>
+                </div>
+                
+                <div class="flex gap-2">
+                    <x-button 
+                        label="Copy Schedule" 
+                        icon="o-document-duplicate" 
+                        wire:click="showCopyScheduleModal()" 
+                        class="btn-outline btn-primary" />
+                </div>
             </div>
-            <div class="mb-4">
-                <label class="font-semibold">Pilih Tanggal:</label>
-                <select wire:model="selectedDate" class="border rounded p-2 w-full max-w-xs"
-                    wire:change="classChanged()">
-                    @foreach ($availableDates as $date)
-                        <option value="{{ $date }}">
-                            {{ \Carbon\Carbon::parse($date)->translatedFormat('l, d M Y') }}
-                        </option>
-                    @endforeach
-                </select>
+
+            <!-- Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <label class="font-semibold text-gray-700 mb-2 block">Class Group:</label>
+                    <x-select 
+                        wire:model.live="selectedgroupclass" 
+                        :options="$calases_group" 
+                        option-label="name" 
+                        option-value="id"
+                        wire:change="classChanged()" />
+                </div>
+                
+                <div>
+                    <label class="font-semibold text-gray-700 mb-2 block">Select Date:</label>
+                    <x-input 
+                        wire:model.live="selectedDate" 
+                        type="date" 
+                        wire:change="classChanged()" />
+                </div>
+                
+                <div class="flex items-end">
+                    <div class="text-sm text-gray-600">
+                        <div class="font-medium">{{ \Carbon\Carbon::parse($selectedDate)->translatedFormat('l, d M Y') }}</div>
+                        <div>{{ count($schedule_data) }} classes scheduled</div>
+                    </div>
+                </div>
             </div>
             
             <hr>
@@ -120,5 +141,64 @@
                 <x-button label="Delete" class="btn-primary" wire:click="delete" />
             </x-slot:actions>
         </x-form>
+    </x-modal>
+
+    <!-- Copy Schedule Modal -->
+    <x-modal wire:model="copyScheduleModal" title="Copy Schedule" class="backdrop-blur">
+        <div class="space-y-4">
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-blue-800 mb-2">📋 Copy Schedule Instructions</h4>
+                <p class="text-sm text-blue-700">
+                    This will copy all schedules from the source date to the target date for the selected class group.
+                    Make sure the target date doesn't have existing schedules to avoid conflicts.
+                </p>
+            </div>
+
+            <x-form wire:submit="copySchedule">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <x-input 
+                            label="Copy From Date" 
+                            wire:model="copyFromDate" 
+                            type="date" 
+                            required />
+                        <div class="text-xs text-gray-500 mt-1">
+                            Source date with existing schedules
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <x-input 
+                            label="Copy To Date" 
+                            wire:model="copyToDate" 
+                            type="date" 
+                            required />
+                        <div class="text-xs text-gray-500 mt-1">
+                            Target date (must be today or future)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 p-3 rounded-lg">
+                    <div class="flex items-start gap-2">
+                        <i class="fas fa-exclamation-triangle text-yellow-600 mt-0.5"></i>
+                        <div class="text-sm text-yellow-800">
+                            <strong>Warning:</strong> This action will copy all schedules from the source date. 
+                            If the target date already has schedules, the copy operation will be cancelled.
+                        </div>
+                    </div>
+                </div>
+
+                <x-slot:actions>
+                    <x-button label="Cancel" @click="$wire.copyScheduleModal = false" />
+                    <x-button 
+                        label="Copy Schedules" 
+                        class="btn-primary" 
+                        type="submit" 
+                        spinner="copySchedule"
+                        icon="o-document-duplicate" />
+                </x-slot:actions>
+            </x-form>
+        </div>
     </x-modal>
 </div>

@@ -135,7 +135,6 @@ class ListRole extends Component
             // ['key' => 'email', 'label' => 'Email'],
             // ['key' => 'roles.0.name', 'label' => 'Role'],
             ['key' => 'updated_at', 'label' => 'Updated At'],
-            ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-2'],
         ];
         return view('livewire.admin.role.list-role', [
             't_headers' => $t_headers,

@@ -77,8 +77,146 @@
                                         <a href="{{ url()->previous() }}" class="cta-btn">Back to Classes</a>
                                     @else
                                         <p>You have {{ $cek_quota }} quota left for this class type</p>
+                                        
+                                        @if($is_reformer_class)
+                                            <!-- Reformer Position Selection -->
+                                            <div class="reformer-selection mb-4">
+                                                <h6 class="mb-3">Select Your Reformer Position:</h6>
+                                                <!-- Reformer Layout Visual -->
+                                                <div class="reformer-layout mb-3">
+                                                    <style>
+                                                        .reformer-layout {
+                                                            background: linear-gradient(135deg, #F6F4EB 0%, #D4BDA5 100%);
+                                                            border-radius: 10px;
+                                                            padding: 15px;
+                                                            position: relative;
+                                                        }
+                                                        
+                                                        .layout-title {
+                                                            text-align: center;
+                                                            color: #4B2E2E;
+                                                            font-weight: bold;
+                                                            margin-bottom: 15px;
+                                                            font-size: 16px;
+                                                        }
+                                                        
+                                                        .reformer-image-container {
+                                                            position: relative;
+                                                            width: 100%;
+                                                            max-width: 500px;
+                                                            margin: 0 auto;
+                                                        }
+                                                        
+                                                        .reformer-image {
+                                                            width: 100%;
+                                                            height: auto;
+                                                            border-radius: 8px;
+                                                            box-shadow: 0 4px 12px rgba(75, 46, 46, 0.15);
+                                                        }
+                                                        
+                                                        .position-overlay {
+                                                            position: absolute;
+                                                            width: 40px;
+                                                            height: 40px;
+                                                            border-radius: 50%;
+                                                            display: flex;
+                                                            align-items: center;
+                                                            justify-content: center;
+                                                            font-weight: bold;
+                                                            font-size: 14px;
+                                                            cursor: pointer;
+                                                            transition: all 0.3s ease;
+                                                            border: 2px solid #CBB4A0;
+                                                            background: rgba(255, 255, 255, 0.9);
+                                                            color: #4B2E2E;
+                                                        }
+                                                        
+                                                        .position-overlay:hover {
+                                                            transform: scale(1.1);
+                                                            box-shadow: 0 4px 12px rgba(75, 46, 46, 0.3);
+                                                        }
+                                                        
+                                                        .position-overlay.available {
+                                                            border-color: #A6A58A;
+                                                            background: rgba(166, 165, 138, 0.2);
+                                                        }
+                                                        
+                                                        .position-overlay.selected {
+                                                            border-color: #4B2E2E;
+                                                            background: #4B2E2E;
+                                                            color: white;
+                                                            transform: scale(1.2);
+                                                        }
+                                                        
+                                                        .position-overlay.occupied {
+                                                            background: rgba(203, 180, 160, 0.8);
+                                                            color: #666;
+                                                            cursor: not-allowed;
+                                                            opacity: 0.6;
+                                                        }
+                                                        
+                                                        /* Position coordinates based on image layout */
+                                                        .pos-1 { top: 15%; left: 15%; }
+                                                        .pos-2 { top: 35%; left: 15%; }
+                                                        .pos-3 { top: 55%; left: 15%; }
+                                                        .pos-4 { top: 75%; left: 15%; }
+                                                        .pos-5 { top: 15%; right: 15%; }
+                                                        .pos-6 { top: 35%; right: 15%; }
+                                                        .pos-7 { top: 55%; right: 15%; }
+                                                        .pos-8 { top: 75%; right: 15%; }
+                                                        
+                                                        @media (max-width: 768px) {
+                                                            .position-overlay {
+                                                                width: 35px;
+                                                                height: 35px;
+                                                                font-size: 12px;
+                                                            }
+                                                            
+                                                            .layout-title {
+                                                                font-size: 14px;
+                                                            }
+                                                        }
+                                                    </style>
+                                                    
+                                                    <div class="layout-title">Select Your Reformer Position</div>
+                                                    
+                                                    <div class="reformer-image-container">
+                                                        <img src="{{ asset('images/reformer_class.png') }}" alt="Reformer Studio Layout" class="reformer-image">
+                                                        
+                                                        <!-- Position overlays -->
+                                                        @foreach(range(1, 8) as $position)
+                                                            @php
+                                                                $positionData = $available_positions[$position - 1];
+                                                                $isAvailable = $positionData['is_available'];
+                                                                $isSelected = $selected_position == $position;
+                                                            @endphp
+                                                            <div 
+                                                                class="position-overlay pos-{{ $position }} {{ $isAvailable ? 'available' : 'occupied' }} {{ $isSelected ? 'selected' : '' }}"
+                                                                wire:click="{{ $isAvailable ? 'selectPosition(' . $position . ')' : '' }}"
+                                                                title="{{ $isAvailable ? 'Available' : 'Occupied' }} - Position {{ $position }}"
+                                                            >
+                                                                {{ $position }}
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                                
+                                                @if($selected_position)
+                                                    <div class="alert alert-success">
+                                                        <strong>Selected Position:</strong> Reformer {{ $selected_position }}
+                                                    </div>
+                                                @else
+                                                    <div class="alert alert-info">
+                                                        Please select a Reformer position to continue with your booking.
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        
                                         <form wire:submit="save">
-                                            <button type="submit" class="cta-btn">Confirm Booking</button>
+                                            <button type="submit" class="cta-btn" {{ $is_reformer_class && !$selected_position ? 'disabled' : '' }}>
+                                                Confirm Booking
+                                            </button>
                                         </form>
                                         <a href="{{ url()->previous() }}" class="cta-btn btn-secondary">Back</a>
                                     @endif

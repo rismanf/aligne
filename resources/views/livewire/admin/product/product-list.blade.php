@@ -25,28 +25,49 @@
         <x-hr target="gotoPage" />
         <x-table class="text-xs" :headers="$t_headers" :rows="$products">
             {{-- Special scopes for custom display --}}
-            @scope('cell_category', $products)
-                <span class="badge badge-outline">{{ $products->category_display }}</span>
+            @scope('cell_category_display', $products)
+                <span class="badge badge-outline badge-sm">{{ $products->category_display }}</span>
             @endscope
 
-            @scope('cell_price', $products)
+            @scope('cell_package_type_display', $products)
+                @if($products->package_type_display !== '-')
+                    <span class="badge badge-secondary badge-sm">{{ $products->package_type_display }}</span>
+                @else
+                    <span class="text-gray-400">-</span>
+                @endif
+            @endscope
+
+            @scope('cell_formatted_price', $products)
                 <span class="font-semibold text-green-600">{{ $products->formatted_price }}</span>
             @endscope
 
             @scope('cell_total_classes', $products)
-                <span class="badge badge-primary">{{ $products->total_classes }}x</span>
+                <span class="badge badge-primary badge-sm">{{ $products->total_classes }}x</span>
+            @endscope
+
+            @scope('cell_validity_text', $products)
+                <span class="text-sm text-gray-600">{{ $products->validity_text }}</span>
+            @endscope
+
+            @scope('cell_updated_at', $products)
+                <span class="text-sm text-gray-500">{{ $products->updated_at->format('d M Y') }}</span>
             @endscope
 
             {{-- Special `actions` slot --}}
             @scope('cell_action', $products)
-                <div class="flex gap-1">
-                    <x-button icon="o-pencil" wire:click="showEditModal({{ $products->id }})" spinner class="btn-xs btn-warning" tooltip="Edit Package" />
+                <div class="flex gap-1 justify-center">
                     <x-button icon="o-eye" wire:click="showDetailModal({{ $products->id }})" spinner class="btn-xs btn-info" tooltip="View Details" />
+                    <x-button icon="o-pencil" wire:click="showEditModal({{ $products->id }})" spinner class="btn-xs btn-warning" tooltip="Edit Package" />
                     <x-button icon="o-trash" wire:click="showDeleteModal({{ $products->id }})" spinner class="btn-xs btn-error" tooltip="Delete Package" />
                 </div>
             @endscope
         </x-table>
     </x-card>
+
+    {{-- Add pagination --}}
+    <div class="mt-4">
+        {{ $products->links() }}
+    </div>
 
     {{-- modal-create-muncul --}}
     <x-modal wire:model="createForm" title="Create New Membership Package"  class="backdrop-blur">
