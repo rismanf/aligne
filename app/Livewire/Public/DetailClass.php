@@ -3,21 +3,26 @@
 namespace App\Livewire\Public;
 
 use App\Models\GroupClass;
+use App\Models\Classes;
+use App\Models\ClassSchedules;
 use App\Models\Menu;
-use App\Models\Schedule;
 use Carbon\Carbon;
 use Livewire\Component;
 
 class DetailClass extends Component
 {
     public $id, $date, $schedule, $schedule_now;
-public $class_name;
+    public $class_name, $groupClass;
+    
     public function mount($id, $date)
     {
         $this->id = $id;
         $this->date = $date;
 
-        $this->class_name = GroupClass::find($id)->name;
+        // Get group class information
+        $this->groupClass = GroupClass::find($id);
+        $this->class_name = $this->groupClass->name;
+        
         $date = Carbon::parse($date);
         $today = Carbon::today();
 
@@ -35,24 +40,32 @@ public $class_name;
         $start = $date->copy()->startOfWeek();
         $end = $date->copy()->endOfWeek();
 
-        $this->schedule = Schedule::where('class_id', $id)
-            ->whereBetween('schedule_date', [$start, $end])
+        // Get schedules for the week using ClassSchedules model
+        $this->schedule = ClassSchedules::with(['classes', 'trainer'])
+            ->whereHas('classes', function($query) {
+                $query->where('group_class_id', $this->id);
+            })
+            ->whereBetween('start_time', [$start, $end->endOfDay()])
             ->get();
 
-        $this->schedule_now = Schedule::with('trainer')
-            ->where('class_id', $id)
-            ->whereDate('schedule_date', $this->date)
-            ->orderby('time', 'asc')
+        // Get schedules for the specific date
+        $this->schedule_now = ClassSchedules::with(['classes', 'trainer'])
+            ->whereHas('classes', function($query) {
+                $query->where('group_class_id', $this->id);
+            })
+            ->whereDate('start_time', $this->date)
+            ->orderBy('start_time', 'asc')
             ->get();
     }
+    
     public function render()
     {
         $menu = Menu::where('name', 'About Us')->first();
 
         return view('livewire.public.detail-class')->layout('components.layouts.website', [
-            'title' => $menu->title,
-            'description' => $menu->description,
-            'keywords' => $menu->keywords,
+            'title' => $menu->title ?? 'Class Detail',
+            'description' => $menu->description ?? 'Class schedule details',
+            'keywords' => $menu->keywords ?? 'fitness, class, schedule',
             'image' => asset('images/logo.png'),
             'url' => url()->current(),
         ]);

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name', 200);
             $table->text('description')->nullable();
+            $table->string('category')->default('signature');
+            $table->string('package_type')->nullable();
             $table->integer('price')->nullable();
             $table->integer('kuota')->nullable();
             $table->integer('valid_until')->nullable();

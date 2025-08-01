@@ -7,20 +7,26 @@
             <div class="row gy-4 justify-content-center text-center ">
                 @if (session()->has('success'))
                     <div class="alert alert-success mb-4">{{ session('success') }}</div>
-
-                    <script>
-                        window.addEventListener('redirect-after-success', function() {
-                            setTimeout(function() {
-                                window.location.href = "{{ route('user.order') }}"; // ganti dengan route tujuan Anda
-                            }, 3000); // 3 detik delay
-                        });
-                    </script>
                 @endif
+                
+                @if (session()->has('error'))
+                    <div class="alert alert-danger mb-4">{{ session('error') }}</div>
+                @endif
+
+                <script>
+                    document.addEventListener('livewire:init', () => {
+                        Livewire.on('redirectAfterSuccess', () => {
+                            setTimeout(() => {
+                                window.location.href = "{{ route('user.my-bookings') }}";
+                            }, 2000);
+                        });
+                    });
+                </script>
                 <div class="col-lg-6">
                     <div class="pricing-item">
                         <div class="border p-3 mb-3">
                             {{-- <h5>Class summary</h5> --}}
-                            <h5>{{ $schedule->classes->group_class }}</h5>
+                            <h5>{{ $schedule->classes->groupClass->name }}</h5>
                             <div class="d-flex justify-content-between mt-3">
                                 <span>Class Name</span>
                                 <span>{{ $schedule->classes->name }}</span>
@@ -30,12 +36,20 @@
                                 <span>{{ $schedule->classes->level_class }}</span>
                             </div>
                             <div class="d-flex justify-content-between mt-3">
+                                <span>Date</span>
+                                <span>{{ $schedule->start_time->format('d M Y') }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
                                 <span>Time</span>
-                                <span>{{ \Carbon\Carbon::parse($schedule->classes->time)->format('h:i A') }}</span>
+                                <span>{{ $schedule->start_time->format('h:i A') }} - {{ $schedule->end_time->format('h:i A') }}</span>
                             </div>
                             <div class="d-flex justify-content-between mt-3">
                                 <span>Trainer</span>
                                 <span>{{ $schedule->trainer->name }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                <span>Capacity</span>
+                                <span>{{ $schedule->capacity_book }}/{{ $schedule->capacity }}</span>
                             </div>
                             <div class="text-muted small mt-2">
                             </div>
@@ -46,27 +60,28 @@
                         <div class="p-3">
                             @guest
                                 <h3>Sign Up</h3>
-                                <p>To purchase this plan and use its benefits in the future, log in to your account or sign
-                                    up.
-                                </p>
+                                <p>To book this class, please log in to your account or sign up.</p>
                                 <a href="{{ route('login') }}" class="cta-btn">Log In</a>
                                 <a href="{{ route('register') }}" class="cta-btn">Sign Up</a>
                             @else
-                                @if ($data_schedule == 0)
-                                    @if ($cek_quota == 0)
-                                        <p>You not have quota for this class</p>
-                                        <p>Please select another class or buy membership first</p>
-                                        <a href="{{ route('membership') }}" type="submit" class="cta-btn">Membership</a>                                    
-                                        <a href="{{ url()->previous() }}" type="submit" class="cta-btn">Back to class</a>
-                                    @else
-                                        <p>You have {{ $cek_quota }} quota left for this class</p>
-                                        <form wire:submit="save">
-                                            <button type="submit" class="cta-btn">Confrim</button>
-                                        </form>
-                                    @endif
+                                @if ($existing_booking)
+                                    <p>You have already booked this class</p>
+                                    <p><strong>Booking Code:</strong> {{ $existing_booking->booking_code }}</p>
+                                    <a href="{{ route('user.my-bookings') }}" class="cta-btn">View My Bookings</a>
+                                    <a href="{{ url()->previous() }}" class="cta-btn">Back</a>
                                 @else
-                                    <p>You have already signed up for this class</p>
-                                    <a href="{{ url()->previous() }}" type="submit" class="cta-btn">Back</a>
+                                    @if ($cek_quota == 0)
+                                        <p>You do not have quota for this class type</p>
+                                        <p>Please buy a membership package that includes this class type</p>
+                                        <a href="{{ route('membership') }}" class="cta-btn">Buy Membership</a>                                    
+                                        <a href="{{ url()->previous() }}" class="cta-btn">Back to Classes</a>
+                                    @else
+                                        <p>You have {{ $cek_quota }} quota left for this class type</p>
+                                        <form wire:submit="save">
+                                            <button type="submit" class="cta-btn">Confirm Booking</button>
+                                        </form>
+                                        <a href="{{ url()->previous() }}" class="cta-btn btn-secondary">Back</a>
+                                    @endif
                                 @endif
                             @endguest
                         </div>

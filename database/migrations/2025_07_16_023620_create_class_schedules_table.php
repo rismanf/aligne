@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name', 200);
             $table->integer('trainer_id');
             $table->integer('class_id');
+            $table->date('date');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->integer('duration');

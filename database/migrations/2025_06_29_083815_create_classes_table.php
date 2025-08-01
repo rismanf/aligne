@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('group_class_id')->nullable();
             $table->string('group_class', 100)->nullable();
             $table->string('name', 200);
+            $table->time('time')->nullable();
             $table->integer('level_class_id')->nullable();
             $table->string('level_class', 50)->nullable();
             $table->integer('mood_class_id')->nullable();

@@ -19,9 +19,9 @@ class Classes extends Component
         $menu = Menu::where('name', 'About Us')->first();
 
         return view('livewire.public.classes')->layout('components.layouts.website', [
-            'title' => $menu->title,
-            'description' => $menu->description,
-            'keywords' => $menu->keywords,
+            'title' => $menu ? $menu->title : 'Classes',
+            'description' => $menu ? $menu->description : 'Browse our fitness classes',
+            'keywords' => $menu ? $menu->keywords : 'fitness, classes, reformer, chair, functional',
             'image' => asset('images/logo.png'),
             'url' => url()->current(),
         ]);
