@@ -23,13 +23,15 @@
                 </div>
             </div>
 
-            <!-- SIGNATURE CLASS PACK Section -->
-            @if($groupedProducts['signature']->count() > 0)
+            <!-- Dynamic Category Sections -->
+            @foreach($groupedProducts as $categoryKey => $categoryData)
                 <div class="mb-5">
-                    <h3 class="text-center mb-4">SIGNATURE CLASS PACK</h3>
-                    <p class="text-center text-muted mb-4">For Reformer / Chair Class</p>
+                    <h3 class="text-center mb-4">{{ $categoryData['display_name'] }}</h3>
+                    @if($categoryData['description'])
+                        <p class="text-center text-muted mb-4">{{ $categoryData['description'] }}</p>
+                    @endif
                     <div class="row gy-4 justify-content-center">
-                        @foreach ($groupedProducts['signature'] as $product)
+                        @foreach ($categoryData['products'] as $product)
                             <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
                                 <div class="pricing-item {{ $loop->index === 1 ? 'featured' : '' }}">
                                     @if($loop->index === 1)
@@ -91,114 +93,7 @@
                         @endforeach
                     </div>
                 </div>
-            @endif
-
-            <!-- Functional Packages -->
-            @if($groupedProducts['functional']->count() > 0)
-                <div class="mb-5">
-                    <h3 class="text-center mb-4">FUNCTIONAL CLASS PACK</h3>
-                    <p class="text-center text-muted mb-4">For Functional Movement Classes</p>
-                    <div class="row gy-4 justify-content-center">
-                        @foreach ($groupedProducts['functional'] as $product)
-                            <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-                                <div class="pricing-item">
-                                    <div class="package-header">
-                                        <h3>{{ $product->name }}</h3>
-                                        <div class="price">
-                                            <h4><sup>IDR</sup>{{ number_format($product->price, 0, ',', '.') }}</h4>
-                                        </div>
-                                        @if($product->valid_until)
-                                            <div class="validity">{{ $product->valid_until }} Days Validity</div>
-                                        @endif
-                                    </div>
-
-                                    <div class="package-content">
-                                        <p class="description">{{ $product->description }}</p>
-                                        
-                                        <div class="class-details">
-                                            <h5>Included Classes:</h5>
-                                            @foreach ($product->groupClasses as $groupClass)
-                                                <div class="class-item">
-                                                    <span class="class-name">{{ $groupClass->category_name }}</span>
-                                                    <span class="class-quota">{{ $groupClass->pivot->quota }}x Classes</span>
-                                                    <span class="class-category badge badge-{{ $groupClass->category }}">
-                                                        {{ $groupClass->category_name }}
-                                                    </span>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-
-                                    <div class="package-footer">
-                                        @auth
-                                            <a href="{{ route('checkout', $product->id) }}" class="cta-btn">
-                                                Select Package
-                                            </a>
-                                        @else
-                                            <a href="{{ route('login') }}" class="cta-btn">
-                                                Login to Purchase
-                                            </a>
-                                        @endauth
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
-            <!-- Other Packages -->
-            @if($groupedProducts['other']->count() > 0)
-                <div class="mb-5">
-                    <h3 class="text-center mb-4">OTHER PACKAGES</h3>
-                    <div class="row gy-4 justify-content-center">
-                        @foreach ($groupedProducts['other'] as $product)
-                            <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-                                <div class="pricing-item">
-                                    <div class="package-header">
-                                        <h3>{{ $product->name }}</h3>
-                                        <div class="price">
-                                            <h4><sup>IDR</sup>{{ number_format($product->price, 0, ',', '.') }}</h4>
-                                        </div>
-                                        @if($product->valid_until)
-                                            <div class="validity">{{ $product->valid_until }} Days Validity</div>
-                                        @endif
-                                    </div>
-
-                                    <div class="package-content">
-                                        <p class="description">{{ $product->description }}</p>
-                                        
-                                        <div class="class-details">
-                                            <h5>Included Classes:</h5>
-                                            @foreach ($product->groupClasses as $groupClass)
-                                                <div class="class-item">
-                                                    <span class="class-name">{{ $groupClass->category_name }}</span>
-                                                    <span class="class-quota">{{ $groupClass->pivot->quota }}x Classes</span>
-                                                    <span class="class-category badge badge-{{ $groupClass->category }}">
-                                                        {{ $groupClass->category_name }}
-                                                    </span>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-
-                                    <div class="package-footer">
-                                        @auth
-                                            <a href="{{ route('checkout', $product->id) }}" class="cta-btn">
-                                                Select Package
-                                            </a>
-                                        @else
-                                            <a href="{{ route('login') }}" class="cta-btn">
-                                                Login to Purchase
-                                            </a>
-                                        @endauth
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
+            @endforeach
 
             @if($products->count() === 0)
                 <div class="row">

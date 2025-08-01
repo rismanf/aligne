@@ -101,35 +101,62 @@ class ProductList extends Component
 
     public function render()
     {
-        $title = 'Membership Management';
+        $title = 'Membership Package Management';
         $breadcrumbs = [
             [
-                'link' => route("admin.home"), // route('home') = nama route yang ada di web.php
-                'label' => 'Home', // label yang ditampilkan di breadcrumb
+                'link' => route("admin.home"),
+                'label' => 'Home',
                 'icon' => 's-home',
             ],
             [
-                // 'link' => route("admin.role.index"), // route('home') = nama route yang ada di web.php
-                'label' => 'Membership',
+                'label' => 'Membership Packages',
             ],
         ];
 
-        $data_all = Product::orderBy('created_at', 'desc')->paginate(5);
+        try {
+            $data_all = Product::with('groupClasses')->orderBy('created_at', 'desc')->paginate(10);
 
-        $data_all->getCollection()->transform(function ($val, $index) use ($data_all) {
-            $val->row_number = ($data_all->currentPage() - 1) * $data_all->perPage() + $index + 1;
-            return $val;
-        });
-
+            $data_all->getCollection()->transform(function ($val, $index) use ($data_all) {
+                $val->row_number = ($data_all->currentPage() - 1) * $data_all->perPage() + $index + 1;
+                $val->category_display = $this->getCategoryDisplayName($val->category ?? 'signature');
+                
+                try {
+                    $val->total_classes = $val->groupClasses->sum('pivot.quota');
+                } catch (\Exception $e) {
+                    $val->total_classes = 0;
+                }
+                
+                $val->formatted_price = 'Rp ' . number_format($val->price ?? 0, 0, ',', '.');
+                $val->validity_text = ($val->valid_until ?? 0) . ' days';
+                
+                // Get package type display name
+                if ($val->package_type) {
+                    $typeMap = [
+                        'core_series' => 'The Core Series',
+                        'elevate_pack' => 'Elevate Pack',
+                        'aligne_flow' => 'Aligné Flow'
+                    ];
+                    $val->package_type_display = $typeMap[$val->package_type] ?? $val->package_type;
+                } else {
+                    $val->package_type_display = '-';
+                }
+                
+                return $val;
+            });
+        } catch (\Exception $e) {
+            $data_all = collect()->paginate(10);
+        }
 
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'price', 'label' => 'Price'],
-            ['key' => 'kuota', 'label' => 'Kuota'],
-            ['key' => 'description', 'label' => 'Description'],
-            ['key' => 'updated_at', 'label' => 'Updated At'],
-            ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
+            ['key' => 'name', 'label' => 'Package Name'],
+            ['key' => 'category_display', 'label' => 'Category'],
+            ['key' => 'package_type_display', 'label' => 'Type'],
+            ['key' => 'formatted_price', 'label' => 'Price'],
+            ['key' => 'total_classes', 'label' => 'Total Classes'],
+            ['key' => 'validity_text', 'label' => 'Validity'],
+            ['key' => 'updated_at', 'label' => 'Last Updated'],
+            ['key' => 'action', 'label' => 'Actions', 'class' => 'justify-center w-1'],
         ];
 
         return view('livewire.admin.product.product-list', [
@@ -139,31 +166,6 @@ class ProductList extends Component
             'breadcrumbs' => $breadcrumbs,
             'title' => $title,
         ]);
-        // try {
-        //     $data_all = Product::orderBy('created_at', 'desc')->paginate(5);
-
-        //     $data_all->getCollection()->transform(function ($val, $index) use ($data_all) {
-        //         $val->row_number = ($data_all->currentPage() - 1) * $data_all->perPage() + $index + 1;
-        //         $val->category_display = $this->getCategoryDisplayName($val->category ?? 'signature');
-                
-        //         try {
-        //             $val->total_classes = $val->groupClasses->sum('pivot.quota');
-        //         } catch (\Exception $e) {
-        //             $val->total_classes = 0;
-        //         }
-                
-        //         $val->formatted_price = 'Rp ' . number_format($val->price ?? 0, 0, ',', '.');
-        //         return $val;
-        //     });
-        // } catch (\Exception $e) {
-        //  }
-        //  return view('livewire.admin.trainer.trainer-list', [
-        //     't_headers' => $t_headers,
-        //     'trainers' => $news,
-        // ])->layout('components.layouts.app', [
-        //     'breadcrumbs' => $breadcrumbs,
-        //     'title' => $title,
-        // ]);
     }
 
 

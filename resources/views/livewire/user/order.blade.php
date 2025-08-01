@@ -211,19 +211,32 @@
 
         .services-list a {
             display: block;
-            padding: 10px 15px;
-            margin-bottom: 5px;
+            padding: 12px 18px;
+            margin-bottom: 8px;
             background: #f8f9fa;
             color: #333;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 12px;
             transition: all 0.3s ease;
+            font-weight: 500;
+            border: 1px solid #e9ecef;
         }
 
         .services-list a:hover,
         .services-list a.active {
-            background: #007bff;
-            color: white;
+            background: #4b2e2e !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(75, 46, 46, 0.3);
+            border-color: #4b2e2e;
+        }
+
+        .services-list {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
         }
 
         .table th {

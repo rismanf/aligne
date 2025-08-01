@@ -179,4 +179,68 @@
             </div>
         </div>
     </section><!-- /Service Details Section -->
+
+    <!-- Additional Styles -->
+    <style>
+        .services-list a {
+            display: block;
+            padding: 12px 18px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            color: #333;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: 1px solid #e9ecef;
+        }
+
+        .services-list a:hover,
+        .services-list a.active {
+            background: #4b2e2e !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(75, 46, 46, 0.3);
+            border-color: #4b2e2e;
+        }
+
+        .services-list {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .bg-info { background-color: #17a2b8 !important; }
+        .bg-success { background-color: #28a745 !important; }
+        .bg-warning { background-color: #ffc107 !important; color: #000; }
+        .bg-primary { background-color: #007bff !important; }
+        .bg-secondary { background-color: #6c757d !important; }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            border-top: none;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </div>
