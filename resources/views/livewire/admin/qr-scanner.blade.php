@@ -94,6 +94,19 @@
                                 <span class="font-medium text-gray-600">Trainer:</span>
                                 <div class="font-semibold text-gray-900">{{ $scanResult['trainer_name'] }}</div>
                             </div>
+                            
+                            @if($scanResult['is_reformer_class'] && $scanResult['reformer_position'])
+                                <div class="col-span-2 mt-2 pt-2 border-t border-gray-200">
+                                    <div class="flex items-center justify-center">
+                                        <div class="bg-blue-100 rounded-lg px-4 py-2">
+                                            <span class="font-medium text-blue-800">
+                                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                                Reformer Position: {{ $scanResult['reformer_position'] }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

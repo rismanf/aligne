@@ -60,6 +60,7 @@ class BookingInvoice extends Component
                 'created_at' => $booking->created_at,
                 'booking_status' => $booking->booking_status,
                 'membership_name' => $booking->userMembership->membership->name ?? 'N/A',
+                'reformer_position' => $booking->reformer_position,
             ];
         }
     }

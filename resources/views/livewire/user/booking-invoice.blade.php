@@ -60,6 +60,20 @@
                             </div>
                         </div>
 
+                        @if($booking['group_class'] == 'REFORMER CLASS' && $booking['reformer_position'])
+                            <!-- Reformer Position -->
+                            <div class="text-center mb-4">
+                                <div class="bg-primary bg-opacity-10 rounded p-3">
+                                    <small class="text-muted d-block mb-2">Your Reformer Position</small>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                        <strong class="text-primary fs-5">Position {{ $booking['reformer_position'] }}</strong>
+                                    </div>
+                                    <small class="text-muted mt-1 d-block">Please find your assigned Reformer machine</small>
+                                </div>
+                            </div>
+                        @endif
+
                         <!-- Booking Code -->
                         <div class="text-center mb-4">
                             <small class="text-muted d-block">Booking Code</small>

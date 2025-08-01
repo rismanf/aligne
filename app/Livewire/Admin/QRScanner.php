@@ -72,7 +72,7 @@ class QRScanner extends Component
                         $now = Carbon::now();
                         $checkInStart = $classStartTime->copy()->subMinutes(120);
                         $checkInEnd = $classStartTime->copy()->addMinutes(15);
-dd($now, $checkInStart, $checkInEnd);
+
                         if ($now->lt($checkInStart)) {
                             $this->setMessage('Check-in opens 120 minutes before class starts (' . 
                                 $checkInStart->format('H:i') . ').', 'warning');
@@ -102,6 +102,8 @@ dd($now, $checkInStart, $checkInEnd);
                 'trainer_name' => $this->booking->classSchedule->trainer->name,
                 'class_time' => $this->booking->classSchedule->start_time->format('H:i'),
                 'booking_code' => $this->booking->booking_code,
+                'reformer_position' => $this->booking->reformer_position,
+                'is_reformer_class' => $this->booking->classSchedule->classes->groupClass->name === 'REFORMER',
                 'qr_verified' => $qrToken ? true : false,
             ];
 
