@@ -203,6 +203,9 @@ class CheckoutClass extends Component
 
             DB::commit();
 
+            // Send email to user
+            // $this->sendBookingConfirmationEmail($booking->id);
+
             session()->flash('success', 'Class booked successfully!');
 
             // Redirect to booking invoice page with the new booking ID

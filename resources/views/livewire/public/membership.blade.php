@@ -68,9 +68,9 @@
                                                     <div class="class-item">
                                                         <span class="class-name">{{ $groupClass->category_name }}</span>
                                                         <span class="class-quota">{{ $groupClass->pivot->quota }}x Classes</span>
-                                                        <span class="class-category badge badge-{{ $groupClass->category }}">
+                                                        {{-- <span class="class-category badge badge-{{ $groupClass->category }}">
                                                             {{ $groupClass->category_name }}
-                                                        </span>
+                                                        </span> --}}
                                                     </div>
                                                 @endforeach
                                             @endif

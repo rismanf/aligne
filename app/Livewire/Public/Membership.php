@@ -60,7 +60,7 @@ class Membership extends Component
             // Filter by the actual category from database
             $query->where('category', $this->selectedCategory);
         }
-
+        
         $this->products = $query->get();
     }
 

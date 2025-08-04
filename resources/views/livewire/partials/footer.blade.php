@@ -4,23 +4,25 @@
          <div class="row gy-4">
              <div class="col-lg-12 col-md-12 footer-about align-items-center">
                  <a href="index.html" class="logo d-flex align-items-center">
-                    <img src="{{ asset('image/Aligne_White.webp') }}" alt="Logo">                     
+                     <img src="{{ asset('image/Aligne_White.webp') }}" alt="Logo">
                  </a>
                  <div class="footer-contact pt-3">
-                     <p>Aligné Studio - SCBD, Jakarta</p>
-                     <p>Tower , Level </p>
-                     <p class="mt-3"><strong>Phone:</strong> <span>+62</span></p>
-                     <p><strong>Email:</strong> <span>info@alignestudio.id</span></p>
+                     <p>Aligné Studio</p>
+                     <p>Kawasan SCBD, </p>
+                     <p>Jl. Jend. Sudirman kav 52-53 Senayan,</p>
+                     <p>Kec. Kby. Baru, Kota Jakarta Selatan,</p>
+                     <p>Daerah Khusus Ibukota Jakarta 12190</p>
                  </div>
                  <div class="social-links d-flex mt-4">
-                     <a href=""><i class="bi bi-twitter-x"></i></a>
-                     <a href=""><i class="bi bi-facebook"></i></a>
-                     <a href=""><i class="bi bi-instagram"></i></a>
-                     <a href=""><i class="bi bi-linkedin"></i></a>
+                     <a href="https://www.instagram.com/alignestudio.id/" target="_blank"><i
+                             class="bi bi-instagram"></i></a>
+                     <a href="mailto:info@alignestudio.id" target="_blank"><i class="bi bi-envelope "></i></a>
+                     <a href="https://maps.app.goo.gl/LqvFveWeEfxpXuyk8" target="_blank"><i
+                             class="bi bi-geo-alt"></i></a>
                  </div>
              </div>
 
-     
+
 
          </div>
      </div>

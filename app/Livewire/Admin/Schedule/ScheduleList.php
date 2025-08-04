@@ -268,11 +268,16 @@ class ScheduleList extends Component
             ->get()
             ->toArray();
 
-        // Generate time slots (8:00 - 20:00, every hour)
+        // Get time slots from ScheduleTime based on selected group class
+        $scheduleTimeSlots = \App\Models\ScheduleTime::where('group_class_id', $this->selectedgroupclass)
+            ->orderBy('time')
+            ->get();
+
         $timeSlots = [];
-        for ($hour = 8; $hour <= 19; $hour++) {
-            $startTime = sprintf('%02d:00', $hour);
-            $endTime = sprintf('%02d:00', $hour + 1);
+        foreach ($scheduleTimeSlots as $slot) {
+            $startTime = \Carbon\Carbon::parse($slot->time)->format('H:i');
+            // Calculate end time (assuming 1 hour duration, can be customized)
+            $endTime = \Carbon\Carbon::parse($slot->time)->addHour()->format('H:i');
             
             // Check if this time slot has a schedule
             $existingSchedule = $this->schedule_data->first(function($schedule) use ($startTime) {
@@ -283,8 +288,31 @@ class ScheduleList extends Component
                 'start_time' => $startTime,
                 'end_time' => $endTime,
                 'schedule' => $existingSchedule,
-                'is_available' => !$existingSchedule
+                'is_available' => !$existingSchedule,
+                'slot_name' => $slot->name,
+                'slot_id' => $slot->id
             ];
+        }
+
+        // If no schedule times found, fallback to default time slots
+        if (empty($timeSlots)) {
+            for ($hour = 8; $hour <= 19; $hour++) {
+                $startTime = sprintf('%02d:00', $hour);
+                $endTime = sprintf('%02d:00', $hour + 1);
+                
+                // Check if this time slot has a schedule
+                $existingSchedule = $this->schedule_data->first(function($schedule) use ($startTime) {
+                    return $schedule->start_time->format('H:i') === $startTime;
+                });
+                
+                $timeSlots[] = [
+                    'start_time' => $startTime,
+                    'end_time' => $endTime,
+                    'schedule' => $existingSchedule,
+                    'is_available' => !$existingSchedule,
+                    'slot_name' => $startTime . ' - ' . $endTime
+                ];
+            }
         }
 
         return view('livewire.admin.schedule.schedule-list', [

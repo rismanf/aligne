@@ -205,7 +205,7 @@ class ProductList extends Component
             ]);
         }
 
-        $this->reset();
+        $this->reset('name', 'description', 'price', 'valid_until', 'category', 'package_type', 'class_kuotas');
         $this->createForm = false;
 
         $this->toast(
@@ -278,7 +278,7 @@ class ProductList extends Component
             ]);
         }
 
-        $this->reset();
+         $this->reset('name', 'description', 'price', 'valid_until', 'category', 'package_type', 'class_kuotas');
         $this->editForm = false;
 
         $this->toast(

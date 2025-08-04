@@ -2,9 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Product;
-use App\Models\UserMembership;
-use App\Models\UserProduk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -12,21 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class CheckoutMembershipMail extends Mailable
+class bookingInvoiceEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $id;
-    public $invoice;
     /**
      * Create a new message instance.
      */
-    public function __construct($id)
+    public function __construct()
     {
-
-        $this->invoice = UserMembership::with(['membership', 'user'])
-            ->where('invoice_number', $id)
-            ->first();
+        //
     }
 
     /**
@@ -35,7 +27,7 @@ class CheckoutMembershipMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invoice payment',
+            subject: 'Booking Invoice Email',
         );
     }
 
@@ -45,7 +37,7 @@ class CheckoutMembershipMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.invoice',
+            view: 'emails.booking-invoice',
         );
     }
 

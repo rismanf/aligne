@@ -28,30 +28,20 @@
 
             <div class="row position-relative">
 
-                <div class="col-lg-7 about-img" data-aos="zoom-out" data-aos-delay="200">
-                    <img src="assets/img/home/image2.webp" alt="">
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                    <h2 class="inner-title">Welcome to Aligné Studio</h2>
+                    <p class="subtitle">— your sanctuary of wellness in the heart of SCBD Jakarta</p>
+                    <div class="our-story">
+                        <p>Nestled amidst the vibrant pulse of the city, our premium studio offers a tranquil escape for those seeking to nurture their body and soul.</p>
+                        
+                        <p>At Aligné Studio, we believe in harmony and holistic well-being. Explore our diverse range of classes, including Pilates, aerial yoga, yoga, barre, and dance — each designed to elevate your physical strength, flexibility, and inner peace. Our devoted team of professional instructors certified is here to guide you on your personal journey, whether you're a beginner or an experienced enthusiast.</p>
+
+                        <p>Escape the chaos of urban life and discover a warm, inviting space where balance and wellness come together. Join us and experience the transformative power of movement at Aligné Studio — a place where your body and spirit align.</p>
+                    </div>
                 </div>
 
-                <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
-                    <h2 class="inner-title">More Than Movement — It’s a Way of Living.</h2>
-                    <div class="our-story">
-                        <h3>Our Story</h3>
-                        <p>Aligné was born from a belief that movement should be meaningful. Founded by passionate women
-                            and led by certified instructors, our mission is to create a space where every body feels
-                            empowered, supported, and aligned — physically and mentally.</p>
-
-                        <p>Whether you come for strength, stillness, or support, Aligné offers more than just fitness.
-                        </p>
-                        <p>Our programs also serve as a gentle yet effective approach to physical rehabilitation,
-                            helping those recovering from injuries, managing scoliosis, knee pain, postural imbalances,
-                            and more. Movement is not one-size-fits-all — and neither is your journey.</p>
-
-                        {{-- <div class="watch-video d-flex align-items-center position-relative">
-                            <i class="bi bi-play-circle"></i>
-                            <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox stretched-link">Watch
-                                Video</a>
-                        </div> --}}
-                    </div>
+                <div class="col-lg-6 about-img" data-aos="zoom-out" data-aos-delay="200">
+                    <img src="assets/img/home/image2.webp" alt="Woman using Pilates reformer at Aligné Studio">
                 </div>
 
             </div>
@@ -73,11 +63,11 @@
             <div class="row gy-4">
 
                 @foreach ($classes as $class)
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <article class="position-relative h-100">
 
                             <div class="post-img position-relative overflow-hidden">
-                                <img src="{{ asset('storage/' . $class->image_original) }}" class="img-fluid"
+                                <img src="{{ asset('assets/img/reformerpilatesstudioadelaide.jpg') }}" class="img-fluid"
                                     alt="">
                             </div>
 
@@ -89,11 +79,8 @@
                                     {!! $class->description !!}
                                 </p>
 
-                                <hr>
-
                                 <a href="{{ route('detail-class', ['id' => $class->id, 'date' => date('Y-m-d')]) }}"
-                                    class="readmore stretched-link"><span>Select</span><i
-                                        class="bi bi-arrow-right"></i></a>
+                                    class="readmore stretched-link"></a>
 
                             </div>
 
@@ -108,7 +95,7 @@
 
 
     <!-- Testimonials Section -->
-    <section id="testimonials" class="testimonials section">
+    {{-- <section id="testimonials" class="testimonials section">
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
@@ -201,5 +188,5 @@
 
         </div>
 
-    </section><!-- /Testimonials Section -->
+    </section><!-- /Testimonials Section --> --}}
 </div>

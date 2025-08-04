@@ -70,7 +70,7 @@ class Checkout extends Component
 
         try {
             $userEmail = Auth::user()->email;
-            Mail::to($userEmail)->send(new CheckoutMembershipMail($data->id));
+            Mail::to($userEmail)->send(new CheckoutMembershipMail($invoiceNumber));
             Log::info('Email sent to: ' . $userEmail);
         } catch (\Exception $e) {
             Log::error('Failed to send email: ' . $e->getMessage());
