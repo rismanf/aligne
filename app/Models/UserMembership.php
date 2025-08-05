@@ -146,6 +146,12 @@ class UserMembership extends Model
             return 0;
         }
 
+        // For flexible quota packages, return the shared quota
+        if ($this->isFlexibleQuota()) {
+            return $this->getRemainingFlexibleQuota();
+        }
+
+        // For fixed quota packages, return specific class quota
         return UserKuota::where('user_id', $this->user_id)
             ->where('class_id', $groupClassId)
             ->where('invoice_number', $this->invoice_number)
@@ -238,38 +244,25 @@ class UserMembership extends Model
             ? now()->addDays($membership->valid_until)->format('Y-m-d')
             : '9999-01-01';
 
-        // Check if this is a combination package (like "Elevate Pack 8x Reformer / Chair Class")
-        $isCombinationPackage = $this->isCombinationPackage();
-        
-        if ($isCombinationPackage) {
-            // For combination packages, create a single shared quota entry
+        // Use the new quota strategy system
+        if ($membership->isFlexibleQuota()) {
+            // For flexible quota packages, create a single shared quota entry
             // Use a special class_id of 0 to indicate shared quota across multiple class types
             
-            // Fix for Elevate Pack: Extract the actual quota number from package name
-            $actualQuota = $this->extractQuotaFromPackageName();
-            
-            // If we can't extract from name, fall back to the first class detail quota
-            // (assuming all class details have the same quota for combination packages)
-            if ($actualQuota === null && $classDetails->isNotEmpty()) {
-                $actualQuota = $classDetails->first()->quota;
-            }
-            
-            // Final fallback to sum if no other method works
-            if ($actualQuota === null) {
-                $actualQuota = $classDetails->sum('quota');
-            }
+            // Get the total quota from the first class detail (all should have the same for flexible)
+            $totalQuota = $classDetails->first()->quota ?? 0;
             
             UserKuota::create([
                 'user_id' => $this->user_id,
                 'product_id' => $this->membership_id,
                 'class_id' => 0, // Special ID for shared quota
-                'kuota' => $actualQuota,
+                'kuota' => $totalQuota,
                 'invoice_number' => $this->invoice_number,
                 'start_date' => now(),
                 'end_date' => $validUntil,
             ]);
         } else {
-            // For specific class packages, create separate quotas
+            // For fixed quota packages, create separate quotas per class type
             foreach ($classDetails as $classDetail) {
                 UserKuota::create([
                     'user_id' => $this->user_id,
@@ -290,21 +283,20 @@ class UserMembership extends Model
     }
 
     /**
+     * Check if this is a flexible quota package (replaces old combination package logic)
+     */
+    public function isFlexibleQuota()
+    {
+        return $this->membership && $this->membership->isFlexibleQuota();
+    }
+
+    /**
      * Check if this is a combination package that shares quota across multiple class types
+     * @deprecated Use isFlexibleQuota() instead
      */
     public function isCombinationPackage()
     {
-        if (!$this->membership) {
-            return false;
-        }
-
-        // Check if membership name contains indicators of combination packages
-        $membershipName = strtolower($this->membership->name);
-        
-        return str_contains($membershipName, 'reformer / chair') || 
-               str_contains($membershipName, 'reformer/chair') ||
-               str_contains($membershipName, 'elevate') ||
-               str_contains($membershipName, 'signature class pack');
+        return $this->isFlexibleQuota();
     }
 
     /**
@@ -341,9 +333,9 @@ class UserMembership extends Model
     }
 
     /**
-     * Get remaining quota for combination packages
+     * Get remaining quota for flexible packages
      */
-    public function getRemainingCombinationQuota()
+    public function getRemainingFlexibleQuota()
     {
         if (!$this->isActive()) {
             return 0;
@@ -357,17 +349,35 @@ class UserMembership extends Model
     }
 
     /**
-     * Check if user can book any class type in combination package
+     * Get remaining quota for combination packages
+     * @deprecated Use getRemainingFlexibleQuota() instead
      */
-    public function canBookCombinationClass()
+    public function getRemainingCombinationQuota()
     {
-        return $this->getRemainingCombinationQuota() > 0;
+        return $this->getRemainingFlexibleQuota();
     }
 
     /**
-     * Decrease quota for combination package
+     * Check if user can book any class type in flexible package
      */
-    public function decreaseCombinationQuota()
+    public function canBookFlexibleClass()
+    {
+        return $this->getRemainingFlexibleQuota() > 0;
+    }
+
+    /**
+     * Check if user can book any class type in combination package
+     * @deprecated Use canBookFlexibleClass() instead
+     */
+    public function canBookCombinationClass()
+    {
+        return $this->canBookFlexibleClass();
+    }
+
+    /**
+     * Decrease quota for flexible package
+     */
+    public function decreaseFlexibleQuota()
     {
         $quota = UserKuota::where('user_id', $this->user_id)
             ->where('class_id', 0)
@@ -382,6 +392,15 @@ class UserMembership extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Decrease quota for combination package
+     * @deprecated Use decreaseFlexibleQuota() instead
+     */
+    public function decreaseCombinationQuota()
+    {
+        return $this->decreaseFlexibleQuota();
     }
 
     /**

@@ -14,6 +14,7 @@ class Product extends Model
         'description', 
         'category',
         'package_type',
+        'quota_strategy',
         'price',
         'kuota',
         'valid_until',
@@ -31,6 +32,10 @@ class Product extends Model
     const TYPE_CORE_SERIES = 'core_series';
     const TYPE_ELEVATE_PACK = 'elevate_pack';
     const TYPE_ALIGNE_FLOW = 'aligne_flow';
+
+    // Quota strategies
+    const QUOTA_STRATEGY_FLEXIBLE = 'flexible';
+    const QUOTA_STRATEGY_FIXED = 'fixed';
 
     protected $casts = [
         'is_active' => 'boolean',
@@ -60,6 +65,17 @@ class Product extends Model
             self::TYPE_CORE_SERIES => 'The Core Series',
             self::TYPE_ELEVATE_PACK => 'Elevate Pack',
             self::TYPE_ALIGNE_FLOW => 'Aligné Flow',
+        ];
+    }
+
+    /**
+     * Get available quota strategies
+     */
+    public static function getQuotaStrategies()
+    {
+        return [
+            self::QUOTA_STRATEGY_FLEXIBLE => 'Flexible (Shared quota across class types)',
+            self::QUOTA_STRATEGY_FIXED => 'Fixed (Specific quota per class type)',
         ];
     }
 
@@ -137,7 +153,37 @@ class Product extends Model
      */
     public function getTotalClassesAttribute()
     {
+        if ($this->isFlexibleQuota()) {
+            // For flexible quota, return the total quota that can be used across all class types
+            return $this->detailquota()->first()->quota ?? 0;
+        }
+        
         return $this->detailquota()->sum('quota');
+    }
+
+    /**
+     * Check if this package uses flexible quota strategy
+     */
+    public function isFlexibleQuota()
+    {
+        return $this->quota_strategy === self::QUOTA_STRATEGY_FLEXIBLE;
+    }
+
+    /**
+     * Check if this package uses fixed quota strategy
+     */
+    public function isFixedQuota()
+    {
+        return $this->quota_strategy === self::QUOTA_STRATEGY_FIXED;
+    }
+
+    /**
+     * Get quota strategy display name
+     */
+    public function getQuotaStrategyNameAttribute()
+    {
+        $strategies = self::getQuotaStrategies();
+        return $strategies[$this->quota_strategy] ?? 'Unknown';
     }
 
     /**

@@ -120,7 +120,6 @@ class Membership extends Component
                 ]
             ];
         }
-
         return view('livewire.public.membership', [
             'groupedProducts' => $groupedProducts,
             'categories' => $this->categories,

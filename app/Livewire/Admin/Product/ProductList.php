@@ -13,7 +13,7 @@ class ProductList extends Component
 {
     use Toast;
 
-    public $id, $name, $description, $kuota, $price, $valid_until, $class_id, $category, $package_type;
+    public $id, $name, $description, $kuota, $price, $valid_until, $class_id, $category, $package_type, $quota_strategy;
 
     public bool $createForm = false;
     public bool $editForm = false;
@@ -33,6 +33,9 @@ class ProductList extends Component
 
     public function mount()
     {
+        // Initialize quota_strategy with default value
+        $this->quota_strategy = 'fixed';
+        
         $this->class_list = GroupClass::all()->map(function($class) {
             return [
                 'id' => $class->id,
@@ -183,6 +186,7 @@ class ProductList extends Component
             'price' => 'required|numeric',
             'valid_until' => 'required|numeric',
             'description' => 'required|string|max:255|min:10',
+            'quota_strategy' => 'required|in:flexible,fixed',
             'class_kuotas.*.class_id' => 'required',
             'class_kuotas.*.kuota' => 'required|integer|min:1',
         ]);
@@ -194,18 +198,32 @@ class ProductList extends Component
             'valid_until' => $this->valid_until,
             'category' => $this->category,
             'package_type' => $this->package_type,
+            'quota_strategy' => $this->quota_strategy,
             'is_active' => true
         ]);
 
-        foreach ($this->class_kuotas as $item) {
-            ClassMembership::create([
-                'membership_id' => $data_product->id,
-                'class_id' => $item['class_id'],
-                'quota' => $item['kuota'],
-            ]);
+        // For flexible quota, all class types should have the same quota
+        if ($this->quota_strategy === 'flexible') {
+            $totalQuota = $this->class_kuotas[0]['kuota'] ?? 0;
+            foreach ($this->class_kuotas as $item) {
+                ClassMembership::create([
+                    'membership_id' => $data_product->id,
+                    'class_id' => $item['class_id'],
+                    'quota' => $totalQuota, // Same quota for all classes in flexible packages
+                ]);
+            }
+        } else {
+            // For fixed quota, use individual quotas
+            foreach ($this->class_kuotas as $item) {
+                ClassMembership::create([
+                    'membership_id' => $data_product->id,
+                    'class_id' => $item['class_id'],
+                    'quota' => $item['kuota'],
+                ]);
+            }
         }
 
-        $this->reset('name', 'description', 'price', 'valid_until', 'category', 'package_type', 'class_kuotas');
+        $this->reset('name', 'description', 'price', 'valid_until', 'category', 'package_type', 'quota_strategy', 'class_kuotas');
         $this->createForm = false;
 
         $this->toast(
@@ -232,6 +250,7 @@ class ProductList extends Component
         $this->price = $product->price;
         $this->category = $product->category ?? 'signature';
         $this->package_type = $product->package_type;
+        $this->quota_strategy = $product->quota_strategy ?? 'fixed';
         $this->id = $id;
         
         $this->class_kuotas = $classDetails->map(function ($item) {
@@ -255,6 +274,7 @@ class ProductList extends Component
             'price' => 'required|numeric',
             'valid_until' => 'required|numeric',
             'description' => 'required|string|max:255|min:10',
+            'quota_strategy' => 'required|in:flexible,fixed',
             'class_kuotas.*.class_id' => 'required',
             'class_kuotas.*.kuota' => 'required|integer|min:1',
         ]);
@@ -267,18 +287,33 @@ class ProductList extends Component
             'price' => $this->price,
             'category' => $this->category,
             'package_type' => $this->package_type,
+            'quota_strategy' => $this->quota_strategy,
         ]);
 
         ClassMembership::where('membership_id', $this->id)->delete();
-        foreach ($this->class_kuotas as $item) {
-            ClassMembership::create([
-                'membership_id' => $this->id,
-                'class_id' => $item['class_id'],
-                'quota' => $item['kuota'],
-            ]);
+        
+        // For flexible quota, all class types should have the same quota
+        if ($this->quota_strategy === 'flexible') {
+            $totalQuota = $this->class_kuotas[0]['kuota'] ?? 0;
+            foreach ($this->class_kuotas as $item) {
+                ClassMembership::create([
+                    'membership_id' => $this->id,
+                    'class_id' => $item['class_id'],
+                    'quota' => $totalQuota, // Same quota for all classes in flexible packages
+                ]);
+            }
+        } else {
+            // For fixed quota, use individual quotas
+            foreach ($this->class_kuotas as $item) {
+                ClassMembership::create([
+                    'membership_id' => $this->id,
+                    'class_id' => $item['class_id'],
+                    'quota' => $item['kuota'],
+                ]);
+            }
         }
 
-         $this->reset('name', 'description', 'price', 'valid_until', 'category', 'package_type', 'class_kuotas');
+         $this->reset('name', 'description', 'price', 'valid_until', 'category', 'package_type', 'quota_strategy', 'class_kuotas');
         $this->editForm = false;
 
         $this->toast(
@@ -303,6 +338,7 @@ class ProductList extends Component
         $this->valid_until = $product->valid_until;
         $this->category = $product->category ?? 'signature';
         $this->package_type = $product->package_type;
+        $this->quota_strategy = $product->quota_strategy ?? 'fixed';
         
         // Get class details for display
         $this->class_kuotas = $product->groupClasses->map(function($class) {
@@ -348,6 +384,7 @@ class ProductList extends Component
     public function resetForm()
     {
         $this->reset(['name', 'description', 'price', 'valid_until', 'category', 'package_type']);
+        $this->quota_strategy = 'fixed';
         $this->class_kuotas = [['class_id' => '', 'kuota' => '']];
     }
 }
