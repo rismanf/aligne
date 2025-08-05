@@ -3,7 +3,7 @@
 
           <a href="{{ route('/') }}" class="logo d-flex align-items-center me-auto">
               <!-- Uncomment the line below if you also wish to use an image logo -->
-              <!-- <img src="assets/img/logo.png" alt=""> -->
+              <img src="{{ asset('images/logo-black.webp') }}" alt="">
               <h1 class="sitename">{{ config('app.name') }}</h1><span>.</span>
           </a>
 
