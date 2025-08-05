@@ -2,13 +2,13 @@
     <!-- Contact Section -->
     <section id="contact" class="contact section">
 
-        <div class="mb-5">
-            <iframe style="width: 100%; height: 400px;"
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-                frameborder="0" allowfullscreen=""></iframe>
-        </div><!-- End Google Maps -->
 
-        <div class="container">
+
+        <div class="container" style="margin-top: 20px">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Contact Us</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+            </div>
 
             <div class="row gy-5 gx-lg-5">
 
@@ -20,15 +20,17 @@
                             minus.</p>
 
                         <div class="info-item d-flex">
-                            <i class="bi bi-geo-alt flex-shrink-0"></i>
+                            <a href="https://maps.app.goo.gl/LqvFveWeEfxpXuyk8" target="_blank"><i
+                                    class="bi bi-geo-alt flex-shrink-0"></i></a>
                             <div>
                                 <h4>Location:</h4>
-                                <p>SCDB, Tower, Level, Jakarta</p>
+                                <p>Kawasan SCBD, Jl. Jend. Sudirman kav 52-53 Senayan, Kec. Kby.
+                                    Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12190</p>
                             </div>
                         </div><!-- End Info Item -->
 
                         <div class="info-item d-flex">
-                            <i class="bi bi-envelope flex-shrink-0"></i>
+                            <a href="mailto:info@alignestudio.id"><i class="bi bi-envelope flex-shrink-0"></i></a>
                             <div>
                                 <h4>Email:</h4>
                                 <p>info@alignestudio.id</p>
@@ -36,10 +38,10 @@
                         </div><!-- End Info Item -->
 
                         <div class="info-item d-flex">
-                            <i class="bi bi-phone flex-shrink-0"></i>
+                            <a href="https://wa.me/+6282299294018"><i class="bi bi-phone flex-shrink-0"></i></a>
                             <div>
                                 <h4>Call:</h4>
-                                <p>+62</p>
+                                <p>+62 822-9929-4018</p>
                             </div>
                         </div><!-- End Info Item -->
 

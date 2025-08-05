@@ -113,8 +113,8 @@ class TrainerList extends Component
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'title' => 'required|string|max:255',
-            'avatar' => 'image|max:1024',
+            'title' => 'nullable|string|max:255',
+            'avatar' => 'nullable|image|max:1024',
         ]);
 
         $trainer = Trainer::find($this->id);

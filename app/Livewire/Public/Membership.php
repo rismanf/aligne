@@ -60,7 +60,7 @@ class Membership extends Component
             // Filter by the actual category from database
             $query->where('category', $this->selectedCategory);
         }
-
+        
         $this->products = $query->get();
     }
 
@@ -120,7 +120,6 @@ class Membership extends Component
                 ]
             ];
         }
-
         return view('livewire.public.membership', [
             'groupedProducts' => $groupedProducts,
             'categories' => $this->categories,

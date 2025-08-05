@@ -140,17 +140,17 @@ class Booking extends Component
             return;
         }
 
-        // Check if this is a combination package
-        if ($userMembership->isCombinationPackage()) {
-            // Return quota to combination package (class_id = 0)
-            $combinationQuota = UserKuota::where('user_id', $booking->user_id)
+        // Check if this is a flexible quota package
+        if ($userMembership->isFlexibleQuota()) {
+            // Return quota to flexible package (class_id = 0)
+            $flexibleQuota = UserKuota::where('user_id', $booking->user_id)
                 ->where('class_id', 0)
                 ->where('invoice_number', $userMembership->invoice_number)
                 ->where('end_date', '>', now())
                 ->first();
 
-            if ($combinationQuota) {
-                $combinationQuota->increment('kuota');
+            if ($flexibleQuota) {
+                $flexibleQuota->increment('kuota');
             }
         } else {
             // Return quota to specific class type

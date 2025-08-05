@@ -10,7 +10,7 @@
           <nav id="navmenu" class="navmenu">
               <ul>
 
-                  <li><a href="{{ route('about-us') }}">About</a></li>
+                  <li><a href="{{ route('/') }}">Home</a></li>
                   <li><a href="{{ route('classes') }}">Class</a></li>
                   <li><a href="{{ route('membership') }}">Membership</a></li>
                   <li><a href="{{ route('contact-us') }}">Contact</a></li>

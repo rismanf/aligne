@@ -37,27 +37,31 @@ class Profile extends Component
                 'category' => $membership->membership->category ?? 'general',
                 'expires_at' => $membership->expires_at,
                 'remaining_days' => $membership->getRemainingDays(),
-                'is_combination' => $membership->isCombinationPackage(),
+                'is_flexible' => $membership->isFlexibleQuota(),
+                'quota_strategy' => $membership->membership->quota_strategy,
                 'quotas' => []
             ];
 
-            if ($membership->isCombinationPackage()) {
-                // For combination packages (like Elevate Pack)
-                $remainingQuota = $membership->getRemainingCombinationQuota();
+            if ($membership->isFlexibleQuota()) {
+                // For flexible quota packages
+                $remainingQuota = $membership->getRemainingFlexibleQuota();
+                $classTypes = $membership->membership->groupClasses->pluck('name')->toArray();
                 $details['quotas'][] = [
-                    'class_name' => 'Reformer / Chair Classes',
+                    'class_name' => implode(' / ', $classTypes) . ' Classes',
                     'remaining_quota' => $remainingQuota,
-                    'class_types' => $membership->membership->groupClasses->pluck('name')->toArray()
+                    'class_types' => $classTypes,
+                    'quota_type' => 'flexible'
                 ];
             } else {
-                // For specific class packages
+                // For fixed quota packages
                 foreach ($membership->membership->groupClasses as $groupClass) {
                     $remainingQuota = $membership->getRemainingQuotaForClass($groupClass->id);
                     if ($remainingQuota > 0) {
                         $details['quotas'][] = [
                             'class_name' => $groupClass->name,
                             'class_category' => ucfirst($groupClass->category),
-                            'remaining_quota' => $remainingQuota
+                            'remaining_quota' => $remainingQuota,
+                            'quota_type' => 'fixed'
                         ];
                     }
                 }

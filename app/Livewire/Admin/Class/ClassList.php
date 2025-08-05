@@ -17,6 +17,7 @@ class ClassList extends Component
     public $id, $name, $class_type;
     public $class_type_list = [];
     public $class_level_id;
+    public $selectGroupClass;
 
     public $class_level = [
         ['id' => '1', 'name' => 'BEGINNER'],
@@ -51,13 +52,33 @@ class ClassList extends Component
             ],
         ];
 
-        $news = Classes::orderBy('created_at', 'desc')->paginate(5);
+        // Prepare class type options with "All" option first
+        $class_type_options = collect([
+            ['id' => '', 'name' => 'All Group Classes']
+        ])->merge(
+            GroupClass::all()->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                ];
+            })
+        )->toArray();
 
-        $news->getCollection()->transform(function ($val, $index) use ($news) {
-            $val->row_number = ($news->currentPage() - 1) * $news->perPage() + $index + 1;
+        // Build query with filters
+        $query = Classes::orderBy('created_at', 'desc');
+
+        // Apply group class filter if selected
+        if ($this->selectGroupClass) {
+            $query->where('group_class_id', $this->selectGroupClass);
+        }
+
+        // Execute query with pagination
+        $class = $query->paginate(5);
+
+        $class->getCollection()->transform(function ($val, $index) use ($class) {
+            $val->row_number = ($class->currentPage() - 1) * $class->perPage() + $index + 1;
             return $val;
         });
-
 
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
@@ -68,16 +89,11 @@ class ClassList extends Component
             ['key' => 'updated_at', 'label' => 'Updated At'],
             ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
         ];
-        $this->class_type_list = GroupClass::all()->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-            ];
-        })->toArray();
+
         return view('livewire.admin.class.class-list', [
             't_headers' => $t_headers,
-            'class' => $news,
-            'class_type' => $this->class_type_list,
+            'class' => $class,
+            'class_type_options' => $class_type_options,
         ])->layout('components.layouts.app', [
             'breadcrumbs' => $breadcrumbs,
             'title' => $title,

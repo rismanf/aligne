@@ -65,7 +65,11 @@
                                                     <div>
                                                         {{ \Carbon\Carbon::parse($booking['date'])->format('D, M j, Y') }}
                                                         <br>
-                                                        <small class="text-muted">{{ $booking['start_time'] }} - {{ $booking['end_time'] }}</small>
+                                                         <small class="text-muted">
+                                                            {{ \Carbon\Carbon::parse($booking['start_time'])->format('h:i A') }}
+                                                            -
+                                                            {{ \Carbon\Carbon::parse($booking['end_time'])->format('h:i A') }}
+                                                        </small>                                                       
                                                     </div>
                                                 </td>
                                                 <td>{{ $booking['trainer_name'] }}</td>
@@ -137,7 +141,11 @@
                                                     <div>
                                                         {{ \Carbon\Carbon::parse($booking['date'])->format('D, M j, Y') }}
                                                         <br>
-                                                        <small class="text-muted">{{ $booking['start_time'] }} - {{ $booking['end_time'] }}</small>
+                                                       <small class="text-muted">
+                                                            {{ \Carbon\Carbon::parse($booking['start_time'])->format('h:i A') }}
+                                                            -
+                                                            {{ \Carbon\Carbon::parse($booking['end_time'])->format('h:i A') }}
+                                                        </small>
                                                     </div>
                                                 </td>
                                                 <td>{{ $booking['trainer_name'] }}</td>

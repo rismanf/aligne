@@ -136,14 +136,30 @@ class ClassSchedules extends Component
                 return;
             }
 
-            // Check and deduct quota
-            $userQuota = UserKuota::where('user_id', Auth::id())
-                ->where('class_id', $schedule->class_id)
-                ->where('kuota', '>', 0)
-                ->where('end_date', '>', Carbon::now())
-                ->first();
+            // Check and deduct quota based on membership strategy
+            $quotaDeducted = false;
+            
+            // First, try to use flexible quota if available
+            if ($userMembership->isFlexibleQuota() && $userMembership->canBookFlexibleClass()) {
+                // For flexible quota packages, deduct from shared quota
+                if ($userMembership->decreaseFlexibleQuota()) {
+                    $quotaDeducted = true;
+                }
+            } else {
+                // For fixed quota packages, deduct from specific class quota
+                $userQuota = UserKuota::where('user_id', Auth::id())
+                    ->where('class_id', $schedule->class_id)
+                    ->where('kuota', '>', 0)
+                    ->where('end_date', '>', Carbon::now())
+                    ->first();
 
-            if (!$userQuota) {
+                if ($userQuota) {
+                    $userQuota->decrement('kuota');
+                    $quotaDeducted = true;
+                }
+            }
+
+            if (!$quotaDeducted) {
                 session()->flash('error', 'You do not have quota for this class type.');
                 return;
             }
@@ -156,9 +172,6 @@ class ClassSchedules extends Component
                 'booking_status' => 'confirmed',
                 'booked_at' => Carbon::now(),
             ]);
-
-            // Deduct quota
-            $userQuota->decrement('kuota');
 
             // Increase participants count
             $schedule->increment('current_participants');
@@ -212,9 +225,18 @@ class ClassSchedules extends Component
 
         // Check if any active membership allows booking this class type
         foreach ($activeMemberships as $membership) {
-            if ($membership->canBookClassType($schedule->classes->group_class_id) && 
-                $membership->getRemainingQuotaForClass($schedule->classes->group_class_id) > 0) {
-                return true;
+            // For flexible quota packages, check if they can book any class and have quota
+            if ($membership->isFlexibleQuota()) {
+                if ($membership->canBookClassType($schedule->classes->group_class_id) && 
+                    $membership->canBookFlexibleClass()) {
+                    return true;
+                }
+            } else {
+                // For fixed quota packages, check specific class quota
+                if ($membership->canBookClassType($schedule->classes->group_class_id) && 
+                    $membership->getRemainingQuotaForClass($schedule->classes->group_class_id) > 0) {
+                    return true;
+                }
             }
         }
 

@@ -8,6 +8,13 @@
     @endphp
 
     <x-card>
+        <div class="flex justify-between items-center gap-2">
+            {{-- Filter kiri --}}
+            <div class="flex gap-1">
+                <x-select wire:model="selectGroupClass" :options="$class_type_options" option-label="name" option-value="id" 
+                    placeholder="Filter by Group Class" wire:change="gotoPage(1)" />
+            </div>
+        </div>
         <div class="flex justify-end mb-4">
             @can('class-create')
                 <x-button label="Add" icon="o-plus" wire:click="showAddModal()" class="btn-primary btn-xs p-2" />

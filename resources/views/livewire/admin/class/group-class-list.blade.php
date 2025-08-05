@@ -9,9 +9,9 @@
 
     <x-card>
         <div class="flex justify-end mb-4">
-            @can('class-create')
+            {{-- @can('class-create')
                 <x-button label="Add" icon="o-plus" wire:click="showAddModal()" class="btn-primary btn-xs p-2" />
-            @endcan
+            @endcan --}}
         </div>
 
         <x-hr target="gotoPage" />
@@ -27,9 +27,9 @@
                     @can('class-edit')
                         <x-button icon="o-pencil" wire:click="showEditModal({{ $class->id }})" spinner class="btn-xs" />
                     @endcan
-                    @can('class-delete')
+                    {{-- @can('class-delete')
                         <x-button icon="o-trash" wire:click="showDeleteModal({{ $class->id }})" spinner class="btn-xs" />
-                    @endcan
+                    @endcan --}}
                 </div>
             @endscope
         </x-table>

@@ -21,12 +21,15 @@
                                 <p class="mb-1">Class: Until canceled</p>
                                 <p class="mb-0">Sessions: {{ $product->kuota }}</p>
                             </div> --}}
-                            <div class=" text-muted small mt-2  ml-2">
-                                <ul>
-                                    @foreach ($product->classes as $class)
-                                        <li>{{ $class->name }} - Quota: {{ $class->pivot->quota }}</li>
-                                    @endforeach
-                                </ul>
+                            <div class=" text-muted small mt-2 ml-2 text-left">
+                                @foreach ($product->groupClasses as $class)
+                                    <div class="col-md-6 mb-2">
+                                        <div class="d-flex justify-content-between">
+                                            <span>{{ $class->name }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+
                             </div>
                             <div class="d-flex justify-content-between mt-3">
                                 <strong>Code unique</strong>

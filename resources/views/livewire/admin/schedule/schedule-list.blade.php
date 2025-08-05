@@ -58,6 +58,9 @@
                                 <h4 class="font-bold text-lg">
                                     {{ $slot['start_time'] }} - {{ $slot['end_time'] }}
                                 </h4>
+                                @if(isset($slot['slot_name']) && $slot['slot_name'] !== $slot['start_time'] . ' - ' . $slot['end_time'])
+                                    <p class="text-sm text-gray-600">{{ $slot['slot_name'] }}</p>
+                                @endif
                             </div>
                             
                             @if($slot['is_available'])
