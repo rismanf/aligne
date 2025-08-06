@@ -56,6 +56,8 @@ use App\Models\User;
 
 // Route bawaan login (Livewire)
 Route::get('/login', Login::class)->name('login');
+Route::get('/forgot-password', App\Livewire\Auth\ForgotPassword::class)->name('forgot-password');
+Route::get('/reset-password/{token}', App\Livewire\Auth\ResetPassword::class)->name('reset-password');
 
 Route::get('/logout', function () {
     auth()->logout();

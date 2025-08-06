@@ -3,7 +3,7 @@
     <section id="pricing" class="pricing section">
         <div class="container">
             <!-- Section Header -->
-            <div class="section-header text-center mb-5" data-aos="fade-up">
+            <div class="section-header text-center mb-5">
                 <h2>Membership Packages</h2>
                 <p>Choose the perfect membership package for your fitness journey</p>
             </div>
@@ -32,7 +32,7 @@
                     @endif
                     <div class="row gy-4 justify-content-center">
                         @foreach ($categoryData['products'] as $product)
-                            <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="col-lg-4">
                                 <div class="pricing-item {{ $loop->index === 1 ? 'featured' : '' }}">
                                     @if($loop->index === 1)
                                         <div class="popular-badge">Most Popular</div>
