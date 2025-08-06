@@ -56,6 +56,8 @@ use App\Models\User;
 
 // Route bawaan login (Livewire)
 Route::get('/login', Login::class)->name('login');
+Route::get('/forgot-password', App\Livewire\Auth\ForgotPassword::class)->name('forgot-password');
+Route::get('/reset-password/{token}', App\Livewire\Auth\ResetPassword::class)->name('reset-password');
 
 Route::get('/logout', function () {
     auth()->logout();
@@ -81,6 +83,8 @@ Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/news', News::class)->name('news');
 Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');
 Route::get('/register', Register::class)->name('register');
+Route::get('/member-checkin', App\Livewire\Public\MemberCheckin::class)->name('member-checkin');
+Route::get('/booking-detail/{bookingId}', App\Livewire\Public\BookingDetail::class)->name('booking-detail');
 // Route::get('/vcard', Vcard::class)->name('vcard');
 
 // });

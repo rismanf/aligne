@@ -7,7 +7,6 @@
         <div class="container" style="margin-top: 20px">
             <div class="section-header" data-aos="fade-up">
                 <h2>Contact Us</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
             </div>
 
             <div class="row gy-5 gx-lg-5">
@@ -16,8 +15,7 @@
 
                     <div class="info">
                         <h3>Get in touch</h3>
-                        <p>Et id eius voluptates atque nihil voluptatem enim in tempore minima sit ad mollitia commodi
-                            minus.</p>
+                        <p>Nestled amidst the vibrant pulse of the city, our premium studio offers a tranquil escape for those seeking to nurture their body and soul.</p>
 
                         <div class="info-item d-flex">
                             <a href="https://maps.app.goo.gl/LqvFveWeEfxpXuyk8" target="_blank"><i

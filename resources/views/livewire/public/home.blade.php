@@ -7,9 +7,9 @@
                 <img src="{{ asset('assets/img/hero.jpg') }}" alt="">
                 <div class="container col-lg-4 col-auto ">
                     <h2>Discover Your Strongest Self</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                        laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <p>At Aligné Studio, we believe in harmony and holistic well-being. Explore our diverse range of
+                        classes, including Pilates, aerial yoga, yoga, barre, and dance — each designed to elevate your
+                        physical strength, flexibility, and inner peace.</p>
                     <a href="{{ route('classes') }}" class="btn-get-started rounded-pill">Class</a>
                     <a href="{{ route('membership') }}" class="btn-get-started rounded-pill">Membership</a>
                 </div>
@@ -32,11 +32,18 @@
                     <h2 class="inner-title">Welcome to Aligné Studio</h2>
                     <p class="subtitle">— your sanctuary of wellness in the heart of SCBD Jakarta</p>
                     <div class="our-story">
-                        <p>Nestled amidst the vibrant pulse of the city, our premium studio offers a tranquil escape for those seeking to nurture their body and soul.</p>
-                        
-                        <p>At Aligné Studio, we believe in harmony and holistic well-being. Explore our diverse range of classes, including Pilates, aerial yoga, yoga, barre, and dance — each designed to elevate your physical strength, flexibility, and inner peace. Our devoted team of professional instructors certified is here to guide you on your personal journey, whether you're a beginner or an experienced enthusiast.</p>
+                        <p>Nestled amidst the vibrant pulse of the city, our premium studio offers a tranquil escape for
+                            those seeking to nurture their body and soul.</p>
 
-                        <p>Escape the chaos of urban life and discover a warm, inviting space where balance and wellness come together. Join us and experience the transformative power of movement at Aligné Studio — a place where your body and spirit align.</p>
+                        <p>At Aligné Studio, we believe in harmony and holistic well-being. Explore our diverse range of
+                            classes, including Pilates, aerial yoga, yoga, barre, and dance — each designed to elevate
+                            your physical strength, flexibility, and inner peace. Our devoted team of professional
+                            instructors certified is here to guide you on your personal journey, whether you're a
+                            beginner or an experienced enthusiast.</p>
+
+                        <p>Escape the chaos of urban life and discover a warm, inviting space where balance and wellness
+                            come together. Join us and experience the transformative power of movement at Aligné Studio
+                            — a place where your body and spirit align.</p>
                     </div>
                 </div>
 
@@ -64,10 +71,10 @@
 
                 @foreach ($classes as $class)
                     <div class="col-lg-3">
-                        <article class="position-relative h-100">
+                        <article class="position-relative h-100 rounded-5">
 
-                            <div class="post-img position-relative overflow-hidden">
-                                <img src="{{ asset('assets/img/reformerpilatesstudioadelaide.jpg') }}" class="img-fluid"
+                            <div class="post-img position-relative overflow-hidden rounded-top-5">
+                                <img src="{{ asset('storage/' . $class->image_original) }}" class="img-fluid"
                                     alt="">
                             </div>
 
@@ -79,8 +86,17 @@
                                     {!! $class->description !!}
                                 </p>
 
-                                <a href="{{ route('detail-class', ['id' => $class->id, 'date' => date('Y-m-d')]) }}"
-                                    class="readmore stretched-link"></a>
+                                <hr>
+                                @if ($class->id == 4)
+                                    <a href="https://wa.me/+6282299294018" target="_blank"
+                                        class="readmore stretched-link"><span>Select</span><i
+                                            class="bi bi-arrow-right"></i></a>
+                                @else
+                                    <a href="{{ route('detail-class', ['id' => $class->id, 'date' => date('Y-m-d')]) }}"
+                                        class="readmore stretched-link"><span>Select</span><i
+                                            class="bi bi-arrow-right"></i></a>
+                                @endif
+
 
                             </div>
 

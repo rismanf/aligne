@@ -7,7 +7,6 @@
                      <img src="{{ asset('image/Aligne_White.webp') }}" alt="Logo">
                  </a>
                  <div class="footer-contact pt-3">
-                     <p>Aligné Studio</p>
                      <p>Kawasan SCBD, </p>
                      <p>Jl. Jend. Sudirman kav 52-53 Senayan,</p>
                      <p>Kec. Kby. Baru, Kota Jakarta Selatan,</p>

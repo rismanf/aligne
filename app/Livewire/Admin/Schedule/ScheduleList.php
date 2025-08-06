@@ -29,7 +29,7 @@ class ScheduleList extends Component
     public $name, $start_time, $end_time, $trainer_id, $class_id, $capacity, $duration, $id;
     public $class_level = [
         'beginner' => 'Beginner',
-        'intermediate' => 'Intermediate', 
+        'intermediate' => 'Intermediate',
         'advanced' => 'Advanced',
     ];
 
@@ -63,7 +63,7 @@ class ScheduleList extends Component
 
         if ($scheduleId) {
             $schedule = ClassSchedules::find($scheduleId);
-            
+
             if ($schedule) {
                 $this->name = $schedule->name;
                 $this->start_time = $schedule->start_time->format('H:i');
@@ -82,7 +82,7 @@ class ScheduleList extends Component
     public function update()
     {
         $this->validate([
-            'name' => 'required|string|max:200',
+            // 'name' => 'required|string|max:200',
             'start_time' => 'required',
             'end_time' => 'required',
             'class_id' => 'required',
@@ -106,10 +106,10 @@ class ScheduleList extends Component
         $duration = $startDateTime->diffInMinutes($endDateTime);
 
         // Generate name if not provided
-        if (!$this->name) {
-            $class = Classes::find($this->class_id);
-            $this->name = $class->name . ' - ' . $startDateTime->format('H:i');
-        }
+        // if (!$this->name) {
+        $class = Classes::find($this->class_id);
+        $this->name = $class->name . ' - ' . $startDateTime->format('H:i');
+        // }
 
         if ($this->id) {
             // Update existing schedule
@@ -117,7 +117,7 @@ class ScheduleList extends Component
             $schedule->update([
                 'name' => $this->name,
                 'class_id' => $this->class_id,
-                'trainer_id' => $this->trainer_id,               
+                'trainer_id' => $this->trainer_id,
                 'start_time' => $startDateTime,
                 'end_time' => $endDateTime,
                 'duration' => $duration,
@@ -130,7 +130,7 @@ class ScheduleList extends Component
                 'name' => $this->name,
                 'class_id' => $this->class_id,
                 'trainer_id' => $this->trainer_id,
-                 'date'=> $this->selectedDate,
+                'date' => $this->selectedDate,
                 'start_time' => $startDateTime,
                 'end_time' => $endDateTime,
                 'duration' => $duration,
@@ -181,7 +181,7 @@ class ScheduleList extends Component
 
         // Get schedules from the source date
         $sourceSchedules = ClassSchedules::with('trainer', 'classes')
-            ->whereHas('classes', function($query) {
+            ->whereHas('classes', function ($query) {
                 $query->where('group_class_id', $this->selectedgroupclass);
             })
             ->whereDate('start_time', $this->copyFromDate)
@@ -193,11 +193,11 @@ class ScheduleList extends Component
         }
 
         // Check if target date already has schedules
-        $existingSchedules = ClassSchedules::whereHas('classes', function($query) {
+        $existingSchedules = ClassSchedules::whereHas('classes', function ($query) {
             $query->where('group_class_id', $this->selectedgroupclass);
         })
-        ->whereDate('start_time', $this->copyToDate)
-        ->count();
+            ->whereDate('start_time', $this->copyToDate)
+            ->count();
 
         if ($existingSchedules > 0) {
             $this->toast('warning', 'Target date already has schedules. Please choose a different date.');
@@ -210,7 +210,7 @@ class ScheduleList extends Component
             $originalDateTime = Carbon::parse($schedule->start_time);
             $newStartTime = Carbon::parse($this->copyToDate)
                 ->setTime($originalDateTime->hour, $originalDateTime->minute, $originalDateTime->second);
-            
+
             $originalEndDateTime = Carbon::parse($schedule->end_time);
             $newEndTime = Carbon::parse($this->copyToDate)
                 ->setTime($originalEndDateTime->hour, $originalEndDateTime->minute, $originalEndDateTime->second);
@@ -234,7 +234,7 @@ class ScheduleList extends Component
 
         $this->copyScheduleModal = false;
         $this->toast('success', "Successfully copied {$copiedCount} schedules to " . Carbon::parse($this->copyToDate)->format('d M Y'));
-        
+
         // Update selected date to show the copied schedules
         $this->selectedDate = $this->copyToDate;
     }
@@ -255,7 +255,7 @@ class ScheduleList extends Component
 
         // Get schedules for selected group class and date
         $this->schedule_data = ClassSchedules::with('trainer', 'classes')
-            ->whereHas('classes', function($query) {
+            ->whereHas('classes', function ($query) {
                 $query->where('group_class_id', $this->selectedgroupclass);
             })
             ->whereDate('start_time', $this->selectedDate)
@@ -278,12 +278,12 @@ class ScheduleList extends Component
             $startTime = \Carbon\Carbon::parse($slot->time)->format('H:i');
             // Calculate end time (assuming 1 hour duration, can be customized)
             $endTime = \Carbon\Carbon::parse($slot->time)->addHour()->format('H:i');
-            
+
             // Check if this time slot has a schedule
-            $existingSchedule = $this->schedule_data->first(function($schedule) use ($startTime) {
+            $existingSchedule = $this->schedule_data->first(function ($schedule) use ($startTime) {
                 return $schedule->start_time->format('H:i') === $startTime;
             });
-            
+
             $timeSlots[] = [
                 'start_time' => $startTime,
                 'end_time' => $endTime,
@@ -299,12 +299,12 @@ class ScheduleList extends Component
             for ($hour = 8; $hour <= 19; $hour++) {
                 $startTime = sprintf('%02d:00', $hour);
                 $endTime = sprintf('%02d:00', $hour + 1);
-                
+
                 // Check if this time slot has a schedule
-                $existingSchedule = $this->schedule_data->first(function($schedule) use ($startTime) {
+                $existingSchedule = $this->schedule_data->first(function ($schedule) use ($startTime) {
                     return $schedule->start_time->format('H:i') === $startTime;
                 });
-                
+
                 $timeSlots[] = [
                     'start_time' => $startTime,
                     'end_time' => $endTime,

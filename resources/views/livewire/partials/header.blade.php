@@ -4,7 +4,8 @@
           <a href="{{ route('/') }}" class="logo d-flex align-items-center me-auto">
               <!-- Uncomment the line below if you also wish to use an image logo -->
               <img src="{{ asset('images/logo-black.webp') }}" alt="">
-              <h1 class="sitename">{{ config('app.name') }}</h1><span>.</span>
+              <img src="{{ asset('images/logo-text.webp') }}" alt="">
+              {{-- <h1 class="sitename">{{ config('app.name') }}</h1><span>.</span> --}}
           </a>
 
           <nav id="navmenu" class="navmenu">

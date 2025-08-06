@@ -18,6 +18,8 @@ class ClassList extends Component
     public $class_type_list = [];
     public $class_level_id;
     public $selectGroupClass;
+    public $selectLevelClass; // Add level filter property
+    public $description, $image; // Add missing properties
 
     public $class_level = [
         ['id' => '1', 'name' => 'BEGINNER'],
@@ -37,6 +39,17 @@ class ClassList extends Component
     public bool $detailForm = false;
     public bool $deleteForm = false;
 
+    public function mount()
+    {
+        // Initialize class type list for modals
+        $this->class_type_list = GroupClass::all()->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+            ];
+        })->toArray();
+    }
+
     public function render()
     {
         $title = 'Class Management';
@@ -53,16 +66,14 @@ class ClassList extends Component
         ];
 
         // Prepare class type options with "All" option first
-        $class_type_options = collect([
-            ['id' => '', 'name' => 'All Group Classes']
-        ])->merge(
+        $class_type_options =
             GroupClass::all()->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'name' => $item->name,
                 ];
             })
-        )->toArray();
+            ->toArray();
 
         // Build query with filters
         $query = Classes::orderBy('created_at', 'desc');
@@ -70,6 +81,11 @@ class ClassList extends Component
         // Apply group class filter if selected
         if ($this->selectGroupClass) {
             $query->where('group_class_id', $this->selectGroupClass);
+        }
+
+        // Apply level class filter if selected
+        if ($this->selectLevelClass) {
+            $query->where('level_class_id', $this->selectLevelClass);
         }
 
         // Execute query with pagination
@@ -83,17 +99,28 @@ class ClassList extends Component
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
             ['key' => 'group_class', 'label' => 'Group Class'],
-            // ['key' => 'level_class', 'label' => 'Level Class'],
             ['key' => 'name', 'label' => 'Name'],
+            ['key' => 'level_class', 'label' => 'Level Class'],
             // ['key' => 'mood_class', 'label' => 'Mood Class'],
             ['key' => 'updated_at', 'label' => 'Updated At'],
             ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-1'],
         ];
 
+        // Prepare level options with "All" option first
+        $level_options =
+            collect($this->class_level)->map(function ($item) {
+                return [
+                    'id' => $item['id'],
+                    'name' => $item['name'],
+                ];
+            })
+            ->toArray();
+
         return view('livewire.admin.class.class-list', [
             't_headers' => $t_headers,
             'class' => $class,
             'class_type_options' => $class_type_options,
+            'level_options' => $level_options,
         ])->layout('components.layouts.app', [
             'breadcrumbs' => $breadcrumbs,
             'title' => $title,
@@ -111,7 +138,7 @@ class ClassList extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'class_type' => 'required|integer',
-            // 'class_level_id' => 'required|integer',
+            'class_level_id' => 'required|integer',
         ]);
 
         // if ($this->image) {
@@ -122,12 +149,12 @@ class ClassList extends Component
             'name' => $this->name,
             'group_class_id' => $this->class_type,
             'group_class' => GroupClass::find($this->class_type)->name,
-            // 'level_class_id' => $this->class_level_id,
-            // 'level_class' => $this->class_level[$this->class_level_id - 1]['name'],
+            'level_class_id' => $this->class_level_id,
+            'level_class' => $this->class_level[array_search($this->class_level_id, array_column($this->class_level, 'id'))]['name'],
             'created_by_id' => auth()->user()->id,
         ]);
 
-        $this->reset();
+        $this->reset('name', 'class_type', 'class_level_id');
         $this->createForm = false;
 
         $this->toast(
@@ -150,26 +177,29 @@ class ClassList extends Component
         $this->id = $id;
         $this->name = $class->name;
         $this->class_type = $class->group_class_id;
+        $this->class_level_id = $class->level_class_id;
         $this->editForm = true;
     }
 
     public function update()
     {
-       $this->validate([
+        $this->validate([
             'name' => 'required|string|max:255',
             'class_type' => 'required|integer',
-            // 'class_level_id' => 'required|integer',
+            'class_level_id' => 'required|integer',
         ]);
 
         $class = Classes::find($this->id);
-       
+
         $class->name = $this->name;
         $class->group_class_id = $this->class_type;
         $class->group_class = GroupClass::find($this->class_type)->name;
+        $class->level_class_id = $this->class_level_id;
+        $class->level_class = $this->class_level[array_search($this->class_level_id, array_column($this->class_level, 'id'))]['name'];
         $class->updated_by_id = auth()->user()->id;
         $class->save();
 
-        $this->reset();
+        $this->reset('name', 'class_type', 'class_level_id');
         $this->editForm = false;
 
         $this->toast(
@@ -188,6 +218,8 @@ class ClassList extends Component
     {
         $class = Classes::find($id);
         $this->name = $class->name;
+        $this->class_type = $class->group_class;
+        $this->class_level_id = $class->level_class;
         $this->description = $class->description;
         $this->image = $class->image_original;
         $this->detailForm = true;
