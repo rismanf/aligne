@@ -37,6 +37,28 @@
                                 </button>
                             </div>
 
+                            <!-- Camera Selection Controls -->
+                            @if ($showCamera)
+                                <div class="text-center mb-3">
+                                    <div class="btn-group" role="group" aria-label="Camera selection">
+                                        <button type="button" id="back-camera-btn" class="btn btn-outline-secondary active" onclick="switchCamera('environment')" style="border-color: #D4BDA5; color: #4B2E2E;">
+                                            <i class="bi bi-camera me-1"></i>
+                                            Back Camera
+                                        </button>
+                                        <button type="button" id="front-camera-btn" class="btn btn-outline-secondary" onclick="switchCamera('user')" style="border-color: #D4BDA5; color: #4B2E2E;">
+                                            <i class="bi bi-camera-video me-1"></i>
+                                            Front Camera
+                                        </button>
+                                    </div>
+                                    <div class="mt-2">
+                                        <small id="camera-mode-indicator" class="text-muted" style="color: #A6A58A !important;">
+                                            <i class="bi bi-camera me-1"></i>
+                                            Using Back Camera
+                                        </small>
+                                    </div>
+                                </div>
+                            @endif
+
                             <!-- Camera Preview -->
                             @if ($showCamera)
                                 <div class="text-center mb-4">
@@ -174,6 +196,8 @@
         let context = null;
         let scanning = false;
         let stream = null;
+        let currentFacingMode = 'environment'; // Default to back camera
+        let availableCameras = [];
 
         // Listen for camera start event
         Livewire.on('start-camera', () => {
@@ -191,6 +215,55 @@
                 @this.resetScan();
             }, 3000);
         });
+
+        // Global function for camera switching
+        window.switchCamera = function(facingMode) {
+            if (currentFacingMode === facingMode) {
+                return; // Already using this camera
+            }
+            
+            currentFacingMode = facingMode;
+            updateCameraButtons();
+            updateCameraIndicator();
+            
+            if (scanning && video) {
+                // Stop current stream and restart with new facing mode
+                stopCurrentStream();
+                initializeCamera();
+            }
+        };
+
+        function updateCameraButtons() {
+            const backBtn = document.getElementById('back-camera-btn');
+            const frontBtn = document.getElementById('front-camera-btn');
+            
+            if (backBtn && frontBtn) {
+                if (currentFacingMode === 'environment') {
+                    backBtn.classList.add('active');
+                    backBtn.style.backgroundColor = '#4B2E2E';
+                    backBtn.style.color = 'white';
+                    frontBtn.classList.remove('active');
+                    frontBtn.style.backgroundColor = '';
+                    frontBtn.style.color = '#4B2E2E';
+                } else {
+                    frontBtn.classList.add('active');
+                    frontBtn.style.backgroundColor = '#4B2E2E';
+                    frontBtn.style.color = 'white';
+                    backBtn.classList.remove('active');
+                    backBtn.style.backgroundColor = '';
+                    backBtn.style.color = '#4B2E2E';
+                }
+            }
+        }
+
+        function updateCameraIndicator() {
+            const indicator = document.getElementById('camera-mode-indicator');
+            if (indicator) {
+                const icon = currentFacingMode === 'environment' ? 'bi-camera' : 'bi-camera-video';
+                const text = currentFacingMode === 'environment' ? 'Using Back Camera' : 'Using Front Camera';
+                indicator.innerHTML = `<i class="bi ${icon} me-1"></i>${text}`;
+            }
+        }
 
         function updateStatus(message) {
             const statusElement = document.getElementById('camera-status');
@@ -212,12 +285,34 @@
                     return;
                 }
                 
-                initializeCamera();
+                // Initialize camera buttons and indicator
+                updateCameraButtons();
+                updateCameraIndicator();
+                
+                // Enumerate cameras first
+                enumerateCameras().then(() => {
+                    initializeCamera();
+                });
             }, 100);
         }
 
-        function initializeCamera() {
+        async function enumerateCameras() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                availableCameras = devices.filter(device => device.kind === 'videoinput');
+                console.log('Available cameras:', availableCameras.length);
+                
+                // Hide camera selection if only one camera available
+                const cameraControls = document.querySelector('.btn-group');
+                if (cameraControls && availableCameras.length <= 1) {
+                    cameraControls.style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Error enumerating cameras:', err);
+            }
+        }
 
+        function initializeCamera() {
             canvas = document.createElement('canvas');
             context = canvas.getContext('2d');
             scanning = true;
@@ -231,13 +326,16 @@
                 return;
             }
 
-            navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'environment',
-                        width: { ideal: 640 },
-                        height: { ideal: 480 }
-                    }
-                })
+            // Try with specific facing mode first, fallback to any camera if not available
+            const constraints = {
+                video: {
+                    facingMode: { ideal: currentFacingMode },
+                    width: { ideal: 640 },
+                    height: { ideal: 480 }
+                }
+            };
+
+            navigator.mediaDevices.getUserMedia(constraints)
                 .then(mediaStream => {
                     stream = mediaStream;
                     if (video && scanning) {
@@ -268,27 +366,75 @@
                 })
                 .catch(err => {
                     console.error('Error accessing camera:', err);
-                    updateStatus('Camera access denied or unavailable');
                     
-                    let errorMessage = 'Unable to access camera. ';
-                    if (err.name === 'NotAllowedError') {
-                        errorMessage += 'Please allow camera permissions and try again.';
-                    } else if (err.name === 'NotFoundError') {
-                        errorMessage += 'No camera found on this device.';
+                    // If the preferred camera is not available, try the opposite
+                    if (err.name === 'OverconstrainedError' || err.name === 'NotFoundError') {
+                        console.log('Trying alternative camera...');
+                        const alternativeFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+                        
+                        navigator.mediaDevices.getUserMedia({
+                            video: {
+                                facingMode: { ideal: alternativeFacingMode },
+                                width: { ideal: 640 },
+                                height: { ideal: 480 }
+                            }
+                        })
+                        .then(mediaStream => {
+                            stream = mediaStream;
+                            currentFacingMode = alternativeFacingMode;
+                            updateCameraButtons();
+                            updateCameraIndicator();
+                            
+                            if (video && scanning) {
+                                video.srcObject = stream;
+                                video.setAttribute('playsinline', true);
+                                video.setAttribute('autoplay', true);
+                                video.setAttribute('muted', true);
+                                
+                                video.onloadedmetadata = () => {
+                                    console.log('Alternative camera loaded');
+                                    updateStatus('Camera ready - Position QR code in frame');
+                                    canvas.width = video.videoWidth;
+                                    canvas.height = video.videoHeight;
+                                    video.play().then(() => {
+                                        console.log('Video playing');
+                                        scanQRCode();
+                                    }).catch(err => {
+                                        console.error('Error playing video:', err);
+                                        updateStatus('Error starting video');
+                                    });
+                                };
+                            }
+                        })
+                        .catch(fallbackErr => {
+                            console.error('Fallback camera also failed:', fallbackErr);
+                            handleCameraError(fallbackErr);
+                        });
                     } else {
-                        errorMessage += 'Please check permissions and try again.';
+                        handleCameraError(err);
                     }
-                    
-                    alert(errorMessage);
-                    @this.toggleCamera();
                 });
         }
 
-        function stopCamera() {
-            console.log('Stopping camera...');
-            scanning = false;
-            updateStatus('');
+        function handleCameraError(err) {
+            updateStatus('Camera access denied or unavailable');
             
+            let errorMessage = 'Unable to access camera. ';
+            if (err.name === 'NotAllowedError') {
+                errorMessage += 'Please allow camera permissions and try again.';
+            } else if (err.name === 'NotFoundError') {
+                errorMessage += 'No camera found on this device.';
+            } else if (err.name === 'OverconstrainedError') {
+                errorMessage += 'Requested camera not available. Please try the other camera option.';
+            } else {
+                errorMessage += 'Please check permissions and try again.';
+            }
+            
+            alert(errorMessage);
+            @this.toggleCamera();
+        }
+
+        function stopCurrentStream() {
             if (stream) {
                 stream.getTracks().forEach(track => {
                     track.stop();
@@ -296,6 +442,14 @@
                 });
                 stream = null;
             }
+        }
+
+        function stopCamera() {
+            console.log('Stopping camera...');
+            scanning = false;
+            updateStatus('');
+            
+            stopCurrentStream();
             
             if (video) {
                 video.srcObject = null;
