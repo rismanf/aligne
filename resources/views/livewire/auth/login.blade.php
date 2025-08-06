@@ -30,7 +30,7 @@
                                 <button class="cta-btn">Login</button>
                                 <div class="col">
                                     <p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
-                                    <p><a href="{{ route('forgot-password') }}" class="text-decoration-none">Lupa Password?</a></p>
+                                    <p><a href="{{ route('forgot-password') }}" class="text-decoration-none">Forgot Password?</a></p>
                                 </div>
                             </div>
                         </form>
