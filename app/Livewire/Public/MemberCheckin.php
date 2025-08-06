@@ -1,25 +1,27 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Public;
 
 use Livewire\Component;
 use App\Models\ClassBooking;
 use Carbon\Carbon;
 
-class QRScanner extends Component
+class MemberCheckin extends Component
 {
     public $bookingCode = '';
     public $scanResult = null;
     public $booking = null;
     public $message = '';
     public $messageType = '';
+    public $showCamera = false;
+    public $currentView = 'scan'; // 'scan' or 'detail'
 
     public function scanBooking()
     {
         $this->reset(['scanResult', 'booking', 'message', 'messageType']);
 
         if (empty($this->bookingCode)) {
-            $this->setMessage('Please enter a booking code.', 'error');
+            $this->setMessage('Please enter a booking code or scan QR code.', 'error');
             return;
         }
 
@@ -80,34 +82,15 @@ class QRScanner extends Component
                             $this->setMessage('Check-in window has closed. Class started at ' . 
                                 $classStartTime->format('H:i') . '.', 'error');
                         } else {
-                            // Get debug info for troubleshooting
-                            $debugInfo = $this->booking->getCheckInWindowInfo();
-                            $this->setMessage('Debug Info - Now: ' . $debugInfo['now'] . 
-                                ', Class: ' . $debugInfo['class_start'] . 
-                                ', Window: ' . $debugInfo['check_in_start'] . ' to ' . $debugInfo['check_in_end'] . 
-                                ', Status: ' . $debugInfo['booking_status'] . 
-                                ', Visit: ' . $debugInfo['visit_status'] . 
-                                ', Can Check In: ' . ($debugInfo['can_check_in'] ? 'YES' : 'NO'), 'error');
+                            $this->setMessage('Unable to check in at this time. Please contact staff for assistance.', 'error');
                         }
                     }
                 }
                 return;
             }
 
-            // All checks passed - show booking details for confirmation
-            $this->scanResult = [
-                'user_name' => $this->booking->user->name,
-                'class_name' => $this->booking->classSchedule->classes->name,
-                'group_class' => $this->booking->classSchedule->classes->groupClass->name,
-                'trainer_name' => $this->booking->classSchedule->trainer->name,
-                'class_time' => $this->booking->classSchedule->start_time->format('H:i'),
-                'booking_code' => $this->booking->booking_code,
-                'reformer_position' => $this->booking->reformer_position,
-                'is_reformer_class' => $this->booking->classSchedule->classes->groupClass->name === 'REFORMER',
-                'qr_verified' => $qrToken ? true : false,
-            ];
-
-            $this->setMessage('Booking found! Please confirm check-in.', 'success');
+            // All checks passed - redirect to booking detail page
+            return redirect()->route('booking-detail', ['bookingId' => $this->booking->id]);
 
         } catch (\Exception $e) {
             $this->setMessage('Error scanning booking: ' . $e->getMessage(), 'error');
@@ -127,10 +110,13 @@ class QRScanner extends Component
                 'visited_at' => Carbon::now(),
             ]);
 
-            $this->setMessage('Check-in successful! Welcome ' . $this->booking->user->name . '!', 'success');
+            $this->setMessage('Check-in successful! Welcome ' . $this->booking->user->name . '! Enjoy your class!', 'success');
             
-            // Reset for next scan
-            $this->reset(['bookingCode', 'scanResult', 'booking']);
+            // Reset for next scan after a delay
+            $this->dispatch('checkin-success');
+            
+            // Reset after 3 seconds and return to scan view
+            $this->dispatch('reset-after-delay');
 
         } catch (\Exception $e) {
             $this->setMessage('Error confirming check-in: ' . $e->getMessage(), 'error');
@@ -140,6 +126,33 @@ class QRScanner extends Component
     public function resetScan()
     {
         $this->reset(['bookingCode', 'scanResult', 'booking', 'message', 'messageType']);
+        $this->showCamera = false;
+        $this->currentView = 'scan';
+    }
+
+    public function backToScan()
+    {
+        $this->reset(['bookingCode', 'scanResult', 'booking', 'message', 'messageType']);
+        $this->showCamera = false;
+        $this->currentView = 'scan';
+    }
+
+    public function toggleCamera()
+    {
+        $this->showCamera = !$this->showCamera;
+        if ($this->showCamera) {
+            $this->dispatch('start-camera');
+        } else {
+            $this->dispatch('stop-camera');
+        }
+    }
+
+    public function processQrCode($qrData)
+    {
+        $this->bookingCode = $qrData;
+        $this->showCamera = false;
+        $this->dispatch('stop-camera');
+        $this->scanBooking();
     }
 
     private function setMessage($message, $type)
@@ -150,12 +163,6 @@ class QRScanner extends Component
 
     public function render()
     {
-        return view('livewire.admin.qr-scanner')->layout('components.layouts.app', [
-            'breadcrumbs' => [
-                ['link' => route("admin.home"), 'label' => 'Home', 'icon' => 's-home'],
-                ['label' => 'Visit'],
-            ],
-            'title' => 'Visit Management',
-        ]);
+        return view('livewire.public.member-checkin')->layout('components.layouts.checkin');
     }
 }

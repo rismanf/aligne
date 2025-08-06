@@ -81,6 +81,8 @@ Route::get('/contact-us', ContactUs::class)->name('contact-us');
 Route::get('/news', News::class)->name('news');
 Route::get('/news/{id}/{slug}', NewsDetail::class)->name('news.detail');
 Route::get('/register', Register::class)->name('register');
+Route::get('/member-checkin', App\Livewire\Public\MemberCheckin::class)->name('member-checkin');
+Route::get('/booking-detail/{bookingId}', App\Livewire\Public\BookingDetail::class)->name('booking-detail');
 // Route::get('/vcard', Vcard::class)->name('vcard');
 
 // });
