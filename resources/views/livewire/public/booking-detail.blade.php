@@ -193,7 +193,7 @@
                                 <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
                                     style="width: 80px; height: 80px; background-color: #dc3545; background-opacity: 0.1;">
                                     <i class="bi bi-exclamation-triangle"
-                                        style="font-size: 2rem; color: #dc3545;"></i>
+                                        style="font-size: 2rem; color: #ffffff;"></i>
                                 </div>
                                 <h4 class="card-title mb-3" style="color: #4B2E2E;">Booking Not Found</h4>
                                 <p class="mb-4" style="color: #A6A58A;">The booking you're looking for could not be
