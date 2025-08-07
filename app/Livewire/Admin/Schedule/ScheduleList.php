@@ -97,7 +97,7 @@ class ScheduleList extends Component
             } elseif ($this->selectedgroupclass == 2) { // CHAIR
                 $this->capacity = 4;
             } else { // FUNCTIONAL
-                $this->capacity = 8;
+                $this->capacity = 6;
             }
         }
 
