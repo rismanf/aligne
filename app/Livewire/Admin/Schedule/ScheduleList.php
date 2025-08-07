@@ -43,7 +43,7 @@ class ScheduleList extends Component
 
         $this->selectedgroupclass = $this->calases_group[0]['id'] ?? 1;
 
-        $this->trainer_data = Trainer::select('id', 'name')->get()->toArray();
+        $this->trainer_data = Trainer::select('id', 'name')->orderby('name')->get()->toArray();
 
         for ($i = 0; $i < 14; $i++) {
             $this->availableDates[] = Carbon::today()->addDays($i)->format('Y-m-d');
@@ -265,6 +265,7 @@ class ScheduleList extends Component
         // Get classes for selected group
         $this->calases = Classes::select('id', 'name')
             ->where('group_class_id', $this->selectedgroupclass)
+            ->orderBy('name')
             ->get()
             ->toArray();
 
