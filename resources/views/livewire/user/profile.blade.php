@@ -15,98 +15,135 @@
                     </div>
                 </div>
 
-                <div class="col-lg-9">                    
+                <div class="col-lg-9">
                     <h3>My Profile</h3>
-                   
-                    <ul>
-                        <li><i class="bi bi-circle"></i> <span>Name: {{ auth()->user()->name }}</span></li>
-                        <li><i class="bi bi-circle"></i> <span>Email: {{ auth()->user()->email }}.</span></li>
-                    </ul>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="d-flex flex-column">
+                                {{-- <img src="{{ asset('assets/img/testimonials/testimonials-2.jpg') }}"
+                                    class="profile-image" alt=""> --}}
+                                <span class="fw-bold" style="color: #4B2E2E;">{{ $user->name }}</span>
+                                <span class="fw-bold" style="color: #4B2E2E;">{{ $user->email }}</span>
+                                {{-- <div>
+                                    <a href="{{ route('classes') }}" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                </div> --}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex flex-column">
+                                <small class="fw-medium" style="color: #111111;">Member
+                                    Since</small>
+                                <span class="fw-bold"
+                                    style="color: #4B2E2E;">{{ $user->created_at->format('M j, Y') }}</span>
+                                <small style="color: #4B2E2E;">{{ $user->created_at->diffForHumans() }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex flex-column">
+                                <small class="fw-medium" style="color: #111111;">Completed
+                                    Classes</small>
+                                <h2 class="fw-bold" style="color: #4B2E2E;">
+                                    <i class="bi bi-trophy me-1"></i>
+                                    {{ $completedClasses }} Classes
+                                </h2>
+                            </div>
+                        </div>
+
+                    </div>
                     <hr>
-                   <h3>My Membership</h3>
-                   
-                   @if($membershipDetails && $membershipDetails->count() > 0)
-                       <div class="row">
-                           @foreach($membershipDetails as $detail)
-                               <div class="col-md-6 mb-4">
-                                   <div class="membership-card">
-                                       <div class="membership-header">
-                                           <h5 class="membership-title">{{ $detail['package_name'] }}</h5>
-                                           <span class="membership-category badge badge-{{ $detail['category'] }}">
-                                               {{ ucfirst($detail['category']) }}
-                                           </span>
-                                       </div>
-                                       
-                                       <div class="membership-body">
-                                           <div class="expiry-info mb-3">
-                                               @if($detail['expires_at'])
-                                                   <div class="d-flex justify-content-between">
-                                                       <span>Expires:</span>
-                                                       <span class="fw-bold">{{ $detail['expires_at']->format('d M Y') }}</span>
-                                                   </div>
-                                                   <div class="d-flex justify-content-between">
-                                                       <span>Days remaining:</span>
-                                                       <span class="fw-bold text-{{ $detail['remaining_days'] > 7 ? 'success' : ($detail['remaining_days'] > 3 ? 'warning' : 'danger') }}">
-                                                           {{ round($detail['remaining_days']) }} days
-                                                       </span>
-                                                   </div>
-                                               @else
-                                                   <div class="text-success">
-                                                       <i class="bi bi-infinity"></i> No expiration
-                                                   </div>
-                                               @endif
-                                           </div>
-                                           
-                                           <div class="quota-info">
-                                               <h6 class="mb-2">Remaining Classes:</h6>
-                                               @if(count($detail['quotas']) > 0)
-                                                   @foreach($detail['quotas'] as $quota)
-                                                       <div class="quota-item">
-                                                           <div class="d-flex justify-content-between align-items-center">
-                                                               <div>
-                                                                   <span class="class-name">{{ $quota['class_name'] }}</span>
-                                                                   @if(isset($quota['class_category']))
-                                                                       <small class="class-category">({{ $quota['class_category'] }})</small>
-                                                                   @endif
-                                                               </div>
-                                                               <span class="quota-badge">
-                                                                   {{ $quota['remaining_quota'] }}x
-                                                               </span>
-                                                           </div>
-                                                           @if(isset($quota['class_types']) && count($quota['class_types']) > 0)
-                                                               <small class="text-muted">
-                                                                   Available for: {{ implode(', ', $quota['class_types']) }}
-                                                               </small>
-                                                           @endif
-                                                       </div>
-                                                   @endforeach
-                                               @else
-                                                   <div class="text-muted">No remaining classes</div>
-                                               @endif
-                                           </div>
-                                       </div>
-                                       
-                                       <div class="membership-footer">
-                                           <a href="{{ route('classes') }}" class="btn btn-primary btn-sm">
-                                               <i class="bi bi-calendar-plus"></i> Book Classes
-                                           </a>
-                                       </div>
-                                   </div>
-                               </div>
-                           @endforeach
-                       </div>
-                   @else
-                       <div class="no-membership-card">
-                           <div class="text-center py-4">
-                               <i class="bi bi-card-list display-4 text-muted mb-3"></i>
-                               <h5>No Active Memberships</h5>
-                               <p class="text-muted mb-3">You don't have any active membership packages at the moment.</p>
-                               <a href="{{ route('membership') }}" class="btn btn-primary">
-                                   <i class="bi bi-plus-circle"></i> Browse Membership Packages
-                               </a>
-                           </div>
-                       </div>
-                   @endif
+                    <h3>My Membership</h3>
+
+                    @if ($membershipDetails && $membershipDetails->count() > 0)
+                        <div class="row">
+                            @foreach ($membershipDetails as $detail)
+                                <div class="col-md-6 mb-4">
+                                    <div class="membership-card">
+                                        <div class="membership-header">
+                                            <h5 class="membership-title">{{ $detail['package_name'] }}</h5>
+                                            <span class="membership-category badge badge-{{ $detail['category'] }}">
+                                                {{ ucfirst($detail['category']) }}
+                                            </span>
+                                        </div>
+
+                                        <div class="membership-body">
+                                            <div class="expiry-info mb-3">
+                                                @if ($detail['expires_at'])
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>Expires:</span>
+                                                        <span
+                                                            class="fw-bold">{{ $detail['expires_at']->format('d M Y') }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>Days remaining:</span>
+                                                        <span
+                                                            class="fw-bold text-{{ $detail['remaining_days'] > 7 ? 'success' : ($detail['remaining_days'] > 3 ? 'warning' : 'danger') }}">
+                                                            {{ round($detail['remaining_days']) }} days
+                                                        </span>
+                                                    </div>
+                                                @else
+                                                    <div class="text-success">
+                                                        <i class="bi bi-infinity"></i> No expiration
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="quota-info">
+                                                <h6 class="mb-2">Remaining Classes:</h6>
+                                                @if (count($detail['quotas']) > 0)
+                                                    @foreach ($detail['quotas'] as $quota)
+                                                        <div class="quota-item">
+                                                            <div
+                                                                class="d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    <span
+                                                                        class="class-name">{{ $quota['class_name'] }}</span>
+                                                                    @if (isset($quota['class_category']))
+                                                                        <small
+                                                                            class="class-category">({{ $quota['class_category'] }})</small>
+                                                                    @endif
+                                                                </div>
+                                                                <span class="quota-badge">
+                                                                    {{ $quota['remaining_quota'] }}x
+                                                                </span>
+                                                            </div>
+                                                            @if (isset($quota['class_types']) && count($quota['class_types']) > 0)
+                                                                <small class="text-muted">
+                                                                    Available for:
+                                                                    {{ implode(', ', $quota['class_types']) }}
+                                                                </small>
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="text-muted">No remaining classes</div>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="membership-footer">
+                                            <a href="{{ route('classes') }}" class="btn btn-primary btn-sm">
+                                                <i class="bi bi-calendar-plus"></i> Book Classes
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="no-membership-card">
+                            <div class="text-center py-4">
+                                <i class="bi bi-card-list display-4 text-muted mb-3"></i>
+                                <h5>No Active Memberships</h5>
+                                <p class="text-muted mb-3">You don't have any active membership packages at the moment.
+                                </p>
+                                <a href="{{ route('membership') }}" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle"></i> Browse Membership Packages
+                                </a>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
             </div>
@@ -170,7 +207,7 @@
 
         p {
             line-height: 1.6;
-            color: #666;
+            /* color: #666; */
         }
 
         /* Membership Cards Styling */
@@ -274,24 +311,71 @@
             margin-top: 20px;
         }
 
-        .badge-signature { background-color: #4b2e2e; }
-        .badge-functional { background-color: #28a745; }
-        .badge-vip { background-color: #ffc107; color: #000; }
-        .badge-special { background-color: #17a2b8; }
-        .badge-general { background-color: #6c757d; }
+        .badge-signature {
+            background-color: #4b2e2e;
+        }
 
-        .text-success { color: #28a745 !important; }
-        .text-warning { color: #ffc107 !important; }
-        .text-danger { color: #dc3545 !important; }
+        .badge-functional {
+            background-color: #28a745;
+        }
 
-        .fw-bold { font-weight: bold !important; }
-        .d-flex { display: flex !important; }
-        .justify-content-between { justify-content: space-between !important; }
-        .align-items-center { align-items: center !important; }
-        .text-center { text-align: center !important; }
-        .mb-3 { margin-bottom: 1rem !important; }
-        .mb-4 { margin-bottom: 1.5rem !important; }
-        .py-4 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+        .badge-vip {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .badge-special {
+            background-color: #17a2b8;
+        }
+
+        .badge-general {
+            background-color: #6c757d;
+        }
+
+        .text-success {
+            color: #28a745 !important;
+        }
+
+        .text-warning {
+            color: #ffc107 !important;
+        }
+
+        .text-danger {
+            color: #dc3545 !important;
+        }
+
+        .fw-bold {
+            font-weight: bold !important;
+        }
+
+        .d-flex {
+            display: flex !important;
+        }
+
+        .justify-content-between {
+            justify-content: space-between !important;
+        }
+
+        .align-items-center {
+            align-items: center !important;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        .py-4 {
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+        }
 
         .btn-primary {
             background-color: #4b2e2e;
@@ -321,6 +405,17 @@
 
         .display-4 {
             font-size: 2.5rem;
+        }
+
+        .profile-image {
+            width: 90px;
+            border-radius: 50px;
+            float: left;
+            margin: 0 10px 0 0;
+        }
+
+        .footer-contact{
+            color: #ffffff;
         }
     </style>
 </div>

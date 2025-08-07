@@ -8,6 +8,9 @@
                 @if (session()->has('success'))
                     <div class="alert alert-success mb-4">{{ session('success') }}</div>
                 @endif
+                  @if (session()->has('error'))
+                    <div class="alert alert-danger mb-4">{{ session('error') }}</div>
+                @endif
                 <div class="col-lg-6">
                     <div class="pricing-item">
                         <div class="border p-3 mb-3">
