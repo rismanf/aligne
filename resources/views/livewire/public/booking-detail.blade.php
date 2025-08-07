@@ -87,10 +87,10 @@
                                                     <div class="d-flex flex-column">
                                                         <small class="fw-medium" style="color: #111111;">Completed
                                                             Classes</small>
-                                                        <span class="fw-bold" style="color: #4B2E2E;">
+                                                        <h2 class="fw-bold" style="color: #4B2E2E;">
                                                             <i class="bi bi-trophy me-1"></i>
                                                             {{ $scanResult['completed_classes'] }} Classes
-                                                        </span>
+                                                        </h2>
                                                     </div>
                                                 </div>
 
@@ -108,17 +108,17 @@
                                                     </small>
                                                 @endif
                                             </h6>
-                                             <div class="row g-3">
-                                            <div class="col-md-12">
-                                                <div class="d-flex flex-column">
-                                                    <small class="fw-medium" style="color: #111111;">Booking
-                                                        Code</small>
-                                                    <span class="font-monospace"
-                                                        style="color: #4B2E2E;">{{ $scanResult['booking_code'] }}</span>
+                                            <div class="row g-3">
+                                                <div class="col-md-12">
+                                                    <div class="d-flex flex-column">
+                                                        <small class="fw-medium" style="color: #111111;">Booking
+                                                            Code</small>
+                                                        <span class="font-monospace"
+                                                            style="color: #4B2E2E;">{{ $scanResult['booking_code'] }}</span>
 
+                                                    </div>
                                                 </div>
-                                            </div>
-                                           
+
                                                 <div class="col-md-6">
                                                     <div class="d-flex flex-column">
                                                         <small class="fw-medium" style="color: #111111;">Class</small>
@@ -128,9 +128,9 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="d-flex flex-column">
-                                                        <small class="fw-medium" style="color: #111111;">Time</small>
+                                                        <small class="fw-medium" style="color: #111111;">Schedule Time</small>
                                                         <span class="fw-bold"
-                                                            style="color: #4B2E2E;">{{ $scanResult['class_time'] }}</span>
+                                                            style="color: #4B2E2E;">{{ $scanResult['class_date'] }} - {{ $scanResult['class_time'] }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -169,8 +169,7 @@
 
                                         <div class="d-flex gap-3 mt-4">
                                             @if ($booking && $booking->canCheckIn())
-                                                <button wire:click="confirmCheckIn"
-                                                    class="btn btn-lg flex-fill fw-bold"
+                                                <button wire:click="confirmCheckIn" class="btn btn-lg flex-fill fw-bold"
                                                     style="background-color: #A6A58A; border-color: #A6A58A; color: white;">
                                                     <i class="bi bi-check-circle me-2"></i>
                                                     Confirm Check-In

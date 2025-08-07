@@ -169,7 +169,7 @@
         .cta-btn {
             display: inline-block;
             padding: 12px 30px;
-            background: #007bff;
+            /* background: #007bff; */
             color: white;
             text-decoration: none;
             border-radius: 25px;

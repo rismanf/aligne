@@ -26,7 +26,6 @@ class BookingDetail extends Component
             $this->booking = ClassBooking::with(['user', 'classSchedule.classes.groupClass', 'classSchedule.trainer'])
                 ->where('id', $this->bookingId)
                 ->first();
-
             if (!$this->booking) {
                 $this->setMessage('Booking not found.', 'error');
                 return;
@@ -79,7 +78,8 @@ class BookingDetail extends Component
                 'class_name' => $this->booking->classSchedule->classes->name,
                 'group_class' => $this->booking->classSchedule->classes->groupClass->name,
                 'trainer_name' => $this->booking->classSchedule->trainer->name,
-                'class_time' => $this->booking->classSchedule->start_time->format('H:i'),
+                'class_time' => $this->booking->classSchedule->start_time->format('H:i A'),
+                'class_date' => $this->booking->classSchedule->date->format('l, d M Y'),
                 'booking_code' => $this->booking->booking_code,
                 'reformer_position' => $this->booking->reformer_position,
                 'is_reformer_class' => $this->booking->classSchedule->classes->groupClass->name === 'REFORMER',

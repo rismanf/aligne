@@ -22,8 +22,8 @@
                                     class="bi bi-geo-alt flex-shrink-0"></i></a>
                             <div>
                                 <h4>Location:</h4>
-                                <p>Kawasan SCBD, Jl. Jend. Sudirman kav 52-53 Senayan, Kec. Kby.
-                                    Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12190</p>
+                                <a href="https://maps.app.goo.gl/LqvFveWeEfxpXuyk8" target="_blank"><p>Kawasan SCBD, Jl. Jend. Sudirman kav 52-53 Senayan, Kec. Kby.
+                                    Baru, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12190</p></a>
                             </div>
                         </div><!-- End Info Item -->
 
@@ -31,15 +31,15 @@
                             <a href="mailto:info@alignestudio.id"><i class="bi bi-envelope flex-shrink-0"></i></a>
                             <div>
                                 <h4>Email:</h4>
-                                <p>info@alignestudio.id</p>
+                                <a href="mailto:info@alignestudio.id"><p>info@alignestudio.id</p></a>
                             </div>
                         </div><!-- End Info Item -->
 
                         <div class="info-item d-flex">
-                            <a href="https://wa.me/+6282299294018"><i class="bi bi-phone flex-shrink-0"></i></a>
+                            <a href="https://wa.me/+6282299294018" target="_blank"><i class="bi bi-phone flex-shrink-0"></i></a>
                             <div>
                                 <h4>Call:</h4>
-                                <p>+62 822-9929-4018</p>
+                               <a href="https://wa.me/+6282299294018" target="_blank"><p>+62 822-9929-4018</p></a>
                             </div>
                         </div><!-- End Info Item -->
 
@@ -51,20 +51,20 @@
                     <form wire:submit="save" role="form" class="php-email-form">
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <input type="text" name="name" wire:model="name" class="form-control"
+                                <input type="text" name="name" wire:model="name" class="form-control" style="border-radius: 10px"
                                     id="name" placeholder="Your Name" required="">
                             </div>
                             <div class="col-md-6 form-group mt-3 mt-md-0">
-                                <input type="email" wire:model="email" class="form-control" name="email"
+                                <input type="email" wire:model="email" class="form-control" name="email" style="border-radius: 10px"
                                     id="email" placeholder="Your Email" required="">
                             </div>
                         </div>
                         <div class="form-group mt-3">
-                            <input type="text" class="form-control" name="subject" wire:model="subject"
+                            <input type="text" class="form-control" name="subject" wire:model="subject" style="border-radius: 10px"
                                 id="subject" placeholder="Subject" required="">
                         </div>
                         <div class="form-group mt-3">
-                            <textarea class="form-control" name="message" wire:model="message" placeholder="Message" required=""></textarea>
+                            <textarea class="form-control" name="message" wire:model="message" placeholder="Message" required=""  style="border-radius: 10px"></textarea>
                         </div>
                         @if (session()->has('success'))
                             <div class="alert alert-success mb-4">{{ session('success') }}</div>
@@ -78,4 +78,10 @@
         </div>
 
     </section><!-- /Contact Section -->
+
+    <style>
+        .info{
+            border-radius: 20px;
+        }
+    </style>
 </div>

@@ -20,6 +20,7 @@ class Checkout extends Component
     
     public function save()
     {
+   
         $this->validate([
             'id' => 'required|exists:products,id',
         ]);
@@ -43,7 +44,7 @@ class Checkout extends Component
             ->first();
 
         if ($existingMembership) {
-            $this->toastError('You already have an active membership for this package.');
+            session()->flash('error', 'You already have an active membership for this package.');
             return;
         }
 

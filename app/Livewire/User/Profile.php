@@ -2,6 +2,7 @@
 
 namespace App\Livewire\User;
 
+use App\Models\ClassBooking;
 use App\Models\Menu;
 use App\Models\User;
 use App\Models\UserKuota;
@@ -14,6 +15,7 @@ class Profile extends Component
     public $user;
     public $activeMemberships;
     public $membershipDetails;
+    public $completedClasses;
 
     public function mount()
     {
@@ -29,6 +31,10 @@ class Profile extends Component
             ->active()
             ->get();
 
+        $this->completedClasses = ClassBooking::where('user_id', $this->user->id)
+            ->where('visit_status', 'visited')
+            ->count();
+
         // Prepare detailed membership information with quotas
         $this->membershipDetails = $this->activeMemberships->map(function ($membership) {
             $details = [
@@ -38,7 +44,7 @@ class Profile extends Component
                 'expires_at' => $membership->expires_at,
                 'remaining_days' => $membership->getRemainingDays(),
                 'is_flexible' => $membership->isFlexibleQuota(),
-                'quota_strategy' => $membership->membership->quota_strategy,
+                'quota_strategy' => $membership->membership->quota_strategy,               
                 'quotas' => []
             ];
 
