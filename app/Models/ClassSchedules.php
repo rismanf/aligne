@@ -37,7 +37,7 @@ class ClassSchedules extends Model
 
     public function trainer()
     {
-        return $this->belongsTo(Trainer::class, 'trainer_id');
+        return $this->belongsTo(Trainer::class, 'trainer_id')->withTrashed();
     }
 
     public function bookings()

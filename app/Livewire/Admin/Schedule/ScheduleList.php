@@ -83,8 +83,8 @@ class ScheduleList extends Component
     {
         $this->validate([
             // 'name' => 'required|string|max:200',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            // 'start_time' => 'required',
+            // 'end_time' => 'required',
             'class_id' => 'required',
             'trainer_id' => 'required',
             'capacity' => 'required|integer|min:1',
