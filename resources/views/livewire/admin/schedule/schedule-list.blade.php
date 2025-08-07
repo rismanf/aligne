@@ -106,7 +106,7 @@
         </div>
     </x-card>
 
-    <x-modal wire:model="editForm" title="{{ $id ? 'Edit Schedule' : 'Add New Schedule' }}" class="backdrop-blur">
+    <x-modal wire:model="editForm" title="{{ $id ? 'Edit Schedule' : 'Add New Schedule' }}" class="backdrop-blur" subtitle="{{$start_time.' - '. $end_time}}">
         <x-form wire:submit="update">
             {{-- Select Class --}}
             <x-select label="Class Type" wire:model="class_id" :options="$calases" option-label="name" option-value="id"
