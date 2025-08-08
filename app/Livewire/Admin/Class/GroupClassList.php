@@ -134,7 +134,7 @@ class GroupClassList extends Component
     public function update()
     {
         $this->validate([
-            'image_edit' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_edit' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255|min:10',
         ]);
