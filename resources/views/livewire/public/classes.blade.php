@@ -6,7 +6,7 @@
 
             <div class="section-header" data-aos="fade-up">
                 <h2>Class</h2>
-                <p>Choose the right class for your body — from strength training to everyday functional movement.</p>
+                <p>Listen to what your body needs — maybe it’s craving a new playground adventure.</p>
             </div>
             <div class="row gy-4">
 
