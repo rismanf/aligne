@@ -10,6 +10,8 @@ use App\Models\UserMembership;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\bookingInvoiceEmail;
 use Livewire\Component;
 use Carbon\Carbon;
 
@@ -24,17 +26,17 @@ class CheckoutClass extends Component
     public function mount($id)
     {
         $this->id = $id;
-        
+
         // Get class schedule with relations
         $this->schedule = ClassSchedules::with(['classes.groupClass', 'trainer'])->find($id);
-        
+
         if (!$this->schedule) {
             abort(404, 'Schedule not found');
         }
 
         // Check if this is a Reformer class
         $this->is_reformer_class = $this->schedule->classes->groupClass->name === 'REFORMER CLASS';
-  
+
         // Initialize available positions for Reformer class
         if ($this->is_reformer_class) {
             $this->initializeReformerPositions();
@@ -58,7 +60,7 @@ class CheckoutClass extends Component
     private function initializeReformerPositions()
     {
         // Initialize all 8 positions as available
-        $this->available_positions = collect(range(1, 8))->map(function($position) {
+        $this->available_positions = collect(range(1, 8))->map(function ($position) {
             return [
                 'position' => $position,
                 'is_available' => true,
@@ -91,7 +93,7 @@ class CheckoutClass extends Component
     private function checkUserQuota()
     {
         $groupClassId = $this->schedule->classes->group_class_id;
-        
+
         // First check for combination package quota (class_id = 0)
         $combinationQuota = UserKuota::where('user_id', Auth::id())
             ->where('class_id', 0) // Shared quota for combination packages
@@ -115,6 +117,7 @@ class CheckoutClass extends Component
 
     public function save()
     {
+
         if (!Auth::check()) {
             return redirect()->route('login');
         }
@@ -159,7 +162,7 @@ class CheckoutClass extends Component
                 ->where('reformer_position', $this->selected_position)
                 ->where('booking_status', 'confirmed')
                 ->exists();
-                
+
             if ($positionTaken) {
                 session()->flash('error', 'Selected position is no longer available. Please choose another position.');
                 $this->initializeReformerPositions(); // Refresh positions
@@ -171,7 +174,7 @@ class CheckoutClass extends Component
         try {
             // Get user membership for this class type
             $userMembership = $this->getUserMembershipForClass();
-            
+
             if (!$userMembership) {
                 session()->flash('error', 'No valid membership found for this class type.');
                 return;
@@ -204,13 +207,12 @@ class CheckoutClass extends Component
             DB::commit();
 
             // Send email to user
-            // $this->sendBookingConfirmationEmail($booking->id);
+            $this->sendBookingConfirmationEmail($booking->id);
 
             session()->flash('success', 'Class booked successfully!');
 
             // Redirect to booking invoice page with the new booking ID
             return redirect()->route('user.my-bookings', ['bookingId' => $booking->id]);
-
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error', 'Failed to book class: ' . $e->getMessage());
@@ -220,14 +222,14 @@ class CheckoutClass extends Component
     private function getUserMembershipForClass()
     {
         $groupClassId = $this->schedule->classes->group_class_id;
-        
+
         // Get all active memberships for the user
         $activeMemberships = UserMembership::where('user_id', Auth::id())
             ->where('status', 'active')
             ->where('payment_status', 'paid')
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->whereNull('expires_at')
-                      ->orWhere('expires_at', '>', now());
+                    ->orWhere('expires_at', '>', now());
             })
             ->get();
 
@@ -245,7 +247,7 @@ class CheckoutClass extends Component
                 $includesClassType = $membership->membership->groupClasses()
                     ->where('class_memberships.class_id', $groupClassId)
                     ->exists();
-                    
+
                 if ($includesClassType) {
                     return $membership;
                 }
@@ -270,7 +272,7 @@ class CheckoutClass extends Component
     private function decreaseUserQuota()
     {
         $groupClassId = $this->schedule->classes->group_class_id;
-        
+
         // First try to decrease combination package quota (class_id = 0)
         $combinationQuota = UserKuota::where('user_id', Auth::id())
             ->where('class_id', 0) // Shared quota for combination packages
@@ -295,6 +297,71 @@ class CheckoutClass extends Component
         if ($specificQuota) {
             $specificQuota->decrement('kuota');
         }
+    }
+
+    /**
+     * Send booking confirmation email to user
+     */
+    private function sendBookingConfirmationEmail($bookingId)
+    {
+        try {
+            // Get booking with all necessary relations
+            $booking = ClassBooking::with([
+                'classSchedule.classes.groupClass',
+                'classSchedule.trainer',
+                'userMembership.membership',
+                'user'
+            ])->find($bookingId);
+
+            if (!$booking) {
+                Log::error('Booking not found for email sending', ['booking_id' => $bookingId]);
+                return;
+            }
+
+            // Prepare booking data for email template
+            $bookingData = [
+                'id' => $booking->id,
+                'class_name' => $booking->classSchedule->classes->name,
+                'group_class' => $booking->classSchedule->classes->groupClass->name,
+                'trainer_name' => $booking->classSchedule->trainer->name,
+                'date' => $booking->classSchedule->start_time->format('Y-m-d'),
+                'start_time' => $booking->classSchedule->start_time->format('H:i'),
+                'end_time' => $booking->classSchedule->end_time->format('H:i'),
+                'booking_code' => $booking->booking_code,
+                'qr_code' => $this->generateEmailQrCode($booking->booking_code),
+                'membership_name' => $booking->userMembership->membership->name ?? 'N/A',
+                'reformer_position' => $booking->reformer_position,
+                'user_name' => $booking->user->name,
+                'user_email' => $booking->user->email,
+            ];
+
+            // Send email
+            Mail::to($booking->user->email)->send(new bookingInvoiceEmail($bookingData));
+
+            Log::info('Booking confirmation email sent successfully', [
+                'booking_id' => $bookingId,
+                'user_email' => $booking->user->email,
+                'class_name' => $bookingData['class_name']
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to send booking confirmation email', [
+                'booking_id' => $bookingId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // Don't throw exception to prevent booking process from failing
+            // Email failure shouldn't stop the booking process
+        }
+    }
+
+    /**
+     * Generate QR code specifically for email (using online service for better compatibility)
+     */
+    private function generateEmailQrCode($bookingCode)
+    {
+        // Use online QR code service for better email client compatibility
+        return "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($bookingCode);
     }
 
     public function render()
