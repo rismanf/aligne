@@ -88,7 +88,7 @@ class GroupClassList extends Component
     public function save()
     {
         $this->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255|min:10',
         ]);
