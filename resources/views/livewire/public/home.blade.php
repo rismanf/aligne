@@ -4,7 +4,7 @@
         <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
 
             <div class="carousel-item active">
-                <img src="{{ asset('assets/img/hero.jpg') }}" alt="">
+                <img src="{{ asset('assets/img/home.webp') }}" alt="" style="filter: brightness(50%);">
                 <div class="container col-lg-4 col-auto ">
                     <h2>Discover Your Strongest Self</h2>
                     <p>At Aligné Studio, we believe in harmony and holistic well-being. Explore our diverse range of
