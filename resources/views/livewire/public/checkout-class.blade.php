@@ -68,13 +68,13 @@
                                     <p>You have already booked this class</p>
                                     <p><strong>Booking Code:</strong> {{ $existing_booking->booking_code }}</p>
                                     <a href="{{ route('user.my-bookings') }}" class="cta-btn">View My Bookings</a>
-                                    <a href="{{ url()->previous() }}" class="cta-btn">Back</a>
+                                    <a href="{{ route('detail-class', ['id' => $schedule->classes->group_class_id, 'date' => $dateClass]) }}" class="cta-btn">Back</a>
                                 @else
                                     @if ($cek_quota == 0)
                                         <p>You do not have quota for this class type</p>
                                         <p>Please buy a membership package that includes this class type</p>
                                         <a href="{{ route('membership') }}" class="cta-btn">Buy Membership</a>                                    
-                                        <a href="{{ url()->previous() }}" class="cta-btn">Back to Classes</a>
+                                        <a href="{{ route('detail-class', ['id' => $schedule->classes->group_class_id, 'date' => $dateClass]) }}" class="cta-btn">Back to Classes</a>
                                     @else
                                         <p>You have {{ $cek_quota }} quota left for this class type</p>
                                         
@@ -218,7 +218,7 @@
                                                 Confirm Booking
                                             </button>
                                         </form>
-                                        <a href="{{ url()->previous() }}" class="cta-btn btn-secondary">Back</a>
+                                        <a href="{{ route('detail-class', ['id' => $schedule->classes->group_class_id, 'date' => $dateClass]) }}" class="cta-btn btn-secondary">Back</a>
                                     @endif
                                 @endif
                             @endguest

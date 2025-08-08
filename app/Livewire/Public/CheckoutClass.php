@@ -22,7 +22,7 @@ class CheckoutClass extends Component
     public $selected_position = null;
     public $available_positions = [];
     public $is_reformer_class = false;
-
+    public $dateClass;
     public function mount($id)
     {
         $this->id = $id;
@@ -33,7 +33,7 @@ class CheckoutClass extends Component
         if (!$this->schedule) {
             abort(404, 'Schedule not found');
         }
-
+        $this->dateClass = Carbon::parse($this->schedule->start_time)->translatedFormat('Y-m-d');
         // Check if this is a Reformer class
         $this->is_reformer_class = $this->schedule->classes->groupClass->name === 'REFORMER CLASS';
 

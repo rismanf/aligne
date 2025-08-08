@@ -2,8 +2,9 @@
     {{-- Menu --}}
     <x-menu class="text-xs space-y-0 p-1" active-bg-color="font-black" activate-by-route>
         <h2 class="menu-title">Menu</h2>
+         @hasrole('Admin')
         <x-menu-item title="Dashboard" icon="o-chart-bar-square" link="{{ route('admin.home') }}" />
-        @hasrole('Admin')
+    
             <x-menu-item title="Contact Us" icon="o-identification" link="{{ route('admin.contact.index') }}" />
 
             <x-menu-item title="Email" icon="o-envelope" link="{{ route('admin.email.index') }}" />
@@ -31,7 +32,8 @@
                 <x-menu-item title="Users" icon="o-users" link="{{ route('admin.user.index') }}" />
                 <x-menu-item title="Roles" icon="o-user-group" link="{{ route('admin.role.index') }}" />
             </x-menu-sub>
-        @else
+        @endhasrole
+        @hasrole('Operator')
             <x-menu-item title="Transaction" icon="o-ticket" link="{{ route('admin.transaction.index') }}" />
             <x-menu-item title="Schedule" icon="o-calendar-days" link="{{ route('admin.schedule.index') }}" />
             <x-menu-item title="QR Scanner" icon="o-qr-code" link="{{ route('admin.qr-scanner') }}" />
