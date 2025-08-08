@@ -4,7 +4,7 @@
         <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
 
             <div class="carousel-item active">
-                <img src="{{ asset('assets/img/home.webp') }}" alt="" style="filter: brightness(50%);">
+                <img src="{{ asset('assets/img/hero.webp') }}" alt="">
                 <div class="container col-lg-4 col-auto ">
                     <h2>Discover Your Strongest Self</h2>
                     <p>At Aligné Studio, we believe in harmony and holistic well-being. Explore our diverse range of
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="col-lg-6 about-img" data-aos="zoom-out" data-aos-delay="200">
-                    <img src="assets/img/home/image2.webp" alt="Woman using Pilates reformer at Aligné Studio">
+                    <img src="{{asset('assets/img/home.webp')}}" alt="Woman using Pilates reformer at Aligné Studio">
                 </div>
 
             </div>
