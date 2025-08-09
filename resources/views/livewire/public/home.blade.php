@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="col-lg-6 about-img" data-aos="zoom-out" data-aos-delay="200">
-                    <img src="{{asset('assets/img/home.webp')}}" alt="Woman using Pilates reformer at Aligné Studio">
+                    <img src="{{asset('assets/img/About.webp')}}" alt="Woman using Pilates reformer at Aligné Studio">
                 </div>
 
             </div>
