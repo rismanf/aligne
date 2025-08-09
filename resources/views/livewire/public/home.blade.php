@@ -65,7 +65,7 @@
 
             <div class="section-header" data-aos="fade-up">
                 <h2>Class</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                <p>Listen to what your body needs — maybe it’s craving a new playground adventure.</p>
             </div>
             <div class="row gy-4">
 
