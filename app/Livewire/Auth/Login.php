@@ -31,7 +31,7 @@ class Login extends Component
         // if (env('LOGIN_TYPE', 'local') == 'local') {
         // if (strpos($email, '@neutradc.com') > 0) {
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            if (Auth::user()->hasRole('Admin')) {
+            if (Auth::user()->hasRole(['Admin','Operator'])) {
                 session()->regenerate();
                 Log_login::logUserAttempt('Auth-Login', Carbon::now(), $email, 'OK');
                 return redirect()->intended(route('admin.home'));

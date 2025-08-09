@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="col-lg-6 about-img" data-aos="zoom-out" data-aos-delay="200">
-                    <img src="{{asset('assets/img/home.webp')}}" alt="Woman using Pilates reformer at Aligné Studio">
+                    <img src="{{asset('assets/img/About.webp')}}" alt="Woman using Pilates reformer at Aligné Studio">
                 </div>
 
             </div>
@@ -65,7 +65,7 @@
 
             <div class="section-header" data-aos="fade-up">
                 <h2>Class</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                <p>Listen to what your body needs — maybe it’s craving a new playground adventure.</p>
             </div>
             <div class="row gy-4">
 
