@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Trainer;
 use App\Models\ClassSchedule;
+use App\Models\ClassSchedules;
+use App\Models\GroupClass;
 use App\Models\UserMembership;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -36,6 +38,12 @@ class Dashboard extends Component
     public $trainer_date_from;
     public $trainer_date_to;
 
+    // Schedule Date filters
+    public $scheduleDate;
+    public $calasesGroup;
+    public $selectedgroupclass;
+    public $schedules = [];
+
     // Modal properties
     public $showModal = false;
     public $type;
@@ -52,6 +60,12 @@ class Dashboard extends Component
         $this->trainer_date_from = Carbon::now()->startOfMonth()->format('Y-m-d');
         $this->trainer_date_to = Carbon::now()->format('Y-m-d');
 
+        $this->scheduleDate = Carbon::now()->format('Y-m-d');
+
+        $this->calasesGroup = GroupClass::select('id', 'name')->get()->toArray();
+
+        $this->selectedgroupclass = $this->calasesGroup[0]['id'] ?? 1;
+
         $this->loadStatistics();
     }
 
@@ -66,17 +80,17 @@ class Dashboard extends Component
     {
         // Get all members (users with role member or similar)
         $this->total_members = User::where('title', 'Member')->count();
-        
+
         // Active members: users with active memberships
         $activeUserIds = UserMembership::active()
             ->distinct('user_id')
             ->pluck('user_id')
             ->toArray();
-        
+
         $this->active_members = User::where('title', 'Member')
             ->whereIn('id', $activeUserIds)
             ->count();
-        
+
         // Inactive members: users without active memberships
         $this->inactive_members = $this->total_members - $this->active_members;
     }
@@ -107,7 +121,7 @@ class Dashboard extends Component
         // Get trainer class statistics - simplified approach
         $trainers = Trainer::get();
 
-        $this->trainer_classes = $trainers->map(function($trainer) {
+        $this->trainer_classes = $trainers->map(function ($trainer) {
             // For now, set a default class count since we don't have the exact relation
             // This can be updated when the proper database structure is confirmed
             $classCount = rand(0, 15); // Temporary random data for demo
@@ -121,6 +135,8 @@ class Dashboard extends Component
             ];
         })->sortByDesc('total_classes')->take(10)->values()->toArray();
     }
+
+  
 
     public function updatedTransactionDateFrom()
     {
@@ -160,25 +176,25 @@ class Dashboard extends Component
                     ->distinct('user_id')
                     ->pluck('user_id')
                     ->toArray();
-                
+
                 $this->data_list = User::where('title', 'Member')
                     ->whereIn('id', $activeUserIds)
-                    ->with(['userMemberships' => function($query) {
+                    ->with(['userMemberships' => function ($query) {
                         $query->active()->latest();
                     }])
                     ->get()
-                    ->map(function($user) {
+                    ->map(function ($user) {
                         $activeMembership = $user->userMemberships->first();
                         return [
                             'name' => $user->name,
                             'email' => $user->email,
                             'membership_type' => $activeMembership ? $activeMembership->membership->name : 'N/A',
-                            'expires_at' => $activeMembership && $activeMembership->expires_at ? 
+                            'expires_at' => $activeMembership && $activeMembership->expires_at ?
                                 $activeMembership->expires_at->format('d M Y') : 'No expiration',
                             'created_at' => $user->created_at
                         ];
                     })->toArray();
-                
+
                 $this->t_headers = [
                     ['key' => 'name', 'label' => 'Name'],
                     ['key' => 'email', 'label' => 'Email'],
@@ -193,15 +209,15 @@ class Dashboard extends Component
                     ->distinct('user_id')
                     ->pluck('user_id')
                     ->toArray();
-                
+
                 $this->data_list = User::where('title', 'Member')
                     ->whereNotIn('id', $activeUserIds)
                     ->get()
-                    ->map(function($user) {
+                    ->map(function ($user) {
                         $lastMembership = UserMembership::where('user_id', $user->id)
                             ->latest()
                             ->first();
-                        
+
                         return [
                             'name' => $user->name,
                             'email' => $user->email,
@@ -210,7 +226,7 @@ class Dashboard extends Component
                             'created_at' => $user->created_at
                         ];
                     })->toArray();
-                
+
                 $this->t_headers = [
                     ['key' => 'name', 'label' => 'Name'],
                     ['key' => 'email', 'label' => 'Email'],

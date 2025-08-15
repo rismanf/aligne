@@ -141,11 +141,12 @@ class ListUser extends Component
         $user = User::find($this->editUserId);
         if ($user) {
             $avatarPath = $user->avatar;
+     
             if ($this->editAvatar) {
                 // Delete old avatar if exists
-                if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-                    Storage::disk('public')->delete($user->avatar);
-                }
+                // if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                //     Storage::disk('public')->delete($user->avatar);
+                // }
                 $avatarPath = $this->editAvatar->store('avatars', 'public');
             }
 

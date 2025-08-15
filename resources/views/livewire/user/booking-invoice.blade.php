@@ -14,7 +14,7 @@
                 </div>
             @endif
 
-            @if($booking)
+            @if ($booking)
                 <!-- Booking Card -->
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
@@ -25,8 +25,9 @@
 
                         <!-- Class Type Badge -->
                         <div class="text-center mb-3">
-                            <span class="badge 
-                                @if($booking['group_class'] == 'REFORMER CLASS') bg-info
+                            <span
+                                class="badge 
+                                @if ($booking['group_class'] == 'REFORMER CLASS') bg-info
                                 @elseif($booking['group_class'] == 'CHAIR CLASS') bg-success
                                 @else bg-warning @endif 
                                 px-3 py-2">
@@ -60,16 +61,20 @@
                             </div>
                         </div>
 
-                        @if($booking['group_class'] == 'REFORMER CLASS' && $booking['reformer_position'])
+                        @if (
+                            ($booking['group_class'] == 'REFORMER CLASS' || $booking['group_class'] == 'CHAIR CLASS') &&
+                                $booking['reformer_position']
+                        )
                             <!-- Reformer Position -->
                             <div class="text-center mb-4">
                                 <div class="bg-primary bg-opacity-10 rounded p-3">
-                                    <small class="text-muted d-block mb-2">Your Reformer Position</small>
+                                    <small class="text-muted d-block mb-2">Your Position</small>
                                     <div class="d-flex align-items-center justify-content-center">
                                         <i class="fas fa-map-marker-alt text-primary me-2"></i>
-                                        <strong class="text-primary fs-5">Position {{ $booking['reformer_position'] }}</strong>
+                                        <strong class="text-primary fs-5">Position
+                                            {{ $booking['reformer_position'] }}</strong>
                                     </div>
-                                    <small class="text-muted mt-1 d-block">Please find your assigned Reformer machine</small>
+                                    <small class="text-muted mt-1 d-block">Please find your assigned machine</small>
                                 </div>
                             </div>
                         @endif
@@ -86,21 +91,22 @@
                         <div class="text-center mb-4">
                             <small class="text-muted d-block mb-2">Show this QR code at the studio</small>
                             <div class="d-inline-block">
-                                <img src="{{ $booking['qr_code'] }}" alt="QR Code" class="img-fluid" style="max-width: 200px; height: auto;">
+                                <img src="{{ $booking['qr_code'] }}" alt="QR Code" class="img-fluid"
+                                    style="max-width: 200px; height: auto;">
                             </div>
                         </div>
 
                         <!-- Action Buttons -->
                         <div class="d-grid gap-2">
-                            @if($booking['visit_status'] == 'visited')
+                            @if ($booking['visit_status'] == 'visited')
                                 <!-- Show feedback button for attended classes -->
                                 <a href="{{ route('user.feedback', $booking['id']) }}" class="btn btn-warning">
                                     <i class="fas fa-star"></i> Share Your Experience
                                 </a>
                             @elseif($booking['can_cancel'])
                                 <button wire:click="cancelBooking"
-                                        onclick="return confirm('Are you sure you want to cancel this booking?')"
-                                        class="btn btn-outline-danger">
+                                    onclick="return confirm('Are you sure you want to cancel this booking?')"
+                                    class="btn btn-outline-danger">
                                     Cancel Booking
                                 </button>
                             @else
@@ -108,7 +114,7 @@
                                     Too close to class time
                                 </button>
                             @endif
-                            
+
                             <div class="row g-2 mt-2">
                                 <div class="col-6">
                                     <a href="{{ route('user.booking') }}" class="btn btn-primary w-100">

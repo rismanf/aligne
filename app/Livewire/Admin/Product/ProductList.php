@@ -14,7 +14,7 @@ class ProductList extends Component
     use Toast;
 
     public $id, $name, $description, $kuota, $price, $valid_until, $class_id, $category, $package_type, $quota_strategy;
-
+    public $isActive, $isPopular;
     public bool $createForm = false;
     public bool $editForm = false;
     public bool $detailForm = false;
@@ -35,8 +35,8 @@ class ProductList extends Component
     {
         // Initialize quota_strategy with default value
         $this->quota_strategy = 'fixed';
-        
-        $this->class_list = GroupClass::all()->map(function($class) {
+
+        $this->class_list = GroupClass::all()->map(function ($class) {
             return [
                 'id' => $class->id,
                 'name' => $class->name . ' (' . ucfirst($class->category) . ')'
@@ -45,7 +45,7 @@ class ProductList extends Component
 
         // Load categories from database - with fallback
         try {
-            $this->categories = PackageCategory::active()->ordered()->get()->map(function($category) {
+            $this->categories = PackageCategory::active()->ordered()->get()->map(function ($category) {
                 return [
                     'id' => $category->name,
                     'name' => $category->display_name
@@ -79,7 +79,7 @@ class ProductList extends Component
         } catch (\Exception $e) {
             // Fallback if database query fails
         }
-        
+
         // Fallback mapping
         $categoryMap = [
             'signature' => 'SIGNATURE CLASS PACK',
@@ -87,7 +87,29 @@ class ProductList extends Component
             'vip' => 'VIP MEMBERSHIP',
             'special' => 'SPECIAL PACKAGES'
         ];
-        
+
+        return $categoryMap[$categoryName] ?? strtoupper($categoryName);
+    }
+
+    private function getCategoryActive($categoryName)
+    {
+        try {
+            $category = PackageCategory::where('name', $categoryName)->first();
+            if ($category) {
+                return $category->is_active;
+            }
+        } catch (\Exception $e) {
+            // Fallback if database query fails
+        }
+
+        // Fallback mapping
+        $categoryMap = [
+            'signature' => 'SIGNATURE CLASS PACK',
+            'functional' => 'FUNCTIONAL MOVEMENT PACK',
+            'vip' => 'VIP MEMBERSHIP',
+            'special' => 'SPECIAL PACKAGES'
+        ];
+
         return $categoryMap[$categoryName] ?? strtoupper($categoryName);
     }
 
@@ -121,17 +143,18 @@ class ProductList extends Component
 
             $data_all->getCollection()->transform(function ($val, $index) use ($data_all) {
                 $val->row_number = ($data_all->currentPage() - 1) * $data_all->perPage() + $index + 1;
+                $val->category_is_active = $this->getCategoryActive($val->category ?? 'signature');
                 $val->category_display = $this->getCategoryDisplayName($val->category ?? 'signature');
-                
+
                 try {
                     $val->total_classes = $val->groupClasses->sum('pivot.quota');
                 } catch (\Exception $e) {
                     $val->total_classes = 0;
                 }
-                
+
                 $val->formatted_price = 'Rp ' . number_format($val->price ?? 0, 0, ',', '.');
                 $val->validity_text = ($val->valid_until ?? 0) . ' days';
-                
+
                 // Get package type display name
                 if ($val->package_type) {
                     $typeMap = [
@@ -143,21 +166,22 @@ class ProductList extends Component
                 } else {
                     $val->package_type_display = '-';
                 }
-                
+
                 return $val;
             });
         } catch (\Exception $e) {
             $data_all = collect()->paginate(10);
         }
-
+        
         $t_headers = [
             ['key' => 'row_number', 'label' => '#', 'class' => 'w-1'],
             ['key' => 'name', 'label' => 'Package Name'],
-            ['key' => 'category_display', 'label' => 'Category'],
-            ['key' => 'package_type_display', 'label' => 'Type'],
+            ['key' => 'category_display', 'label' => 'Paket Group'],
             ['key' => 'formatted_price', 'label' => 'Price'],
             ['key' => 'total_classes', 'label' => 'Total Classes'],
             ['key' => 'validity_text', 'label' => 'Validity'],
+            ['key' => 'is_active', 'label' => 'Active'],
+            ['key' => 'is_popular', 'label' => 'Popular'],
             ['key' => 'updated_at', 'label' => 'Last Updated'],
             ['key' => 'action', 'label' => 'Actions', 'class' => 'justify-center w-1'],
         ];
@@ -199,7 +223,8 @@ class ProductList extends Component
             'category' => $this->category,
             'package_type' => $this->package_type,
             'quota_strategy' => $this->quota_strategy,
-            'is_active' => true
+            'is_active' => $this->isActive ?? true,
+            'is_popular' => $this->isPopular ?? false,
         ]);
 
         // For flexible quota, all class types should have the same quota
@@ -243,7 +268,7 @@ class ProductList extends Component
         $this->editForm = true;
         $product = Product::find($id);
         $classDetails = ClassMembership::where('membership_id', $id)->get();
-        
+
         $this->name = $product->name;
         $this->description = $product->description;
         $this->valid_until = $product->valid_until;
@@ -251,15 +276,17 @@ class ProductList extends Component
         $this->category = $product->category ?? 'signature';
         $this->package_type = $product->package_type;
         $this->quota_strategy = $product->quota_strategy ?? 'fixed';
+        $this->isActive = $product->is_active;
+        $this->isPopular = $product->is_popular;
         $this->id = $id;
-        
+
         $this->class_kuotas = $classDetails->map(function ($item) {
             return [
                 'class_id' => $item->class_id,
                 'kuota' => $item->quota
             ];
         })->toArray();
-        
+
         // Ensure at least one class quota entry
         if (empty($this->class_kuotas)) {
             $this->class_kuotas = [['class_id' => '', 'kuota' => '']];
@@ -288,10 +315,12 @@ class ProductList extends Component
             'category' => $this->category,
             'package_type' => $this->package_type,
             'quota_strategy' => $this->quota_strategy,
+            'is_active' => $this->isActive ?? true,
+            'is_popular' => $this->isPopular ?? false,
         ]);
 
         ClassMembership::where('membership_id', $this->id)->delete();
-        
+
         // For flexible quota, all class types should have the same quota
         if ($this->quota_strategy === 'flexible') {
             $totalQuota = $this->class_kuotas[0]['kuota'] ?? 0;
@@ -313,7 +342,7 @@ class ProductList extends Component
             }
         }
 
-         $this->reset('name', 'description', 'price', 'valid_until', 'category', 'package_type', 'quota_strategy', 'class_kuotas');
+        $this->reset('name', 'description', 'price', 'valid_until', 'category', 'package_type', 'quota_strategy', 'class_kuotas');
         $this->editForm = false;
 
         $this->toast(
@@ -339,9 +368,9 @@ class ProductList extends Component
         $this->category = $product->category ?? 'signature';
         $this->package_type = $product->package_type;
         $this->quota_strategy = $product->quota_strategy ?? 'fixed';
-        
+
         // Get class details for display
-        $this->class_kuotas = $product->groupClasses->map(function($class) {
+        $this->class_kuotas = $product->groupClasses->map(function ($class) {
             return [
                 'class_name' => $class->name,
                 'class_category' => ucfirst($class->category),
@@ -359,16 +388,16 @@ class ProductList extends Component
     public function delete()
     {
         $product = Product::find($this->id);
-        
+
         // Delete related class memberships first
         ClassMembership::where('membership_id', $this->id)->delete();
-        
+
         // Delete the product
         $product->delete();
-        
+
         $this->reset();
         $this->deleteForm = false;
-        
+
         $this->toast(
             type: 'success',
             title: 'Membership Package Deleted',

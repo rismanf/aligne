@@ -22,6 +22,7 @@ class CheckoutClass extends Component
     public $selected_position = null;
     public $available_positions = [];
     public $is_reformer_class = false;
+    public $isChairClass = false;
     public $dateClass;
     public function mount($id)
     {
@@ -36,12 +37,16 @@ class CheckoutClass extends Component
         $this->dateClass = Carbon::parse($this->schedule->start_time)->translatedFormat('Y-m-d');
         // Check if this is a Reformer class
         $this->is_reformer_class = $this->schedule->classes->groupClass->name === 'REFORMER CLASS';
+        $this->isChairClass = $this->schedule->classes->groupClass->name === 'CHAIR CLASS';
 
         // Initialize available positions for Reformer class
         if ($this->is_reformer_class) {
             $this->initializeReformerPositions();
         }
 
+        if ($this->isChairClass) {
+            $this->initializeReformerPositions();
+        }
         // Initialize quota to 0
         $this->cek_quota = 0;
 
@@ -88,6 +93,10 @@ class CheckoutClass extends Component
         if ($this->is_reformer_class && $this->available_positions[$position - 1]['is_available']) {
             $this->selected_position = $position;
         }
+
+        if ($this->isChairClass && $this->available_positions[$position - 1]['is_available']) {
+            $this->selected_position = $position;
+        }
     }
 
     private function checkUserQuota()
@@ -132,6 +141,12 @@ class CheckoutClass extends Component
             return;
         }
 
+        // For Chair class, validate position selection
+        if ($this->isChairClass && !$this->selected_position) {
+            session()->flash('error', 'Please select a Chair position before booking.');
+            return;
+        }
+
         // Check if schedule exists and is bookable
         if (!$this->schedule->canBeBooked()) {
             session()->flash('error', 'This class cannot be booked. Booking closes 1 hour before class starts.');
@@ -157,7 +172,7 @@ class CheckoutClass extends Component
         }
 
         // For Reformer class, check if selected position is still available
-        if ($this->is_reformer_class) {
+        if ($this->is_reformer_class || $this->isChairClass) {
             $positionTaken = ClassBooking::where('class_schedule_id', $this->id)
                 ->where('reformer_position', $this->selected_position)
                 ->where('booking_status', 'confirmed')
@@ -192,6 +207,10 @@ class CheckoutClass extends Component
 
             // Add Reformer position if applicable
             if ($this->is_reformer_class && $this->selected_position) {
+                $bookingData['reformer_position'] = $this->selected_position;
+            }
+
+            if ($this->isChairClass && $this->selected_position) {
                 $bookingData['reformer_position'] = $this->selected_position;
             }
 

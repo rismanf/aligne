@@ -6,6 +6,7 @@ use App\Models\Menu;
 use App\Models\Product;
 use App\Models\PackageCategory;
 use App\Models\GroupClass;
+use App\Models\User;
 use Livewire\Component;
 
 class Membership extends Component
@@ -26,10 +27,20 @@ class Membership extends Component
     {
         try {
             $dbCategories = PackageCategory::active()->ordered()->get();
-            
+
             $this->categories = ['all' => 'All Packages'];
-            
+
             foreach ($dbCategories as $category) {
+                if ($category->name === 'TRIAL PACKAGE') {
+
+                    // Kalau belum login atau user adalah new_member → tampilkan
+                    if (!auth()->check() || auth()->user()->new_member) {
+                        // OK, biarkan $categoryProducts
+                    } else {
+                        // Kalau bukan new_member → skip kategori ini
+                        continue;
+                    }
+                }
                 $this->categories[$category->name] = $category->display_name;
             }
         } catch (\Exception $e) {
@@ -52,7 +63,7 @@ class Membership extends Component
 
     private function loadProducts()
     {
-        $query = Product::with(['groupClasses' => function($q) {
+        $query = Product::with(['groupClasses' => function ($q) {
             $q->where('is_active', true);
         }])->where('is_active', true);
 
@@ -60,8 +71,8 @@ class Membership extends Component
             // Filter by the actual category from database
             $query->where('category', $this->selectedCategory);
         }
-        
-        $this->products = $query->get();
+
+        $this->products = $query->orderby('price', 'asc')->get();
     }
 
     public function render()
@@ -70,56 +81,69 @@ class Membership extends Component
 
         // Group products by their actual database categories
         $groupedProducts = [];
-        
+
         try {
             $dbCategories = PackageCategory::active()->ordered()->get();
-            
+
             foreach ($dbCategories as $category) {
-                $categoryProducts = $this->products->filter(function($product) use ($category) {
+                $categoryProducts = $this->products->filter(function ($product) use ($category) {
                     return $product->category === $category->name;
                 });
-                
+
+                // Jika kategori adalah "trial" (khusus member baru)
+                if ($category->name === 'TRIAL PACKAGE') {
+
+                    // Kalau belum login atau user adalah new_member → tampilkan
+                    if (!auth()->check() || auth()->user()->new_member) {
+                        // OK, biarkan $categoryProducts
+                    } else {
+                        // Kalau bukan new_member → skip kategori ini
+                        continue;
+                    }
+                }
+
                 if ($categoryProducts->count() > 0) {
                     $groupedProducts[$category->name] = [
                         'display_name' => $category->display_name,
                         'description' => $category->description,
-                        'products' => $categoryProducts->sortBy('name')
+                        'products' => $categoryProducts->sortBy('price')
                     ];
                 }
             }
-            
+
             // Add products without category to 'other'
-            $uncategorizedProducts = $this->products->filter(function($product) use ($dbCategories) {
-                return !$dbCategories->pluck('name')->contains($product->category);
-            });
-            
-            if ($uncategorizedProducts->count() > 0) {
-                $groupedProducts['other'] = [
-                    'display_name' => 'Other Packages',
-                    'description' => 'Additional membership packages',
-                    'products' => $uncategorizedProducts->sortBy('name')
-                ];
-            }
-            
+            // $uncategorizedProducts = $this->products->filter(function($product) use ($dbCategories) {
+            //     return !$dbCategories->pluck('name')->contains($product->category);
+            // });
+
+            // if ($uncategorizedProducts->count() > 0) {
+            //     $groupedProducts['other'] = [
+            //         'display_name' => 'Other Packages',
+            //         'description' => 'Additional membership packages',
+            //         'products' => $uncategorizedProducts->sortBy('name')
+            //     ];
+            // }
+
         } catch (\Exception $e) {
             // Fallback grouping if database query fails
             $groupedProducts = [
                 'signature' => [
                     'display_name' => 'SIGNATURE CLASS PACK',
                     'description' => 'For Reformer / Chair Classes',
-                    'products' => $this->products->filter(function($product) {
+                    'products' => $this->products->filter(function ($product) {
                         return $product->category === 'signature';
                     })
                 ],
                 'functional' => [
                     'display_name' => 'FUNCTIONAL CLASS PACK',
                     'description' => 'For Functional Movement Classes',
-                    'products' => $this->products->filter(function($product) {
+                    'products' => $this->products->filter(function ($product) {
                         return $product->category === 'functional';
                     })
                 ]
             ];
         }
+
         return view('livewire.public.membership', [
             'groupedProducts' => $groupedProducts,
             'categories' => $this->categories,

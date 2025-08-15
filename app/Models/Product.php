@@ -19,6 +19,7 @@ class Product extends Model
         'kuota',
         'valid_until',
         'is_active',
+        'is_popular',
         'created_by_id',
         'updated_by_id'
     ];

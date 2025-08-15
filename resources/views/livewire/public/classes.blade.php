@@ -11,7 +11,7 @@
             <div class="row gy-4">
 
                 @foreach ($classes as $class)
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <article class="position-relative h-100 rounded-5">
 
                             <div class="post-img position-relative overflow-hidden rounded-top-5">

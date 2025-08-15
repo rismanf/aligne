@@ -21,6 +21,7 @@ use App\Livewire\Admin\Question\ListQuestion;
 use App\Livewire\Admin\Role\ListRole;
 use App\Livewire\Admin\Role\RoleShow;
 use App\Livewire\Admin\Schedule\ScheduleList;
+use App\Livewire\Admin\Schedule\ScheduleMonitoring;
 use App\Livewire\Admin\Sponsor\ListSponsor;
 use App\Livewire\Admin\Trainer\TrainerList;
 use App\Livewire\Admin\Transaction\TransactionList;
@@ -117,6 +118,7 @@ Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('home');
+    Route::get('/schedulemonitoring', ScheduleMonitoring::class)->name('schedulemonitoring');
 
     Route::get('/news', ListNews::class)->name('news.index');
     Route::get('/news/create', AddNews::class)->name('news.create');
