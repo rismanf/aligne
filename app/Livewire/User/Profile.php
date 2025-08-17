@@ -21,6 +21,7 @@ class Profile extends Component
     {
         $this->user = auth()->user();
         $this->loadActiveMemberships();
+        
     }
 
     private function loadActiveMemberships()
@@ -72,7 +73,6 @@ class Profile extends Component
                     }
                 }
             }
-
             return $details;
         });
     }

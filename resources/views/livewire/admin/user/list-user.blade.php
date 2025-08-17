@@ -63,18 +63,22 @@
     <x-modal wire:model="editForm" title="Edit User" class="backdrop-blur">
         <x-form wire:submit="update">
             <x-file label="Avatar" wire:model="editAvatar" accept="image/png, image/jpeg" crop-after-change>
-                @if ($editUserId)
-                    @php
-                        $editUser = \App\Models\User::find($editUserId);
-                    @endphp
-                    <img src="{{ $editUser && $editUser->avatar ? asset('storage/' . $editUser->avatar) : asset('/image/empty-user.webp') }}"
-                        class="h-36 rounded-lg" />
-                @else
-                    <img src="{{ asset('/image/empty-user.webp') }}" class="h-36 rounded-lg" />
-                @endif
+                <img src="{{ $editUser && $editUser->avatar ? asset('storage/' . $editUser->avatar) : asset('/image/empty-user.webp') }}" 
+                     class="h-36 rounded-lg" alt="user avatar" />
             </x-file>
             <x-input label="Name" icon="o-user" wire:model="editName" />
-            <x-input label="Email" icon="o-at-symbol" wire:model="editEmail" />
+            <x-input label="Email" icon="o-at-symbol" wire:model="editEmail" disabled />
+
+            <div class="collapse collapse-arrow bg-base-200">
+                <input type="checkbox" />
+                <div class="collapse-title text-md font-medium">
+                    Change Password
+                </div>
+                <div class="collapse-content space-y-3">
+                    <x-password label="New Password" wire:model="password" />
+                    <x-password label="Retype Password" wire:model="password_confirmation" />
+                </div>
+            </div>
             <x-select label="Role" wire:model="editRole" :options="$roles" option-value="name" option-label="name" />
 
             <x-slot:actions>

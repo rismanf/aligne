@@ -149,7 +149,12 @@ class CheckoutClass extends Component
 
         // Check if schedule exists and is bookable
         if (!$this->schedule->canBeBooked()) {
-            session()->flash('error', 'This class cannot be booked. Booking closes 1 hour before class starts.');
+            $scheduleDateTime = \Carbon\Carbon::parse($this->schedule->start_time);
+            $hourOfClass = $scheduleDateTime->hour;
+
+            $minHoursBefore = ($hourOfClass <= 10) ? 12 : 3;
+
+            session()->flash('error', "This class cannot be booked. Booking closes {$minHoursBefore} hours before the class starts.");
             return;
         }
 

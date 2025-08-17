@@ -46,16 +46,24 @@ class ClassSchedules extends Model
     }
 
     // Business Logic Methods
-    
+
     /**
      * Check if class can be booked (minimum 1 hour before start time)
      */
     public function canBeBooked()
     {
+        // $now = Carbon::now();
+
+        // // Must be at least 1 hour before class starts
+        // return $now->diffInHours($this->start_time, false) >= 1;
         $now = Carbon::now();
-        
-        // Must be at least 1 hour before class starts
-        return $now->diffInHours($this->start_time, false) >= 1;
+        $scheduleDateTime = Carbon::parse($this->start_time);
+
+        // Tentukan batas minimal booking
+        $hourOfClass = $scheduleDateTime->hour;
+        $minHoursBefore = ($hourOfClass <= 10) ? 12 : 3;
+
+        return $now->diffInHours($scheduleDateTime, false) >= $minHoursBefore;
     }
 
     /**
@@ -64,7 +72,7 @@ class ClassSchedules extends Model
     public function canBeCancelled()
     {
         $now = Carbon::now();
-        
+
         // Can cancel up to 12 hours before class starts
         return $now->diffInHours($this->start_time, false) >= 12;
     }
@@ -115,10 +123,10 @@ class ClassSchedules extends Model
     public function scopeAvailableForBooking($query)
     {
         $oneHourFromNow = Carbon::now()->addHour();
-        
+
         return $query->where('is_active', true)
-                    ->where('start_time', '>', $oneHourFromNow)
-                    ->whereColumn('capacity_book', '<', 'capacity');
+            ->where('start_time', '>', $oneHourFromNow)
+            ->whereColumn('capacity_book', '<', 'capacity');
     }
 
     /**

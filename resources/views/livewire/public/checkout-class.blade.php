@@ -394,13 +394,14 @@
                                                 @endif
                                             </div>
                                         @endif
-
-                                        <form wire:submit="save">
-                                            <button type="submit" class="cta-btn"
-                                                {{ ($is_reformer_class || $isChairClass) && !$selected_position ? 'disabled' : '' }}>
-                                                Confirm Booking
-                                            </button>
-                                        </form>
+                                        <center>
+                                            <form wire:submit="save">
+                                                <button type="submit" class="cta-btn"
+                                                    {{ ($is_reformer_class || $isChairClass) && !$selected_position ? 'disabled' : '' }}>
+                                                    Confirm Booking
+                                                </button>
+                                            </form>
+                                        </center>
                                         <a href="{{ route('detail-class', ['id' => $schedule->classes->group_class_id, 'date' => $dateClass]) }}"
                                             class="cta-btn btn-secondary">Back</a>
                                     @endif
