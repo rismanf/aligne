@@ -64,15 +64,32 @@
                                                 <i class="bi bi-person-circle me-2"></i>
                                                 Member Information
                                             </h6>
-                                            <div class="row g-3">
-                                                <div class="col-md-6">
-                                                    <div class="d-flex flex-column">
-                                                        <small class="fw-medium" style="color: #111111;">Member
-                                                            Name</small>
-                                                        <span class="fw-bold"
-                                                            style="color: #4B2E2E;">{{ $scanResult['user_name'] }}</span>
-                                                    </div>
+                                            
+                                            <!-- Member Avatar and Basic Info -->
+                                            <div class="d-flex align-items-center mb-4">
+                                                <div class="me-3">
+                                                    @if($scanResult['user_avatar'])
+                                                        <img src="{{ asset('storage/' . $scanResult['user_avatar']) }}" 
+                                                             alt="Member Avatar" 
+                                                             class="rounded-circle"
+                                                             style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #4B2E2E;">
+                                                    @else
+                                                        <div class="d-flex align-items-center justify-content-center rounded-circle"
+                                                             style="width: 80px; height: 80px; background-color: #4B2E2E; color: white;">
+                                                            <i class="bi bi-person-fill" style="font-size: 2rem;"></i>
+                                                        </div>
+                                                    @endif
                                                 </div>
+                                                <div class="flex-grow-1">
+                                                    <h5 class="mb-1 fw-bold" style="color: #4B2E2E;">{{ $scanResult['user_name'] }}</h5>
+                                                    <p class="mb-0" style="color: #111111;">
+                                                        <i class="bi bi-envelope me-1"></i>
+                                                        {{ $scanResult['user_email'] }}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row g-3">
                                                 <div class="col-md-6">
                                                     <div class="d-flex flex-column">
                                                         <small class="fw-medium" style="color: #111111;">Member
@@ -93,7 +110,6 @@
                                                         </h2>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
 

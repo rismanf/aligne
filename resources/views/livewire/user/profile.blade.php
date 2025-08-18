@@ -17,42 +17,187 @@
 
                 <div class="col-lg-9">
                     <h3>My Profile</h3>
+                    
+                    <!-- Success/Error Messages -->
+                    @if (session()->has('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+                    
+                    @if (session()->has('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
                     <div class="row g-3">
+                        <!-- Profile Photo Section -->
                         <div class="col-md-12">
-                            <div class="d-flex flex-column">
-                                {{-- <img src="{{ asset('assets/img/testimonials/testimonials-2.jpg') }}"
-                                    class="profile-image" alt=""> --}}
-                                <span class="fw-bold" style="color: #4B2E2E;">{{ $user->name }}</span>
-                                <span class="fw-bold" style="color: #4B2E2E;">{{ $user->email }}</span>
-                                {{-- <div>
-                                    <a href="{{ route('classes') }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-pencil"></i> Edit
-                                    </a>
-                                </div> --}}
+                            <div class="profile-photo-section">
+                                <div class="d-flex align-items-center">
+                                    <div class="profile-photo-container">
+                                        @if($user->avatar)
+                                            <img src="{{ asset('storage/' . $user->avatar) }}" class="profile-image" alt="Profile Photo">
+                                        @else
+                                            <div class="profile-placeholder">
+                                                <i class="bi bi-person-circle"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="profile-info ms-3">
+                                        <!-- Name Section -->
+                                        <div class="name-section mb-2">
+                                            @if(!$editName)
+                                                <div class="d-flex align-items-center">
+                                                    <span class="fw-bold profile-name">{{ $user->name }}</span>
+                                                    <button wire:click="toggleEditName" class="btn btn-link btn-sm ms-2 p-0">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                </div>
+                                            @else
+                                                <div class="edit-name-form">
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="text" wire:model="name" class="form-control @error('name') is-invalid @enderror" placeholder="Enter your name">
+                                                        <button wire:click="updateName" class="btn btn-success btn-sm">
+                                                            <i class="bi bi-check"></i>
+                                                        </button>
+                                                        <button wire:click="toggleEditName" class="btn btn-secondary btn-sm">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                    @error('name')
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                            @endif
+                                        </div>
+                                        
+                                        <!-- Email (non-editable) -->
+                                        <div class="email-section mb-2">
+                                            <span class="text-muted">{{ $user->email }}</span>
+                                        </div>
+                                        
+                                        <!-- Action Buttons -->
+                                        <div class="action-buttons">
+                                            <button wire:click="toggleEditAvatar" class="btn btn-outline-primary btn-sm me-2">
+                                                <i class="bi bi-camera"></i> Change Photo
+                                            </button>
+                                            <button wire:click="toggleEditPassword" class="btn btn-outline-secondary btn-sm">
+                                                <i class="bi bi-key"></i> Change Password
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="d-flex flex-column">
-                                <small class="fw-medium" style="color: #111111;">Member
-                                    Since</small>
-                                <span class="fw-bold"
-                                    style="color: #4B2E2E;">{{ $user->created_at->format('M j, Y') }}</span>
-                                <small style="color: #4B2E2E;">{{ $user->created_at->diffForHumans() }}</small>
+
+                        <!-- Avatar Upload Form -->
+                        @if($editAvatar)
+                            <div class="col-md-12">
+                                <div class="avatar-upload-form">
+                                    <h5>Update Profile Photo</h5>
+                                    <div class="mb-3">
+                                        <input type="file" wire:model="avatar" class="form-control @error('avatar') is-invalid @enderror" accept="image/*">
+                                        @error('avatar')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    
+                                    @if($avatar)
+                                        <div class="mb-3">
+                                            <img src="{{ $avatar->temporaryUrl() }}" class="preview-image" alt="Preview">
+                                        </div>
+                                    @endif
+                                    
+                                    <div class="d-flex gap-2">
+                                        <button wire:click="updateAvatar" class="btn btn-primary btn-sm" @if(!$avatar) disabled @endif>
+                                            <i class="bi bi-upload"></i> Upload Photo
+                                        </button>
+                                        @if($user->avatar)
+                                            <button wire:click="removeAvatar" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-trash"></i> Remove Current Photo
+                                            </button>
+                                        @endif
+                                        <button wire:click="toggleEditAvatar" class="btn btn-secondary btn-sm">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex flex-column">
-                                <small class="fw-medium" style="color: #111111;">Completed
-                                    Classes</small>
-                                <h2 class="fw-bold" style="color: #4B2E2E;">
-                                    <i class="bi bi-trophy me-1"></i>
-                                    {{ $completedClasses }} Classes
-                                </h2>
+                        @endif
+
+                        <!-- Password Change Form -->
+                        @if($editPassword)
+                            <div class="col-md-12">
+                                <div class="password-change-form">
+                                    <h5>Change Password</h5>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Current Password</label>
+                                            <input type="password" wire:model="current_password" class="form-control @error('current_password') is-invalid @enderror">
+                                            @error('current_password')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">New Password</label>
+                                            <input type="password" wire:model="new_password" class="form-control @error('new_password') is-invalid @enderror">
+                                            @error('new_password')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Confirm New Password</label>
+                                            <input type="password" wire:model="new_password_confirmation" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button wire:click="updatePassword" class="btn btn-primary btn-sm">
+                                            <i class="bi bi-key"></i> Update Password
+                                        </button>
+                                        <button wire:click="toggleEditPassword" class="btn btn-secondary btn-sm">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <!-- Member Statistics Section -->
+                        <div class="col-md-12">
+                            <div class="member-stats-section">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="stat-card">
+                                            <div class="stat-icon">
+                                                <i class="bi bi-calendar-check"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <small class="stat-label">Member Since</small>
+                                                <h4 class="stat-value">{{ $user->created_at->format('M j, Y') }}</h4>
+                                                <small class="stat-subtitle">{{ $user->created_at->diffForHumans() }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="stat-card">
+                                            <div class="stat-icon">
+                                                <i class="bi bi-trophy"></i>
+                                            </div>
+                                            <div class="stat-content">
+                                                <small class="stat-label">Completed Classes</small>
+                                                <h4 class="stat-value">{{ $completedClasses }} Classes</h4>
+                                                <small class="stat-subtitle">Total achievements</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </div>
-                    <hr>
                     <h3>My Membership</h3>
 
                     @if ($membershipDetails && $membershipDetails->count() > 0)
@@ -409,9 +554,192 @@
 
         .profile-image {
             width: 90px;
-            border-radius: 50px;
-            float: left;
-            margin: 0 10px 0 0;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4b2e2e;
+        }
+
+        .profile-placeholder {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #e9ecef;
+        }
+
+        .profile-placeholder i {
+            font-size: 40px;
+            color: #6c757d;
+        }
+
+        .profile-photo-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+
+        .member-stats-section {
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4b2e2e 0%, #6d4545 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .stat-icon i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .stat-value {
+            color: #4B2E2E;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .stat-subtitle {
+            color: #4B2E2E;
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            color: #4B2E2E;
+        }
+
+        .edit-name-form {
+            max-width: 300px;
+        }
+
+        .avatar-upload-form,
+        .password-change-form {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+
+        .avatar-upload-form h5,
+        .password-change-form h5 {
+            color: #4B2E2E;
+            margin-bottom: 15px;
+        }
+
+        .preview-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid #e9ecef;
+        }
+
+        .btn-link {
+            color: #4B2E2E;
+            text-decoration: none;
+        }
+
+        .btn-link:hover {
+            color: #3a2323;
+        }
+
+        .btn-outline-primary {
+            border-color: #4B2E2E;
+            color: #4B2E2E;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #4B2E2E;
+            border-color: #4B2E2E;
+            color: white;
+        }
+
+        .btn-outline-secondary {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-control:focus {
+            border-color: #4B2E2E;
+            box-shadow: 0 0 0 0.2rem rgba(75, 46, 46, 0.25);
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
         }
 
         .footer-contact{

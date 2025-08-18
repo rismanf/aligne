@@ -75,6 +75,8 @@ class BookingDetail extends Component
             // Prepare booking details
             $this->scanResult = [
                 'user_name' => $this->booking->user->name,
+                'user_email' => $this->booking->user->email,
+                'user_avatar' => $this->booking->user->avatar,
                 'class_name' => $this->booking->classSchedule->classes->name,
                 'group_class' => $this->booking->classSchedule->classes->groupClass->name,
                 'trainer_name' => $this->booking->classSchedule->trainer->name,
