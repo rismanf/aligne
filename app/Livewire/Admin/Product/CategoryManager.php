@@ -48,7 +48,7 @@ class CategoryManager extends Component
             ['key' => 'is_active', 'label' => 'Status', 'class' => 'w-20'],
             ['key' => 'action', 'label' => 'Action', 'class' => 'justify-center w-32'],
         ];
-dd($data_all);
+        
         return view('livewire.admin.product.category-manager', [
             't_headers' => $t_headers,
             'categories_data' => $data_all,

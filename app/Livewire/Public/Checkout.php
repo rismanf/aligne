@@ -5,6 +5,7 @@ namespace App\Livewire\Public;
 use App\Mail\CheckoutMembershipMail;
 use App\Models\Menu;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\UserMembership;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -30,6 +31,10 @@ class Checkout extends Component
         if (!$this->product) {
             $this->toastError('Product not found.');
             return;
+        }
+
+        if( $this->product->category=='TRIAL PACKAGE'){
+            User::where('id', Auth::id())->update(['new_member' => false]);            
         }
 
         // Check if user already has active membership for this product

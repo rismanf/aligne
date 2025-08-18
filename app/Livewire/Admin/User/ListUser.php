@@ -22,9 +22,9 @@ class ListUser extends Component
     public bool $editForm = false;
 
     public bool $deleteModal = false;
-    public $name, $email, $role, $password, $retype_password, $avatar;
-    public $editUserId, $editName, $editEmail, $editRole, $editAvatar;
-    
+    public $name, $email, $role, $password, $retype_password,$password_confirmation, $avatar;
+    public $editUser, $editUserId, $editName, $editEmail, $editRole, $editAvatar;
+
     // Search and filter properties
     public $search = '';
     public $roleFilter = '';
@@ -40,13 +40,14 @@ class ListUser extends Component
     public function showEditModal($userId)
     {
         $user = User::find($userId);
-        if ($user) {
-            $this->editUserId = $user->id;
-            $this->editName = $user->name;
-            $this->editEmail = $user->email;
-            $this->editRole = $user->roles->first()?->name ?? '';
-            $this->editForm = true;
-        }
+
+        $this->editUser = $user;
+        // dd($this->editUser);
+        $this->editUserId = $user->id;
+        $this->editName = $user->name;
+        $this->editEmail = $user->email;
+        $this->editRole = $user->roles->first()?->name ?? '';
+        $this->editForm = true;
     }
 
     public function resetForm()
@@ -65,12 +66,12 @@ class ListUser extends Component
         $this->editRole = '';
         $this->editAvatar = null;
     }
-    
+
     public function updatedSearch()
     {
         $this->resetPage();
     }
-    
+
     public function updatedRoleFilter()
     {
         $this->resetPage();
@@ -136,24 +137,29 @@ class ListUser extends Component
             'editEmail' => 'required|email|unique:users,email,' . $this->editUserId,
             'editRole' => 'required',
             'editAvatar' => 'nullable|image|max:2048', // 2MB max
+            'password' => 'nullable|min:8|confirmed',
         ]);
 
         $user = User::find($this->editUserId);
         if ($user) {
             $avatarPath = $user->avatar;
+
             if ($this->editAvatar) {
                 // Delete old avatar if exists
-                if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-                    Storage::disk('public')->delete($user->avatar);
-                }
+                // if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                //     Storage::disk('public')->delete($user->avatar);
+                // }
                 $avatarPath = $this->editAvatar->store('avatars', 'public');
             }
 
-            $user->update([
-                'name' => $this->editName,
-                'email' => $this->editEmail,
-                'avatar' => $avatarPath,
-            ]);
+            if ($this->password) {
+                $user->password = bcrypt($this->password);
+            }
+
+            $user->name = $this->editName;
+            $user->email = $this->editEmail;
+            $user->avatar = $avatarPath;
+            $user->save();
 
             // Update role
             $user->syncRoles([$this->editRole]);
@@ -198,12 +204,12 @@ class ListUser extends Component
         if (!$currentUser->hasRole('Admin')) {
             return false;
         }
-        
+
         // Admin cannot edit other admin users (optional security measure)
         if ($user->hasRole('Admin') && $user->id !== $currentUser->id) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -227,22 +233,22 @@ class ListUser extends Component
         ];
 
         $query = User::with('roles');
-        
+
         // Apply search filter
         if (!empty($this->search)) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('email', 'like', '%' . $this->search . '%');
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
             });
         }
-        
+
         // Apply role filter
         if (!empty($this->roleFilter)) {
-            $query->whereHas('roles', function($q) {
+            $query->whereHas('roles', function ($q) {
                 $q->where('name', $this->roleFilter);
             });
         }
-        
+
         $users = $query->paginate(5);
 
         $users->getCollection()->transform(function ($user, $index) use ($users) {
@@ -250,7 +256,7 @@ class ListUser extends Component
             return $user;
         });
 
-        
+
 
         $roles = Role::all();
 

@@ -274,7 +274,7 @@
                                                         <div>To: {{ \Carbon\Carbon::parse($membership['expires_at'])->format('d M Y') }}</div>
                                                         @if($membership['remaining_days'] !== null)
                                                             <div class="text-xs {{ $membership['remaining_days'] > 0 ? 'text-green-600' : 'text-red-600' }}">
-                                                                {{ $membership['remaining_days'] > 0 ? $membership['remaining_days'] . ' days left' : 'Expired' }}
+                                                                {{ $membership['remaining_days'] > 0 ? round($membership['remaining_days']) . ' days left' : 'Expired' }}
                                                             </div>
                                                         @endif
                                                     @else

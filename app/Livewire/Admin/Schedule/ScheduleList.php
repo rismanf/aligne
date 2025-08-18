@@ -7,6 +7,7 @@ use App\Models\GroupClass;
 use App\Models\ClassSchedules;
 use App\Models\Trainer;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
@@ -263,7 +264,7 @@ class ScheduleList extends Component
             ->get();
 
         // Get classes for selected group
-        $this->calases = Classes::select('id', 'name')
+        $this->calases = Classes::select('id', DB::raw("CONCAT(name, ' (', level_class, ')') AS name"))
             ->where('group_class_id', $this->selectedgroupclass)
             ->orderBy('name')
             ->get()
@@ -315,7 +316,7 @@ class ScheduleList extends Component
                 ];
             }
         }
-
+        
         return view('livewire.admin.schedule.schedule-list', [
             'schedule_data' => $this->schedule_data,
             'calases' => $this->calases,

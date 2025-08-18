@@ -10,7 +10,7 @@
         $prev = $startOfWeek->copy()->subWeek()->toDateString();
         $next = $startOfWeek->copy()->addWeek()->toDateString();
     @endphp
-    
+
     <style>
         /* Color Palette Variables */
         :root {
@@ -293,15 +293,15 @@
                 grid-template-columns: repeat(4, 1fr);
                 gap: 0.3rem;
             }
-            
+
             .day-card {
                 padding: 0.6rem 0.3rem;
             }
-            
+
             .class-title {
                 font-size: 1.5rem;
             }
-            
+
             .schedule-info {
                 flex-direction: column;
                 align-items: flex-start;
@@ -347,7 +347,8 @@
                     @endif
 
                     <h2 class="week-title">
-                        {{ $currentDate->startOfWeek()->format('M d') }} - {{ $currentDate->endOfWeek()->format('M d, Y') }}
+                        {{ $currentDate->startOfWeek()->format('M d') }} -
+                        {{ $currentDate->endOfWeek()->format('M d, Y') }}
                     </h2>
 
                     {{-- Tombol Next: hanya aktif kalau currentDate < 1 bulan ke depan --}}
@@ -371,8 +372,8 @@
                             });
                             $isSelected = $day->format('Y-m-d') === $date;
                         @endphp
-                        <a href="{{ route('detail-class', ['id' => $id, 'date' => $day->toDateString()]) }}" 
-                           class="day-card {{ $isSelected ? 'selected' : '' }}">
+                        <a href="{{ route('detail-class', ['id' => $id, 'date' => $day->toDateString()]) }}"
+                            class="day-card {{ $isSelected ? 'selected' : '' }}">
                             <div class="day-name">{{ $day->format('D') }}</div>
                             <div class="day-number">{{ $day->format('j') }}</div>
                             @if ($hasSchedule)
@@ -389,24 +390,28 @@
                     <h3 style="margin-bottom: 1.5rem; color: #2d3748; font-weight: 600;">
                         Available Classes for {{ \Carbon\Carbon::parse($date)->format('l, M d, Y') }}
                     </h3>
-                    
+
                     @foreach ($schedule_now as $val)
                         @php
                             $availableSlots = $val->capacity - $val->capacity_book;
                             $scheduleDateTime = \Carbon\Carbon::parse($val->start_time);
                             $now = \Carbon\Carbon::now();
                             $diffInHours = $now->diffInHours($scheduleDateTime, false);
+
                             $capacityPercentage = ($val->capacity_book / $val->capacity) * 100;
+                            // Tentukan batas minimal booking berdasarkan jam kelas
+                            $hourOfClass = $scheduleDateTime->hour;
+                            $minHoursBefore = $hourOfClass <= 10 ? 12 : 3;
                         @endphp
-                        
+
                         <div class="schedule-card">
                             <div class="schedule-time">
                                 {{ Carbon::parse($val->start_time)->format('h:i A') }}
                             </div>
-                            
+
                             <div class="schedule-class">{{ $val->classes->name }}</div>
                             <div class="schedule-level">{{ $val->classes->level_class }}</div>
-                            
+
                             <div class="schedule-info">
                                 <div>
                                     <div class="trainer-info">
@@ -414,20 +419,36 @@
                                         {{ $val->trainer->name }}
                                     </div>
                                 </div>
-                                
+
                                 <div class="capacity-info">
                                     <span>{{ $availableSlots }}/{{ $val->capacity }} available</span>
                                     <div class="capacity-bar">
                                         <div class="capacity-fill" style="width: {{ $capacityPercentage }}%"></div>
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                     @if ($availableSlots == 0)
                                         <span class="book-btn full">Full</span>
+                                    @elseif ($availableSlots == 1)
+                                        <x-button label="View Details" icon="o-eye"
+                                            wire:click="showDetailModal({{ $val->id }})" spinner class="btn-xs" />
+                                        @php
+                                            $minutesAfterStart = $now->diffInMinutes($scheduleDateTime, false);
+                                        @endphp
+
+                                        @if ($minutesAfterStart < -5)
+                                            {{-- Nilai negatif artinya sudah lewat dari start time --}}
+                                            <span class="book-btn expired">Expired</span>
+                                        @else
+                                            <a href="{{ route('checkout_class', $val->id) }}"
+                                                class="book-btn available">
+                                                Book Now
+                                            </a>
+                                        @endif
                                     @elseif ($scheduleDateTime->isPast())
                                         <span class="book-btn expired">Expired</span>
-                                    @elseif ($diffInHours < 1)
+                                    @elseif ($diffInHours < $minHoursBefore)
                                         <span class="book-btn expired">Too Late</span>
                                     @else
                                         <a href="{{ route('checkout_class', $val->id) }}" class="book-btn available">

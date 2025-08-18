@@ -13,7 +13,8 @@ class GroupClassList extends Component
 {
     use Toast, WithFileUploads, WithPagination;
 
-    public $id, $name, $image, $image_edit, $description;
+    public $id, $name, $image,  $description;
+    public $image_edit;
 
     public $class_type = [
         ['id' => '1', 'name' => 'REFORMER CLASS'],
@@ -94,7 +95,7 @@ class GroupClassList extends Component
         ]);
 
         if ($this->image) {
-            
+
             $url = $this->image->store('groupclass', 'public');
         }
 
@@ -134,18 +135,18 @@ class GroupClassList extends Component
     public function update()
     {
         $this->validate([
-            'image_edit' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'image_edit' => 'nullable|mimetypes:image/jpeg,image/png,image/jpg,image/gif,image/svg+xml|max:5120',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255|min:10',
         ]);
 
         $class = GroupClass::find($this->id);
         $url = $class->image_original;
-        // dd($this->image_edit);
+
         if ($this->image_edit) {
-             if ($class->image_original && Storage::disk('public')->exists($class->image_original)) {
-                Storage::disk('public')->delete($class->image_original);
-            }
+            // if ($class->image_original && Storage::disk('public')->exists($class->image_original)) {
+            //     Storage::disk('public')->delete($class->image_original);
+            // }
 
             $url = $this->image_edit->store('groupclass', 'public');
         }

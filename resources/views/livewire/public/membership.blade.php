@@ -33,8 +33,8 @@
                     <div class="row gy-4 justify-content-center">
                         @foreach ($categoryData['products'] as $product)
                             <div class="col-lg-4">
-                                <div class="pricing-item {{ $loop->index === 1 ? 'featured' : '' }}">
-                                    @if($loop->index === 1)
+                                <div class="pricing-item {{ $product->is_popular  ? 'featured' : '' }}">
+                                    @if($product->is_popular)
                                         <div class="popular-badge">Most Popular</div>
                                     @endif
                                     

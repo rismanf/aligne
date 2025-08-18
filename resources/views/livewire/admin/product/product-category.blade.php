@@ -40,7 +40,7 @@
         <x-form wire:submit="save">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <x-input label="System Name" wire:model="name" placeholder="e.g., signature"
-                    hint="Lowercase, no spaces" />
+                    hint="A unique identifier for the package category" />
                 <x-input label="Sort Order" wire:model="sort_order" type="number" placeholder="e.g., 1" />
             </div>
 
@@ -62,7 +62,7 @@
     <x-modal wire:model="editForm" title="Edit Category" class="backdrop-blur">
         <x-form wire:submit="update">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <x-input label="System Name" wire:model="name" hint="Lowercase, no spaces" />
+                <x-input label="System Name" wire:model="name" disabled />
                 <x-input label="Sort Order" wire:model="sort_order" type="number" />
             </div>
 

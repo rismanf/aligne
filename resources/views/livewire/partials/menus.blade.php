@@ -4,6 +4,7 @@
         <h2 class="menu-title">Menu</h2>
          @hasrole('Admin')
         <x-menu-item title="Dashboard" icon="o-chart-bar-square" link="{{ route('admin.home') }}" />
+        <x-menu-item title="Schedule Monitoring" icon="o-chart-bar-square" link="{{ route('admin.schedulemonitoring') }}" />
     
             <x-menu-item title="Contact Us" icon="o-identification" link="{{ route('admin.contact.index') }}" />
 
