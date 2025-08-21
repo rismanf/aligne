@@ -29,10 +29,10 @@
                             </ul>
                         </div>
                     @endif
-                    
+
                     <h3>My Membership Orders</h3>
-                    
-                    @if($orders->count() > 0)
+
+                    @if ($orders->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -53,32 +53,36 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
-                                                <a href="{{ route('invoice', $order->invoice_number) }}" class="text-primary">
+                                                <a href="{{ route('invoice', $order->invoice_number) }}"
+                                                    class="text-primary">
                                                     {{ $order->invoice_number }}
                                                 </a>
                                             </td>
                                             <td>
                                                 <strong>{{ $order->membership->name }}</strong>
-                                                @if($order->membership->description)
-                                                    <br><small class="text-muted">{{ $order->membership->description }}</small>
+                                                @if ($order->membership->description)
+                                                    <br><small
+                                                        class="text-muted">{{ $order->membership->description }}</small>
                                                 @endif
                                             </td>
                                             <td>IDR {{ number_format($order->total_price, 0, ',', '.') }}</td>
                                             <td>
-                                                <span class="badge badge-{{ $order->payment_status === 'paid' ? 'success' : ($order->payment_status === 'pending' ? 'warning' : 'danger') }}">
+                                                <span
+                                                    class="badge badge-{{ $order->payment_status === 'paid' ? 'success' : ($order->payment_status === 'pending' ? 'warning' : 'danger') }}">
                                                     {{ ucfirst($order->payment_status) }}
                                                 </span>
                                             </td>
                                             <td>
-                                                <span class="badge badge-{{ $order->status === 'active' ? 'success' : ($order->status === 'pending' ? 'warning' : 'secondary') }}">
+                                                <span
+                                                    class="badge badge-{{ $order->status === 'active' ? 'success' : ($order->status === 'pending' ? 'warning' : 'secondary') }}">
                                                     {{ ucfirst($order->status) }}
                                                 </span>
                                             </td>
                                             <td>{{ $order->created_at->format('d M Y') }}</td>
                                             <td>
-                                                @if($order->expires_at)
+                                                @if ($order->expires_at)
                                                     {{ $order->expires_at->format('d M Y') }}
-                                                    @if($order->expires_at->isPast())
+                                                    @if ($order->expires_at->isPast())
                                                         <br><small class="text-danger">Expired</small>
                                                     @endif
                                                 @else
@@ -134,7 +138,8 @@
                         modal.hide();
                     }
                 });
-            }" style="display: none;" wire:ignore.self>
+            }" style="display: none;"
+            wire:ignore.self>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form wire:submit="save">
@@ -149,16 +154,55 @@
                                 <input type="text" class="form-control" value="{{ $invoice_number }}" readonly>
                             </div>
                             <div class="mb-3">
+                                <div class="card shadow-sm" style="max-width: 640px;">
+                                    <div class="card-body">
+                                        <label class="form-label text-muted">Bank Information</label>
+
+                                        <div class="d-flex align-items-center gap-2 mb-3">
+                                            {{-- Opsional: logo bank --}}
+                                            <img src="{{ asset('images/bank-artha-graha.png') }}" alt="Bank Logo"
+                                                class="rounded" style="height:32px;width:52px;object-fit:contain;">
+                                            <h5 class="card-title mb-0">Bank Artha Graha</h5>
+                                        </div>
+
+                                        <div class="row align-items-center mb-2">
+                                            <div class="col-6 text-muted">Account Number</div>
+                                            <div class="col-6 d-flex justify-content-end align-items-center gap-2">
+                                                <code class="fw-semibold">53 1022 0127</code>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                    onclick="navigator.clipboard.writeText({{ preg_replace('/\s+/', '', '53 1022 0127') }} )">
+                                                    Copy
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center">
+                                            <div class="col-6 text-muted">Account Holder</div>
+                                            <div class="col-6 text-end fw-semibold">
+                                                ALIGNE SEMESTA RAGA INDONESIA </div>
+                                        </div>
+
+                                        <div class="alert alert-light border mt-3 mb-0" role="alert"
+                                            style="font-size: .875rem;">
+                                            Please ensure you transfer to the correct account. Keep the payment receipt
+                                            for confirmation.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="mb-3">
                                 <label class="form-label">Bank Transfer Method</label>
                                 <input type="text" class="form-control" wire:model="bank" name="bank" 
                                        placeholder="e.g., BCA, Mandiri, BNI">
                                 @error('bank') <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>
+                            </div> --}}
                             <div class="mb-3">
-                                <label class="form-label">Payment Proof (Image)</label>
+                                <label class="form-label">Upload Transfer Receipt</label>
                                 <input type="file" class="form-control" wire:model.lazy="payment_proof"
                                     name="payment_proof" accept="image/*">
-                                @error('payment_proof') <span class="text-danger">{{ $message }}</span> @enderror
+                                @error('payment_proof')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                                 <small class="text-muted">Max file size: 5MB. Accepted formats: JPG, PNG, GIF</small>
                             </div>
                         </div>
