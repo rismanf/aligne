@@ -54,7 +54,7 @@ class Order extends Component
     public function save()
     {
         $this->validate([
-            'bank' => 'required',
+            // 'bank' => 'required',
             'payment_proof' => 'required|file|max:5120',
         ]);
         
@@ -63,7 +63,7 @@ class Order extends Component
             $userMembership = UserMembership::find($this->order_id);
             
             $userMembership->update([
-                'payment_method' => $this->bank,
+                'payment_method' => 'Transfer',
                 'payment_proof' => $url,
                 'payment_status' => 'pending',
                 'paid_at' => now(),
